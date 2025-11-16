@@ -51,6 +51,8 @@
   --color-border-gradient: var(--border-gradient);
   --color-circle: var(--inner-circle);
   --color-dark-circle: var(--dark-circle);
+  --color-bot: var(--bot);
+  --color-bot-foreground: var(--bot-text);
 }
 
 :root {
@@ -95,6 +97,8 @@
   --heading: hsla(0, 0%, 17%, 1);
   --inner-circle: hsla(245, 100%, 95%, 1);
   --dark-circle: hsla(245, 96%, 70%, 1);
+  --bot: hsla(245, 96%, 70%, 0.1);
+  --bot-text: hsla(0, 0%, 33%, 1);
 }
 
 .dark {

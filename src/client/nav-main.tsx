@@ -53,12 +53,17 @@ export function NavMain({
                     setOpen(true);
                   }}
                   tooltip={item.title}
-                  className="cursor-pointer mx-auto p-0 py-[18px] "
+                  className="cursor-pointer mx-auto py-[18px] "
                 >
                   {item.icon && (
                     <item.icon className="min-w-5 min-h-5  group-hover/collapsible:text-sidebar-accent-foreground  font-medium text-foreground" />
                   )}
-                  <span className="font-medium text-foreground group-hover/collapsible:text-sidebar-accent-foreground ">
+                  <span
+                    className={cn(
+                      open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                      "font-medium text-foreground group-hover/collapsible:text-sidebar-accent-foreground  transition-all duration-300 whitespace-nowrap overflow-hidden "
+                    )}
+                  >
                     {item.title}
                   </span>
                   <ChevronRight className="ml-auto max-h-[15px] max-w-[15px] transition-transform group-hover/collapsible:text-sidebar-accent-foreground  duration-200 font-medium text-foreground group-data-[state=open]/collapsible:rotate-90" />

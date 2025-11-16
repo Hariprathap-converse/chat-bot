@@ -72,7 +72,7 @@ const defaultData: OpsBotData = {
       "Get started by selecting an operation below or ask me directly for assistance!",
     icon: "BotIcon",
   },
-  search: { placeholder: "Send a message...", buttonIcon: "Sparkles" },
+  search: { placeholder: "How can assist you ...", buttonIcon: "Sparkles" },
   sections: [
     {
       title: "Our Operations",
@@ -88,7 +88,7 @@ const defaultData: OpsBotData = {
   ],
   footerSection: [
     {
-      title: "Role Operations",
+      title: "Quick Operations For You",
       type: "list",
       layout: "grid",
       icon: null,

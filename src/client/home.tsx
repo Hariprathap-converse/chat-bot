@@ -78,14 +78,9 @@ export default function DynamicHome() {
               />
             </div>
             <Link href={"/chat"}>
-              <button
-                className={cn(
-                  " absolute top-2.5 right-3 p-2  font-semibold  bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-sm text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
-                  "  "
-                )}
-              >
+              <button className=" absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white  bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center ">
                 {components[data.search.buttonIcon]}{" "}
-                {/* <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span> */}
+                <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
               </button>
             </Link>
           </div>
@@ -109,15 +104,16 @@ export default function DynamicHome() {
                     key={i}
                     className="group bg-white cursor-pointer w-[170px] border hover:border-[hsla(245,96%,70%,0.3)] rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
                   >
-                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[28%] left-[45%] bg-circle  group-hover:bg-dark-circle rounded-full"></div>
-                    <span className="absolute top-3 right-4 group-hover:block hidden">
+                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[28%] left-[45%] bg-circle   rounded-full"></div>
+                    <span className="absolute top-3 right-4 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
                       <Sparkles className="text-[hsla(245,96%,70%,1)] h-5 w-5" />
                     </span>
-                    <span className="relative  z-50 ">
+
+                    <span className="relative group-hover:scale-[140%]  transition-all duration-500  z-50 ">
                       {components[item.icon]}
                     </span>
 
-                    <span className="text-foreground relative z-50 group-hover:text-[hsla(245,96%,70%,1)] text-sm font-medium text-start ">
+                    <span className="text-foreground group-hover:pt-2 transition-all duration-300 relative z-50  text-sm font-medium text-start ">
                       {item.label}
                     </span>
                   </div>
@@ -129,7 +125,7 @@ export default function DynamicHome() {
           {data.footerSection.map((footer, idx) => (
             <div
               key={idx}
-              className="w-full border bg-white rounded-2xl  flex flex-col gap-[18px] p-[38px] pb-[25px] pt-4"
+              className="w-full border bg-white rounded-2xl  flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3"
             >
               <div className="flex gap-3 items-center  ">
                 <span className="text-heading text-base font-medium tracking-normal">
@@ -140,9 +136,11 @@ export default function DynamicHome() {
                 {footer.items.map((item, index) => (
                   <div
                     key={index}
-                    className="border rounded-[7px] hover:border-dark-circle cursor-pointer p-[7px] px-3 w-full flex gap-2 items-center"
+                    className="border group rounded-[7px] hover:bg-background cursor-pointer p-[7px] px-3 w-full flex gap-2 items-center"
                   >
-                    <span>{components[item.icon]}</span>
+                    <span className="">
+                      {components[item.icon]}
+                    </span>
                     <span className="text-xs font-medium w-full tracking-normal text-foreground">
                       {item.label}
                     </span>

@@ -50,12 +50,12 @@ export function NavProjects({
                 href={item.url}
                 className="py-[18px] font-medium text-foreground !rounded-[4px]"
               >
-                <item.icon className="max-h-[15px] max-w-[15px]" />
+                <item.icon className="min-w-5 min-h-5 " />
                 <span>{item.name}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger asChild className="mt-1 rounded-[4px]">
                 <SidebarMenuAction className="cursor-pointer" showOnHover>
                   <MoreHorizontal />
                   <span className="sr-only">More</span>

@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}  antialiased`}>
+      <body className={`${inter.variable}  antialiased bg-background`}>
         <ThemeProvider attribute="class" defaultTheme="light">
           <Toaster richColors position="top-right" />
           <SidebarProvider defaultOpen={false} >
