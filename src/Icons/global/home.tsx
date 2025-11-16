@@ -5,7 +5,7 @@ export const LeaveIcon = () => (
     height="40"
     viewBox="0 0 40 40"
     fill="none"
-    // className="min-h-16 min-w-16 "
+    className="fill-sub-title"
   >
     <rect width="40" height="40" fill="url(#pattern0_1_793)" />
     <defs>

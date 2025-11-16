@@ -11,7 +11,7 @@ import Link from "next/link";
 export default function Login() {
   return (
     <div className="min-h-screen flex bg-background items-center justify-center w-full p-4">
-      <Card className="w-[590px] h-[550px]  backdrop-blur-[40px] bg-background rounded-[55px] border-0 shadow-none ring-3 p-10 ring-white">
+      <Card className="w-[590px] h-[550px]  backdrop-blur-[40px] bg-white rounded-[55px] border-0 shadow-none ring-3 p-10 ring-white">
         <CardHeader>
           <div className="flex flex-col items-center justify-center gap-5">
             <span className="pl-1 flex gap-2 items-center justify-center transition-all duration-300">
@@ -126,13 +126,15 @@ export default function Login() {
               </div>
             </div>
 
-            <Button
-              className={cn(
-                " w-full mt-5 capitalize text-base font-semibold h-[45px]  bg-sidebar-accent  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
-              )}
-            >
-              <Link href={"/"}> Log In</Link>
-            </Button>
+            <Link href={"/"} className="w-full">
+              <Button
+                className={cn(
+                  " w-full mt-5 capitalize text-base font-semibold h-[45px]  bg-sidebar-accent  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
+                )}
+              >
+                Log In
+              </Button>
+            </Link>
             <div className="text-sm text-sub-heading font-medium mt-4 flex gap-1">
               Don't have an account ?
               <Link href={"/"} className="text-dark-circle font-medium">

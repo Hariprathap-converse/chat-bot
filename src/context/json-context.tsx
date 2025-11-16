@@ -13,10 +13,11 @@ interface Header {
   title: string;
   subtitle: string;
   description: string;
-  icon: string;
+  customIcon: string;
 }
 
 interface SectionItem {
+  key: string; // NEW
   label: string;
   icon: string;
   hoverIcon?: string;
@@ -25,8 +26,6 @@ interface SectionItem {
 interface Section {
   title: string;
   icon: string;
-  type: string;
-  layout: string;
   items: SectionItem[];
 }
 
@@ -36,9 +35,8 @@ interface FooterItem {
 }
 
 interface FooterSection {
+  sectionKey: string; // NEW (used to filter by selected section)
   title: string;
-  type: string;
-  layout: string;
   icon: string | null;
   items: FooterItem[];
 }
@@ -50,7 +48,7 @@ interface OpsBotData {
     buttonIcon: string;
   };
   sections: Section[];
-  footerSection: FooterSection[];
+  footerSection: FooterSection[]; // updated structure
   chat: {
     introTitle: string;
     subtitle: string;
@@ -62,7 +60,6 @@ interface OpsBotContextType {
   setData: (newData: OpsBotData) => void;
 }
 
-// Default JSON
 const defaultData: OpsBotData = {
   header: {
     title: "Welcome to OpsBot!",
@@ -70,27 +67,54 @@ const defaultData: OpsBotData = {
       "Your go-to assistant for all things operations! Whether you need quick answers, expert insights, or help with complex operational queries, OpsBot is here to support you.",
     description:
       "Get started by selecting an operation below or ask me directly for assistance!",
-    icon: "BotIcon",
+    customIcon: "BotIcon",
   },
-  search: { placeholder: "How can assist you ...", buttonIcon: "Sparkles" },
+
+  search: { placeholder: "How can assist you ...", buttonIcon: "SendIcon" },
+
   sections: [
     {
       title: "Our Operations",
       icon: "MessageIcon",
-      type: "cards",
-      layout: "row",
       items: [
-        { label: "Leave", icon: "LeaveIcon", hoverIcon: "HoverLeaveIcon" },
-        { label: "Role", icon: "RoleIcon", hoverIcon: "RoleIcon" },
-        { label: "Team", icon: "TeamIcon", hoverIcon: "TeamIcon" },
+        {
+          key: "leave",
+          label: "Leave",
+          icon: "LeaveIcon",
+          hoverIcon: "HoverLeaveIcon",
+        },
+        {
+          key: "role",
+          label: "Role",
+          icon: "MdOutlineAdminPanelSettings",
+          hoverIcon: "MdOutlineAdminPanelSettings",
+        },
+        {
+          key: "team",
+          label: "Team",
+          icon: "TbBrandTeams",
+          hoverIcon: "TbBrandTeams",
+        },
+        {
+          key: "attendance",
+          label: "Attendance",
+          icon: "CalendarClock",
+          hoverIcon: "CalendarClock",
+        },
+        {
+          key: "payroll",
+          label: "Payroll",
+          icon: "Wallet",
+          hoverIcon: "Wallet",
+        },
       ],
     },
   ],
+
   footerSection: [
     {
-      title: "Quick Operations For You",
-      type: "list",
-      layout: "grid",
+      sectionKey: "leave",
+      title: "Leave Operations",
       icon: null,
       items: [
         { label: "Create Leave", icon: "EditIcon" },
@@ -103,7 +127,53 @@ const defaultData: OpsBotData = {
         { label: "Delete Leave Record", icon: "EditIcon" },
       ],
     },
+
+    {
+      sectionKey: "role",
+      title: "Role Operations",
+      icon: null,
+      items: [
+        { label: "Create Role", icon: "EditIcon" },
+        { label: "Update Role", icon: "EditIcon" },
+        { label: "Get Role List", icon: "EditIcon" },
+      ],
+    },
+
+    {
+      sectionKey: "team",
+      title: "Team Operations",
+      icon: null,
+      items: [
+        { label: "Create Team", icon: "EditIcon" },
+        { label: "Update Team", icon: "EditIcon" },
+        { label: "Delete Team", icon: "EditIcon" },
+        { label: "Get Team Members", icon: "EditIcon" },
+      ],
+    },
+    {
+      sectionKey: "attendance",
+      title: "Attendance Operations",
+      icon: null,
+      items: [
+        { label: "Mark Attendance", icon: "CheckIcon" },
+        { label: "Get Attendance Report", icon: "FileText" },
+        { label: "Update Attendance", icon: "EditIcon" },
+      ],
+    },
+
+    // ⭐ NEW FOOTER 2
+    {
+      sectionKey: "payroll",
+      title: "Payroll Operations",
+      icon: null,
+      items: [
+        { label: "Generate Payslip", icon: "Receipt" },
+        { label: "Process Payroll", icon: "Settings" },
+        { label: "View Salary Structure", icon: "Wallet" },
+      ],
+    },
   ],
+
   chat: {
     introTitle: "Hello Hari!",
     subtitle:

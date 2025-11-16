@@ -35,7 +35,7 @@ export default function RootLayout({
       <body className={`${inter.variable}  antialiased bg-background`}>
         <ThemeProvider attribute="class" defaultTheme="light">
           <Toaster richColors position="top-right" />
-          <SidebarProvider defaultOpen={false} >
+          <SidebarProvider defaultOpen={false}>
             <OpsBotProvider>{children}</OpsBotProvider>
           </SidebarProvider>
         </ThemeProvider>

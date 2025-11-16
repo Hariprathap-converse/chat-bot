@@ -11,12 +11,19 @@ import {
   TeamIcon,
 } from "@/Icons/global/home";
 import { cn } from "@/lib/utils";
-import { Send, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import Link from "next/link";
-import { JSX } from "react";
-import { RiSendPlaneFill } from "react-icons/ri";
-import { IoIosSend } from "react-icons/io";
-const Iconss = () => (
+import { useState } from "react";
+import * as LucideIcons from "lucide-react";
+import * as FaIcons from "react-icons/fa";
+import * as MdIcons from "react-icons/md";
+import * as RiIcons from "react-icons/ri";
+import * as TbIcons from "react-icons/tb";
+import * as AiIcons from "react-icons/ai";
+import * as BsIcons from "react-icons/bs";
+import * as IoIcons from "react-icons/io";
+
+const SendIcon = () => (
   <svg
     fill="#FFFF"
     version="1.1"
@@ -25,6 +32,7 @@ const Iconss = () => (
     width="20px"
     height="20px"
     viewBox="0 0 31.806 31.806"
+    className=""
   >
     <g>
       <g>
@@ -34,29 +42,61 @@ const Iconss = () => (
     </g>
   </svg>
 );
-export const components: Record<string, JSX.Element> = {
-  BotIcon: <BotIcon />,
-  MessageIcon: <MessageIcon />,
-  LeaveIcon: <LeaveIcon />,
-  HoverLeaveIcon: <HoverLeaveIcon />,
-  RoleIcon: <RoleIcon />,
-  TeamIcon: <TeamIcon />,
-  EditIcon: <EditIcon />,
-  Sparkles: <Iconss />,
+export const dynamicIconSources: Record<string, any> = {
+  ...LucideIcons,
+  ...FaIcons,
+  ...MdIcons,
+  ...RiIcons,
+  ...TbIcons,
+  ...AiIcons,
+  ...BsIcons,
+  ...IoIcons,
+  BotIcon,
+  MessageIcon, // your local custom icons
+  LeaveIcon,
+  HoverLeaveIcon,
+  RoleIcon,
+  TeamIcon,
+  EditIcon,
+  SendIcon,
+};
+
+export const icons: Record<string, any> = {
+  LeaveIcon,
+  HoverLeaveIcon,
+  RoleIcon,
+  TeamIcon,
+  EditIcon,
+  SendIcon,
+  Sparkles,
+};
+export const getIcon = (name?: string, className?: string) => {
+  if (!name) return null;
+
+  const Icon = dynamicIconSources[name];
+
+  if (!Icon) {
+    console.warn(`⚠ Unknown icon: ${name}`);
+    return null;
+  }
+
+  return <Icon className={cn("h-8 w-8", className)} />;
 };
 
 export default function DynamicHome() {
   const { data } = useOpsBot();
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
 
   return (
     <div className="bg-background h-full w-full p-[87px] pb-0 flex item-center justify-center">
       <main className="flex flex-col gap-[45px]">
         <div className="flex flex-col items-center gap-[27px]">
           <div className="flex flex-col items-center w-full gap-1.5">
-            <span>{components[data.header.icon]}</span>
+            <span>{getIcon(data.header.customIcon)}</span>
             <span className="bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold text-[45px] leading-[150%]  tracking-normal">
               {data.header.title}
             </span>
+
             <span className="text-sub-title text-center max-w-[696px] font-medium leading-[150%] text-sm tracking-normal">
               {data.header.subtitle}
             </span>
@@ -66,7 +106,7 @@ export default function DynamicHome() {
           </span>
         </div>
 
-        <div className="flex flex-col gap-[23px]  max-w-[1198px]">
+        <div className="flex flex-col gap-[23px]  w-[1098px]">
           <div className="flex relative max-w-[1198px] p-0">
             <div className="p-px rounded-[14px] w-full  shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)]  bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] max-w-[1198px]">
               <Input
@@ -79,7 +119,7 @@ export default function DynamicHome() {
             </div>
             <Link href={"/chat"}>
               <button className=" absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white  bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center ">
-                {components[data.search.buttonIcon]}{" "}
+                {getIcon(data.search.buttonIcon)}{" "}
                 <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
               </button>
             </Link>
@@ -88,10 +128,10 @@ export default function DynamicHome() {
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[38px] pb-[25px] pt-3"
+              className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[38px] pb-[25px] pt-3"
             >
               <div className="flex gap-3 items-center  ">
-                <span>{components[section.icon]}</span>
+                <span>{getIcon(section.icon)}</span>
 
                 <span className="text-heading text-base font-medium tracking-normal">
                   {section.title}
@@ -102,18 +142,33 @@ export default function DynamicHome() {
                 {section.items.map((item, i) => (
                   <div
                     key={i}
-                    className="group bg-white cursor-pointer w-[170px] border hover:border-[hsla(245,96%,70%,0.3)] rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
+                    onClick={() => setSelectedSection(item.key)}
+                    className={cn(
+                      selectedSection == item.key ? "border-hover-border" : "",
+                      "group bg-white cursor-pointer w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
+                    )}
                   >
                     <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[28%] left-[45%] bg-circle   rounded-full"></div>
-                    <span className="absolute top-3 right-4 opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                    <span
+                      className={cn(
+                        selectedSection == item.key
+                          ? "opacity-100"
+                          : " opacity-0 group-hover:opacity-100",
+                        "absolute top-3 right-4  translate-y-1  group-hover:translate-y-0 transition-all duration-500 ease-out"
+                      )}
+                    >
                       <Sparkles className="text-[hsla(245,96%,70%,1)] h-5 w-5" />
                     </span>
 
-                    <span className="relative group-hover:scale-[140%]  transition-all duration-500  z-50 ">
-                      {components[item.icon]}
+                    <span
+                      className={cn(
+                        selectedSection == item.key && "scale-[140%]",
+                        "relative  group-hover:scale-[140%]  transition-all duration-500 h-[50px]  z-50 "
+                      )}
+                    >
+                      {getIcon(item.icon)}
                     </span>
-
-                    <span className="text-foreground group-hover:pt-2 transition-all duration-300 relative z-50  text-sm font-medium text-start ">
+                    <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300  z-50  text-sm font-medium text-start ">
                       {item.label}
                     </span>
                   </div>
@@ -122,33 +177,56 @@ export default function DynamicHome() {
             </div>
           ))}
 
-          {data.footerSection.map((footer, idx) => (
-            <div
-              key={idx}
-              className="w-full border bg-white rounded-2xl  flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3"
-            >
-              <div className="flex gap-3 items-center  ">
+          {selectedSection === null ? (
+            <div className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3">
+              <div className="flex gap-3 items-center">
                 <span className="text-heading text-base font-medium tracking-normal">
-                  {footer.title}
+                  Quick Operations
                 </span>
               </div>
+
               <div className="grid grid-cols-5 gap-[11px]">
-                {footer.items.map((item, index) => (
+                {data.footerSection[0].items.slice(0, 6).map((item, index) => (
                   <div
                     key={index}
-                    className="border group rounded-[7px] hover:bg-background cursor-pointer p-[7px] px-3 w-full flex gap-2 items-center"
+                    className="border group rounded-[7px]  hover:border-hover-border  hover:bg-background cursor-pointer w-[180px] p-[7px] px-3  flex gap-2 items-center"
                   >
-                    <span className="">
-                      {components[item.icon]}
-                    </span>
-                    <span className="text-xs font-medium w-full tracking-normal text-foreground">
-                      {item.label}
-                    </span>
+                    <span>{getIcon(item.icon)}</span>
+                    <span className="text-xs font-medium">{item.label}</span>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
+          ) : (
+            data.footerSection
+              .filter((footer) => footer.sectionKey === selectedSection)
+              .map((footer, idx) => (
+                <div
+                  key={idx}
+                  className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3"
+                >
+                  <div className="flex gap-3 items-center">
+                    <span className="text-heading text-base font-medium tracking-normal">
+                      {footer.title}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-5 gap-[11px]">
+                    {footer.items.map((item, index) => (
+                      <div
+                        key={index}
+                        className="border group rounded-[7px] hover:bg-background hover:border-hover-border cursor-pointer p-[7px] min-w-[180px] w-full px-3  flex gap-2 items-center"
+                      >
+                        <span>{getIcon(item.icon, "h-4 w-4")}</span>
+                        <span className="text-xs font-medium">
+                          {item.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))
+          )}
         </div>
       </main>
     </div>

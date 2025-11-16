@@ -45,6 +45,7 @@ import { BsStars } from "react-icons/bs";
 import { MdOutlineWbIncandescent } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Navdata = {
   navMain: [
@@ -181,14 +182,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           "rounded-2xl pt-5 cursor-pointer items-center gap-4 mb-1 "
         )}
       >
-        <span className="pl-1 flex gap-2 items-center transition-all duration-300">
+        <Link
+          href={"/"}
+          className="pl-1 flex gap-2 items-center transition-all duration-300"
+        >
           <NavChatBot />
           {open && (
             <span className="bg-[linear-gradient(180deg,#7468FC_0%,#FF8FD9_100%)] bg-clip-text text-transparent font-semibold text-[23px] ">
               OpsBot
             </span>
           )}
-        </span>
+        </Link>
 
         <SidebarTrigger className="cursor-pointer"></SidebarTrigger>
       </SidebarHeader>

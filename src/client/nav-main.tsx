@@ -66,7 +66,12 @@ export function NavMain({
                   >
                     {item.title}
                   </span>
-                  <ChevronRight className="ml-auto max-h-[15px] max-w-[15px] transition-transform group-hover/collapsible:text-sidebar-accent-foreground  duration-200 font-medium text-foreground group-data-[state=open]/collapsible:rotate-90" />
+                  <ChevronRight
+                    className={cn(
+                      open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                      "ml-auto max-h-[15px] max-w-[15px] transition-transform group-hover/collapsible:text-sidebar-accent-foreground  duration-200 font-medium text-foreground group-data-[state=open]/collapsible:rotate-90"
+                    )}
+                  />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent className="transition-all duration-1000">
