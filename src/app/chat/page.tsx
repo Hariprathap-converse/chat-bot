@@ -6,64 +6,102 @@ import { Textarea } from "@/components/ui/textarea";
 import { useOpsBot } from "@/context/json-context";
 import { NavChatBot } from "@/Icons/global/home";
 import { cn } from "@/lib/utils";
-import { Copy, Sparkles, User, UserCircle } from "lucide-react";
+import {
+  Copy,
+  FileArchive,
+  FileDiff,
+  HardDriveDownload,
+  MoreHorizontal,
+  Sparkles,
+  ThumbsDown,
+  ThumbsUp,
+  User,
+  UserCircle,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { FaRegThumbsUp } from "react-icons/fa";
+import { FaRegThumbsDown } from "react-icons/fa";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SidebarMenuAction, useSidebar } from "@/components/ui/sidebar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 const page = () => {
   const { data } = useOpsBot();
-
+  const { isMobile } = useSidebar();
   const [messages, setMessages] = useState<
-    { sender: "user" | "bot"; text: string }[]
+    { role: "user" | "bot"; content: string }[]
   >([
     {
-      sender: "user",
-      text: "Hey, I’ve been trying to figure out why my app keeps freezing whenever I load large amounts of text. Any ideas what might cause that?",
+      role: "user",
+      content:
+        "Hey, I’ve been trying to figure out why my app keeps freezing whenever I load large amounts of text. Any ideas what might cause that?",
     },
     {
-      sender: "bot",
-      text: "It could be related to how the rendering engine handles long strings. If everything is being re-rendered on each keystroke or state update, the UI thread might get overwhelmed. Are you processing the text on the main thread?",
+      role: "bot",
+      content:
+        "It could be related to how the rendering engine handles long strings. If everything is being re-rendered on each keystroke or state update, the UI thread might get overwhelmed. Are you processing the text on the main thread?",
     },
     {
-      sender: "user",
-      text: "Yeah, everything’s happening in the main thread right now. I was thinking about offloading it, but I’m not sure what the best approach is.",
+      role: "user",
+      content:
+        "Yeah, everything’s happening in the main thread right now. I was thinking about offloading it, but I’m not sure what the best approach is.",
     },
     {
-      sender: "bot",
-      text: "A good start would be to move heavy text operations into a Web Worker or a background task. That way, your UI stays responsive while the data is processed separately.",
+      role: "bot",
+      content:
+        "A good start would be to move heavy text operations into a Web Worker or a background task. That way, your UI stays responsive while the data is processed separately.",
     },
     {
-      sender: "user",
-      text: "Makes sense. Also, I noticed the UI lags even when I’m typing quickly. Could it be related to how I’m updating the state?",
+      role: "user",
+      content:
+        "Makes sense. Also, I noticed the UI lags even when I’m typing quickly. Could it be related to how I’m updating the state?",
     },
     {
-      sender: "bot",
-      text: "Possibly. If you're storing the entire text in a single state variable and updating it on each keystroke, it can trigger expensive re-renders. Try debouncing the input or splitting the logic so that only necessary components re-render.",
+      role: "bot",
+      content:
+        "Possibly. If you're storing the entire text in a single state variable and updating it on each keystroke, it can trigger expensive re-renders. Try debouncing the input or splitting the logic so that only necessary components re-render.",
     },
     {
-      sender: "user",
-      text: "I’ll try debouncing. Another thing—when I scroll through the text, it feels choppy. Is that normal for large amounts of content?",
+      role: "user",
+      content:
+        "I’ll try debouncing. Another thing—when I scroll through the text, it feels choppy. Is that normal for large amounts of content?",
     },
     {
-      sender: "bot",
-      text: "Scrolling lag usually comes from large DOM nodes or too many elements at once. Virtualization might help—only render what’s visible on screen instead of the entire text block.",
+      role: "bot",
+      content:
+        "Scrolling lag usually comes from large DOM nodes or too many elements at once. Virtualization might help—only render what’s visible on screen instead of the entire text block.",
     },
     {
-      sender: "user",
-      text: "Got it. One last thing: should I compress the text before sending it to the server? It’s usually pretty long.",
+      role: "user",
+      content:
+        "Got it. One last thing: should I compress the text before sending it to the server? It’s usually pretty long.",
     },
     {
-      sender: "bot",
-      text: "Yes, compressing before sending is a good practice. You can use gzip or brotli on the backend. For the frontend, if you're sending via fetch, the browser usually negotiates compression automatically, so you just need server support.",
+      role: "bot",
+      content:
+        "Yes, compressing before sending is a good practice. You can use gzip or brotli on the backend. For the frontend, if you're sending via fetch, the browser usually negotiates compression automatically, so you just need server support.",
     },
     {
-      sender: "user",
-      text: "Perfect. That clears up a lot. I’ll implement these changes. Thanks!",
+      role: "user",
+      content:
+        "Perfect. That clears up a lot. I’ll implement these changes. Thanks!",
     },
     {
-      sender: "bot",
-      text: "Happy to help! Let me know if you run into anything else.",
+      role: "bot",
+      content: "Happy to help! Let me know if you run into anything else.",
     },
   ]);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -83,22 +121,74 @@ const page = () => {
   }, [messages]);
 
   const [input, setInput] = useState("");
+
+  // Front End Send Meassge
   const sendMessage = () => {
     if (!input.trim()) return;
 
     // Add user message
-    setMessages([...messages, { sender: "user", text: input }]);
+    setMessages([...messages, { role: "user", content: input }]);
 
     // Simulate bot response (replace with API call if needed)
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: `Bot response to "${input}"` },
+        { role: "bot", content: `Bot response to "${input}"` },
       ]);
     }, 500);
 
     setInput("");
   };
+
+  // Model End Send Meassge
+
+  // const sendMessage = async () => {
+  //   if (!input.trim()) return;
+
+  //   const userMessage = input.trim();
+
+  //   // 1️⃣ Add user message to UI
+  //   setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+  //   setInput("");
+
+  //   // 2️⃣ Build conversation history for backend
+  //   const updatedConversation = [
+  //     ...messages,
+  //     { role: "user", content: userMessage },
+  //   ];
+
+  //   try {
+  //     // 3️⃣ Call your FastAPI backend
+  //     const response = await fetch("http://127.0.0.1:8000/chat", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ conversation: updatedConversation }),
+  //     });
+
+  //     const data = await response.json();
+
+  //     // 4️⃣ Bot message received
+  //     const botMessage = data.reply || "⚠️ No response from AI";
+
+  //     setMessages((prev) => [...prev, { role: "bot", content: botMessage }]);
+
+  //     // 5️⃣ Append bot message to conversation (optional)
+  //     updatedConversation.push({
+  //       role: "assistant",
+  //       content: botMessage,
+  //     });
+  //   } catch (err) {
+  //     console.error("💥 Chat request failed:", err);
+
+  //     setMessages((prev) => [
+  //       ...prev,
+  //       {
+  //         role: "bot",
+  //         content: "⚠️ Something went wrong while talking to the AI.",
+  //       },
+  //     ]);
+  //   }
+  // };
 
   return (
     <div className="bg-background relative min-h-screen w-full p-[50px] pb-0 pr-2 flex flex-col item-center justify-center">
@@ -133,12 +223,18 @@ const page = () => {
               <div
                 key={idx}
                 className={`flex w-full ${
-                  msg.sender === "bot" ? "justify-start" : "justify-end"
+                  msg.role === "bot" ? "justify-start" : "justify-end"
                 }`}
               >
-                <div className="flex  flex-col gap-2">
-                  <div className="flex items-start   w-full  gap-2">
-                    {msg.sender === "bot" && (
+                <div className="flex group flex-col gap-2">
+                  <div
+                    className={
+                      msg.role === "bot"
+                        ? "flex items-start w-full  gap-2"
+                        : "flex items-center   w-full  gap-2"
+                    }
+                  >
+                    {msg.role === "bot" && (
                       <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center">
                         <NavChatBot />
                       </div>
@@ -146,21 +242,23 @@ const page = () => {
 
                     <div
                       className={`relative w-full   font-medium   ${
-                        msg.sender === "bot"
+                        msg.role === "bot"
                           ? "bg-bot text-bot-foreground  relative z-10 ring-1 ring-accent !rounded-[8px]  !rounded-tl-none  px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]"
                           : "bg-transparent text-foreground rounded-tl-none text-end px-2 py-2"
                       }`}
                     >
-                      <span
+                      <div
                         className={cn(
-                          msg.sender === "user"
-                            ? "max-w-[70%] inline-block text-left"
-                            : "w-full"
+                          "inline-flex",
+                          msg.role === "user"
+                            ? "max-w-[70%] min-w-[100px] text-left justify-end  whitespace-pre-wrap"
+                            : "w-full justify-start  whitespace-pre-wrap"
                         )}
                       >
-                        {msg.text}
-                      </span>
-                      {msg.sender === "bot" && (
+                        <span className="break-words">{msg.content}</span>
+                      </div>
+
+                      {msg.role === "bot" && (
                         <div>
                           <span
                             className="
@@ -188,8 +286,8 @@ const page = () => {
                         </div>
                       )}
                     </div>
-                    {msg.sender === "user" && (
-                      <div className="w-8 h-8 ml-1 rounded-full bg-muted flex shadow items-center justify-center">
+                    {msg.role === "user" && (
+                      <div className="min-w-8 min-h-8 ml-1 rounded-full bg-muted  shadow items-center ">
                         <Image
                           src="/profile.jpg"
                           width={40}
@@ -200,9 +298,46 @@ const page = () => {
                       </div>
                     )}
                   </div>
-                  {msg.sender === "bot" && (
-                    <div className="flex pl-8">
-                      <Copy className="h-[14px]  w-[14px]  text-sub-title" />
+                  {msg.role === "bot" && (
+                    <div className="relative">
+                      <div className="absolute hidden group-hover:flex  pl-8 h-[20px] gap-3 items-center">
+                        <Copy className="h-[14px]  w-[14px]  cursor-pointer text-sub-title" />
+                        <ThumbsUp className="h-[14px]  w-[14px]  cursor-pointer text-sub-title" />
+                        <ThumbsDown className="h-[14px]  w-[14px]  mt-1 cursor-pointer text-sub-title" />
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <div className="cursor-pointer rounded-[4px]">
+                              <MoreHorizontal className="h-[17px]  w-[17px]   cursor-pointer text-sub-title" />
+                            </div>
+                          </PopoverTrigger>
+
+                          <PopoverContent className="z-50 p-[6px] w-40 bg-white rounded-md shadow-md">
+                            <div className="flex flex-col gap-1">
+                              <Button
+                                variant={"ghost"}
+                                className="flex group items-center gap-2 p-1 py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                              >
+                                <FileArchive className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                Option 1
+                              </Button>
+                              <Button
+                                variant={"ghost"}
+                                className="flex group items-center gap-2 p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                              >
+                                <FileDiff className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                Option 2
+                              </Button>
+                              <Button
+                                variant={"ghost"}
+                                className="flex group items-center gap-2  p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                              >
+                                <HardDriveDownload className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                Option 3
+                              </Button>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
                     </div>
                   )}
                 </div>
