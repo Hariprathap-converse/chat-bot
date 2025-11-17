@@ -267,7 +267,7 @@ const page = () => {
           {/* Chat Conversation */}
           <div className="flex flex-col min-w-[60%] max-w-[61%] gap-[11px] p-4 ">
             {grouped.map((pair, idx) => (
-              <div key={`group-${idx}`} className="flex flex-col gap-2">
+              <div key={`group-${idx}`} className="flex flex-col gap-1">
                 {/* User Conversation  */}
                 {pair[0] && (
                   <div
