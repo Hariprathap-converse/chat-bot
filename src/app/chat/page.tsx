@@ -8,6 +8,7 @@ import { NavChatBot } from "@/Icons/global/home";
 import { cn } from "@/lib/utils";
 import {
   Copy,
+  Edit,
   FileArchive,
   FileDiff,
   HardDriveDownload,
@@ -40,7 +41,6 @@ import {
 import { Button } from "@/components/ui/button";
 const page = () => {
   const { data } = useOpsBot();
-  const { isMobile } = useSidebar();
   const [messages, setMessages] = useState<
     { role: "user" | "bot"; content: string }[]
   >([
@@ -226,12 +226,12 @@ const page = () => {
                   msg.role === "bot" ? "justify-start" : "justify-end"
                 }`}
               >
-                <div className="flex group flex-col gap-2">
+                <div className="flex group relative flex-col gap-2 ">
                   <div
                     className={
                       msg.role === "bot"
                         ? "flex items-start w-full  gap-2"
-                        : "flex items-center   w-full  gap-2"
+                        : "flex items-center   w-full  gap-1"
                     }
                   >
                     {msg.role === "bot" && (
@@ -340,11 +340,52 @@ const page = () => {
                       </div>
                     </div>
                   )}
+                  {msg.role === "user" && (
+                    <div className="absolute hidden group-hover:flex -top-[15px] right-4 pl-8 h-[20px] gap-3 items-center">
+                      <Copy className="h-[14px]  w-[14px]  cursor-pointer text-sub-title" />
+                      <Edit className="h-[14px]  w-[14px]  mt-1 cursor-pointer text-sub-title" />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <div className="cursor-pointer rounded-[4px]">
+                            <MoreHorizontal className="h-[17px]  w-[17px]   cursor-pointer text-sub-title" />
+                          </div>
+                        </PopoverTrigger>
+
+                        <PopoverContent className="z-50 p-[6px] w-40 bg-white rounded-md shadow-md">
+                          <div className="flex flex-col gap-1">
+                            <Button
+                              variant={"ghost"}
+                              className="flex group items-center gap-2 p-1 py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                            >
+                              <FileArchive className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                              Option 1
+                            </Button>
+                            <Button
+                              variant={"ghost"}
+                              className="flex group items-center gap-2 p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                            >
+                              <FileDiff className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                              Option 2
+                            </Button>
+                            <Button
+                              variant={"ghost"}
+                              className="flex group items-center gap-2  p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                            >
+                              <HardDriveDownload className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                              Option 3
+                            </Button>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  )}
                 </div>
+
                 <div ref={messagesEndRef} />
               </div>
             ))}
           </div>
+
         </div>
         <div className="flex absolute bottom-2 z-50  flex-col-reverse p-5 w-full max-w-[61%] ">
           <div className="flex relative  p-0">
