@@ -251,11 +251,11 @@ const page = () => {
                         className={cn(
                           "inline-flex",
                           msg.role === "user"
-                            ? "max-w-[70%] min-w-[100px] text-left justify-end  whitespace-pre-wrap"
-                            : "w-full justify-start  whitespace-pre-wrap"
+                            ? "max-w-[70%] min-w-[700px] text-left justify-end whitespace-pre-wrap "
+                            : "max-w-[96%] justify-start whitespace-pre-wrap "
                         )}
                       >
-                        <span className="break-words">{msg.content}</span>
+                        <span className="break-all">{msg.content}</span>
                       </div>
 
                       {msg.role === "bot" && (
