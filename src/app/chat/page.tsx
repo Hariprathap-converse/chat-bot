@@ -7,7 +7,9 @@ import { useOpsBot } from "@/context/json-context";
 import { NavChatBot } from "@/Icons/global/home";
 import { cn } from "@/lib/utils";
 import {
+  Check,
   Copy,
+  CopyCheck,
   Edit,
   FileArchive,
   FileDiff,
@@ -39,6 +41,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 const page = () => {
   const { data } = useOpsBot();
   const [messages, setMessages] = useState<
@@ -106,6 +109,45 @@ const page = () => {
   ]);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [reactions, setReactions] = useState<{
+    [key: number]: { liked: boolean; disliked: boolean };
+  }>({});
+
+  const [copied, setCopied] = useState<{ [key: number]: boolean }>({});
+
+  const handleCopy = (index: number, text: string) => {
+    navigator.clipboard.writeText(text);
+
+    toast.success("Copied successfully!");
+
+    // Change icon
+    setCopied((prev) => ({ ...prev, [index]: true }));
+
+    // Reset icon after 2 seconds
+    setTimeout(() => {
+      setCopied((prev) => ({ ...prev, [index]: false }));
+    }, 2000);
+  };
+
+  const toggleLike = (index: number) => {
+    setReactions((prev) => ({
+      ...prev,
+      [index]: {
+        liked: !prev[index]?.liked,
+        disliked: prev[index]?.liked ? prev[index].disliked : false,
+      },
+    }));
+  };
+
+  const toggleDislike = (index: number) => {
+    setReactions((prev) => ({
+      ...prev,
+      [index]: {
+        disliked: !prev[index]?.disliked,
+        liked: prev[index]?.disliked ? prev[index].liked : false,
+      },
+    }));
+  };
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -190,6 +232,11 @@ const page = () => {
   //   }
   // };
 
+  const grouped = [];
+  for (let i = 0; i < messages.length; i += 2) {
+    grouped.push([messages[i], messages[i + 1]]);
+  }
+
   return (
     <div className="bg-background relative min-h-screen w-full p-[50px] pb-0 pr-2 flex flex-col item-center justify-center">
       <div className="absolute left-5 rounded-2xl top-5 ">
@@ -218,174 +265,222 @@ const page = () => {
           )}
 
           {/* Chat Conversation */}
-          <div className="flex flex-col min-w-[60%] max-w-[61%] gap-4 p-4 ">
-            {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`flex w-full ${
-                  msg.role === "bot" ? "justify-start" : "justify-end"
-                }`}
-              >
-                <div className="flex group relative flex-col gap-2 ">
+          <div className="flex flex-col min-w-[60%] max-w-[61%] gap-[11px] p-4 ">
+            {grouped.map((pair, idx) => (
+              <div key={`group-${idx}`} className="flex flex-col gap-2">
+                {/* User Conversation  */}
+                {pair[0] && (
                   <div
-                    className={
-                      msg.role === "bot"
-                        ? "flex items-start w-full  gap-2"
-                        : "flex items-center   w-full  gap-1"
-                    }
+                    key={`user-${idx}`}
+                    className={`flex w-full justify-end`}
                   >
-                    {msg.role === "bot" && (
-                      <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center">
-                        <NavChatBot />
-                      </div>
-                    )}
-
-                    <div
-                      className={`relative w-full   font-medium   ${
-                        msg.role === "bot"
-                          ? "bg-bot text-bot-foreground  relative z-10 ring-1 ring-accent !rounded-[8px]  !rounded-tl-none  px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]"
-                          : "bg-transparent text-foreground rounded-tl-none text-end px-2 py-2"
-                      }`}
-                    >
-                      <div
-                        className={cn(
-                          "inline-flex",
-                          msg.role === "user"
-                            ? "max-w-[70%] min-w-[700px] text-left justify-end whitespace-pre-wrap "
-                            : "max-w-[96%] justify-start whitespace-pre-wrap "
+                    <div className="flex group relative flex-col gap-2 ">
+                      <div className={"flex items-center   w-full  gap-1"}>
+                        <div
+                          className={`relative w-full   font-medium   bg-transparent text-foreground rounded-tl-none text-end px-2 py-2`}
+                        >
+                          <div
+                            className={cn(
+                              "inline-flex max-w-[70%] min-w-[700px] text-left justify-end whitespace-pre-wrap "
+                            )}
+                          >
+                            <span className="break-all">{pair[0].content}</span>
+                          </div>
+                        </div>
+                        {pair[0].role === "user" && (
+                          <div className="min-w-8 min-h-8 ml-1 rounded-full bg-muted  shadow items-center ">
+                            <Image
+                              src="/profile.jpg"
+                              width={40}
+                              height={40}
+                              alt="user"
+                              className="object-cover rounded-full"
+                            ></Image>
+                          </div>
                         )}
-                      >
-                        <span className="break-all">{msg.content}</span>
                       </div>
+                      {pair[0].role === "user" && (
+                        <div className="absolute hidden group-hover:flex -top-[15px] right-4 pl-8 h-[20px] gap-3 items-center">
+                          {/* <Copy
+                            onClick={() => handleCopy(pair[0].content)}
+                            className="h-[14px]  w-[14px]  cursor-pointer text-sub-title"
+                          /> */}
+                          {copied[idx] ? (
+                            <CopyCheck className="h-[14px] w-[14px] text-green-500" />
+                          ) : (
+                            <Copy
+                              className="h-[14px] w-[14px] cursor-pointer text-sub-title"
+                              onClick={() => handleCopy(idx, pair[0].content)}
+                            />
+                          )}
 
-                      {msg.role === "bot" && (
-                        <div>
-                          <span
-                            className="
+                          <Edit className="h-[14px]  w-[14px]  mt-1 cursor-pointer text-sub-title" />
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <div className="cursor-pointer rounded-[4px]">
+                                <MoreHorizontal className="h-[17px]  w-[17px]   cursor-pointer text-sub-title" />
+                              </div>
+                            </PopoverTrigger>
+
+                            <PopoverContent className="z-50 p-[6px] w-40 bg-white rounded-md shadow-md">
+                              <div className="flex flex-col gap-1">
+                                <Button
+                                  variant={"ghost"}
+                                  className="flex group items-center gap-2 p-1 py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                                >
+                                  <FileArchive className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                  Option 1
+                                </Button>
+                                <Button
+                                  variant={"ghost"}
+                                  className="flex group items-center gap-2 p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                                >
+                                  <FileDiff className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                  Option 2
+                                </Button>
+                                <Button
+                                  variant={"ghost"}
+                                  className="flex group items-center gap-2  p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                                >
+                                  <HardDriveDownload className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                  Option 3
+                                </Button>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Bot Conversation  */}
+                {pair[1] && (
+                  <div
+                    key={`bot-${idx}`}
+                    className={"flex w-full justify-start"}
+                  >
+                    <div className="flex group relative flex-col gap-2 ">
+                      <div className={"flex items-start w-full  gap-2"}>
+                        <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center">
+                          <NavChatBot />
+                        </div>
+
+                        <div
+                          className={`relative w-full   font-medium  bg-bot text-bot-foreground  relative z-10 ring-1 ring-accent !rounded-[8px]  !rounded-tl-none  px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]`}
+                        >
+                          <div
+                            className={cn(
+                              "inline-flex justify-start whitespace-pre-wrap"
+                            )}
+                          >
+                            <span className="break-all">{pair[1].content}</span>
+                          </div>
+
+                          <div>
+                            <span
+                              className="
                           absolute -left-[6px] -top-[7.5px] !z-50 -translate-x-full
                           w-[2px] h-[14px] bg-accent
                           rotate-[88deg]
                         "
-                          ></span>
-                          <span
-                            className="
+                            ></span>
+                            <span
+                              className="
                           absolute -left-px -top-[1px] -translate-x-full
                           w-[12px] h-[14px] z-50 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]
                           bg-bot 
                           [clip-path:polygon(100%_0,0_0,0_100%)]
                           rotate-90
                         "
-                          ></span>
-                          <span
-                            className="
+                            ></span>
+                            <span
+                              className="
                           absolute -left-[6px] -top-[2px] z-50 -translate-x-full
                           w-[1px] h-[18px] bg-accent
                           rotate-[130deg]
                         "
-                          ></span>
+                            ></span>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                    {msg.role === "user" && (
-                      <div className="min-w-8 min-h-8 ml-1 rounded-full bg-muted  shadow items-center ">
-                        <Image
-                          src="/profile.jpg"
-                          width={40}
-                          height={40}
-                          alt="user"
-                          className="object-cover rounded-full"
-                        ></Image>
                       </div>
-                    )}
+                      <div className="relative">
+                        <div className="absolute hidden group-hover:flex  pl-8 h-[20px] gap-3 items-center">
+                          {/* <Copy
+                            onClick={() => handleCopy(pair[1].content)}
+                            className="h-[14px]  w-[14px]  cursor-pointer text-sub-title"
+                          /> */}
+                          {copied[idx] ? (
+                            <CopyCheck className="h-[14px] w-[14px] text-green-500" />
+                          ) : (
+                            <Copy
+                              className="h-[14px] w-[14px] cursor-pointer text-sub-title"
+                              onClick={() => handleCopy(idx, pair[1].content)}
+                            />
+                          )}
+
+                          <ThumbsUp
+                            className={cn(
+                              "h-[14px] w-[14px] cursor-pointer",
+                              reactions[idx]?.liked
+                                ? "text-emerald-500"
+                                : "text-sub-title"
+                            )}
+                            onClick={() => toggleLike(idx)}
+                          />
+
+                          <ThumbsDown
+                            className={cn(
+                              "h-[14px] w-[14px] cursor-pointer",
+                              reactions[idx]?.disliked
+                                ? "text-red-500"
+                                : "text-sub-title"
+                            )}
+                            onClick={() => toggleDislike(idx)}
+                          />
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <div className="cursor-pointer rounded-[4px]">
+                                <MoreHorizontal className="h-[17px]  w-[17px]   cursor-pointer text-sub-title" />
+                              </div>
+                            </PopoverTrigger>
+
+                            <PopoverContent className="z-50 p-[6px] w-40 bg-white rounded-md shadow-md">
+                              <div className="flex flex-col gap-1">
+                                <Button
+                                  variant={"ghost"}
+                                  className="flex group items-center gap-2 p-1 py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                                >
+                                  <FileArchive className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                  Option 1
+                                </Button>
+                                <Button
+                                  variant={"ghost"}
+                                  className="flex group items-center gap-2 p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                                >
+                                  <FileDiff className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                  Option 2
+                                </Button>
+                                <Button
+                                  variant={"ghost"}
+                                  className="flex group items-center gap-2  p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
+                                >
+                                  <HardDriveDownload className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
+                                  Option 3
+                                </Button>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  {msg.role === "bot" && (
-                    <div className="relative">
-                      <div className="absolute hidden group-hover:flex  pl-8 h-[20px] gap-3 items-center">
-                        <Copy className="h-[14px]  w-[14px]  cursor-pointer text-sub-title" />
-                        <ThumbsUp className="h-[14px]  w-[14px]  cursor-pointer text-sub-title" />
-                        <ThumbsDown className="h-[14px]  w-[14px]  mt-1 cursor-pointer text-sub-title" />
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <div className="cursor-pointer rounded-[4px]">
-                              <MoreHorizontal className="h-[17px]  w-[17px]   cursor-pointer text-sub-title" />
-                            </div>
-                          </PopoverTrigger>
-
-                          <PopoverContent className="z-50 p-[6px] w-40 bg-white rounded-md shadow-md">
-                            <div className="flex flex-col gap-1">
-                              <Button
-                                variant={"ghost"}
-                                className="flex group items-center gap-2 p-1 py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
-                              >
-                                <FileArchive className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
-                                Option 1
-                              </Button>
-                              <Button
-                                variant={"ghost"}
-                                className="flex group items-center gap-2 p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
-                              >
-                                <FileDiff className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
-                                Option 2
-                              </Button>
-                              <Button
-                                variant={"ghost"}
-                                className="flex group items-center gap-2  p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
-                              >
-                                <HardDriveDownload className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
-                                Option 3
-                              </Button>
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                    </div>
-                  )}
-                  {msg.role === "user" && (
-                    <div className="absolute hidden group-hover:flex -top-[15px] right-4 pl-8 h-[20px] gap-3 items-center">
-                      <Copy className="h-[14px]  w-[14px]  cursor-pointer text-sub-title" />
-                      <Edit className="h-[14px]  w-[14px]  mt-1 cursor-pointer text-sub-title" />
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <div className="cursor-pointer rounded-[4px]">
-                            <MoreHorizontal className="h-[17px]  w-[17px]   cursor-pointer text-sub-title" />
-                          </div>
-                        </PopoverTrigger>
-
-                        <PopoverContent className="z-50 p-[6px] w-40 bg-white rounded-md shadow-md">
-                          <div className="flex flex-col gap-1">
-                            <Button
-                              variant={"ghost"}
-                              className="flex group items-center gap-2 p-1 py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0 focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
-                            >
-                              <FileArchive className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
-                              Option 1
-                            </Button>
-                            <Button
-                              variant={"ghost"}
-                              className="flex group items-center gap-2 p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
-                            >
-                              <FileDiff className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
-                              Option 2
-                            </Button>
-                            <Button
-                              variant={"ghost"}
-                              className="flex group items-center gap-2  p-1  py-1 cursor-pointer  focus:ring-0 focus-visible:ring-0  focus:ring-offset-0 focus-visible:ring-offset-0 justify-start  h-fit   text-sm text-foreground rounded"
-                            >
-                              <HardDriveDownload className="h-[14px]  w-[14px] text-muted-foreground group-hover:text-accent-foreground" />{" "}
-                              Option 3
-                            </Button>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                  )}
-                </div>
+                )}
 
                 <div ref={messagesEndRef} />
               </div>
             ))}
           </div>
-
         </div>
         <div className="flex absolute bottom-2 z-50  flex-col-reverse p-5 w-full max-w-[61%] ">
           <div className="flex relative  p-0">
