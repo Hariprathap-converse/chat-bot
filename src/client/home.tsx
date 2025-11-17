@@ -114,7 +114,7 @@ export default function DynamicHome() {
                placeholder:font-normal placeholder:text-base placeholder:text-foreground  
                leading-[150%] tracking-normal font-normal !text-base text-heading outline-none 
                 focus:ring-0 focus:ring-offset-0 focus:ring-transparent  focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
-                placeholder="Send a message..."
+                placeholder={data.search.placeholder}
               />
             </div>
             <Link href={"/chat"}>
@@ -148,13 +148,13 @@ export default function DynamicHome() {
                       "group bg-white cursor-pointer w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
                     )}
                   >
-                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[28%] left-[45%] bg-circle   rounded-full"></div>
+                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[36%] left-[45%] bg-circle   rounded-full"></div>
                     <span
                       className={cn(
                         selectedSection == item.key
                           ? "opacity-100"
                           : " opacity-0 group-hover:opacity-100",
-                        "absolute top-3 right-4  translate-y-1  group-hover:translate-y-0 transition-all duration-500 ease-out"
+                        "absolute top-3 right-4  translate-y-1  group-hover:translate-y-0 transition-all duration-500 ease-out "
                       )}
                     >
                       <Sparkles className="text-[hsla(245,96%,70%,1)] h-5 w-5" />
@@ -162,11 +162,12 @@ export default function DynamicHome() {
 
                     <span
                       className={cn(
-                        selectedSection == item.key && "scale-[140%]",
-                        "relative  group-hover:scale-[140%]  transition-all duration-500 h-[50px]  z-50 "
+                        selectedSection == item.key &&
+                          "scale-[130%] origin-bottom ",
+                        "relative  group-hover:scale-[130%] origin-bottom  transition-all duration-[800ms] h-[50px]  z-50   "
                       )}
                     >
-                      {getIcon(item.icon)}
+                      {getIcon(item.icon, "h-[50px] w-[50px] stroke-[1.2px]")}
                     </span>
                     <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300  z-50  text-sm font-medium text-start ">
                       {item.label}
@@ -217,7 +218,12 @@ export default function DynamicHome() {
                         key={index}
                         className="border group rounded-[7px] hover:bg-background hover:border-hover-border cursor-pointer p-[7px] min-w-[180px] w-full px-3  flex gap-2 items-center"
                       >
-                        <span>{getIcon(item.icon, "h-4 w-4")}</span>
+                        <span>
+                          {getIcon(
+                            item.icon,
+                            "h-4 w-4 group-hover:text-[hsla(245,96%,70%,1)]"
+                          )}
+                        </span>
                         <span className="text-xs font-medium">
                           {item.label}
                         </span>

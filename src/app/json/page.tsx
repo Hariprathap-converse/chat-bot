@@ -1,4 +1,4 @@
-import { OpsBotJsonEditor } from "@/client/edit-json";
+import OpsBotJsonEditor from "@/client/edit-json";
 
 const page = () => {
   return <OpsBotJsonEditor />;

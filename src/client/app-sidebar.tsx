@@ -177,8 +177,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader
         className={cn(
           !open
-            ? "flex flex-col-reverse "
-            : "grid grid-cols-[1fr_auto]  pr-5  px-5",
+            ? "flex flex-col-reverse  transition-all duration-500 "
+            : "grid grid-cols-[1fr_auto] w-full transition-all duration-0 pr-5  px-5 ",
           "rounded-2xl pt-5 cursor-pointer items-center gap-4 mb-1 "
         )}
       >

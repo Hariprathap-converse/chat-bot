@@ -52,6 +52,7 @@ interface OpsBotData {
   chat: {
     introTitle: string;
     subtitle: string;
+    inputPlaceholder: string;
   };
 }
 
@@ -70,7 +71,7 @@ const defaultData: OpsBotData = {
     customIcon: "BotIcon",
   },
 
-  search: { placeholder: "How can assist you ...", buttonIcon: "SendIcon" },
+  search: { placeholder: "How can I assist you...", buttonIcon: "SendIcon" },
 
   sections: [
     {
@@ -86,8 +87,8 @@ const defaultData: OpsBotData = {
         {
           key: "role",
           label: "Role",
-          icon: "MdOutlineAdminPanelSettings",
-          hoverIcon: "MdOutlineAdminPanelSettings",
+          icon: "ShieldUser",
+          hoverIcon: "ShieldUser",
         },
         {
           key: "team",
@@ -178,6 +179,7 @@ const defaultData: OpsBotData = {
     introTitle: "Hello Hari!",
     subtitle:
       "Your personal assistant for all operational queries. What can I assist you with today?",
+    inputPlaceholder: "How can I assist you...",
   },
 };
 
