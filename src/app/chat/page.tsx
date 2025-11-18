@@ -254,7 +254,7 @@ const page = () => {
         ref={containerRef}
         className="flex relative flex-col pb-0 w-full h-full  items-center"
       >
-        <div className="flex flex-col items-center gap-4 mx-auto w-full max-h-[750px]  overflow-auto">
+        <div className="flex flex-col items-center gap-4 mx-auto w-full max-h-[750px] pt-2 overflow-auto">
           {messages.length <= 0 && (
             <div
               ref={messagesEndRef}
@@ -283,11 +283,11 @@ const page = () => {
                       key={`user-${idx}`}
                       className={`flex w-full justify-end`}
                     >
-                      <div className="flex group relative flex-col  items-end max-h-[58px] justify-end">
+                      <div className="flex group relative flex-col  items-end  justify-end gap-[4px] ">
                         {pair[0].role === "user" && (
                           <div
                             className={cn(
-                              " opacity-0  group-hover:opacity-100 flex gap-3 items-center",
+                              " opacity-0  group-hover:opacity-100 flex gap-3 items-center h-[10px]",
                               useropen === idx ? "opacity-100" : "opacity-0"
                             )}
                           >
@@ -346,7 +346,7 @@ const page = () => {
                         )}
                         <div className={"flex items-center   w-full  gap-1"}>
                           <div
-                            className={`relative w-full   font-medium   bg-transparent text-foreground rounded-tl-none text-end px-2 py-2`}
+                            className={`relative w-full   font-medium   bg-transparent text-foreground rounded-tl-none text-end px-2 py-0`}
                           >
                             <div
                               className={cn(
@@ -380,7 +380,7 @@ const page = () => {
                       key={`bot-${idx}`}
                       className={"flex w-full justify-start"}
                     >
-                      <div className="flex group relative flex-col gap-1 ">
+                      <div className="flex group relative flex-col gap-[4px] ">
                         <div className={"flex items-start w-full  gap-2"}>
                           <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center">
                             <NavChatBot />
@@ -426,10 +426,10 @@ const page = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="relative">
+                        <div className="relative z-50 h-[16px]">
                           <div
                             className={cn(
-                              " opacity-0 group-hover:opacity-100 flex  pl-8 h-[20px] gap-3 items-center",
+                              " opacity-0 group-hover:opacity-100 flex  pl-8 max-h-[20px] gap-3 items-center",
                               botopen === idx ? "opacity-100" : "opacity-0"
                             )}
                           >
