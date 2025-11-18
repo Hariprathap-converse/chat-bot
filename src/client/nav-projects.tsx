@@ -45,21 +45,20 @@ export function NavProjects({
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a
-                href={item.url}
-                className="py-[18px] font-medium text-foreground !rounded-[4px]"
-              >
-                <item.icon className="min-w-5 min-h-5 " />
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild className="mt-1 rounded-[4px]">
-                <SidebarMenuAction className="cursor-pointer" showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
+              <DropdownMenuTrigger className="mt-1 rounded-[4px] w-full">
+                <SidebarMenuButton asChild>
+                  <a
+                    href={item.url}
+                    className="py-[18px] flex  justify-between w-full font-medium text-foreground !rounded-[4px]"
+                  >
+                    <div className="flex w-full gap-2">
+                      <item.icon className="w-5 h-5 " />
+                      <span>{item.name}</span>
+                    </div>
+                    <MoreHorizontal />
+                  </a>
+                </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-48 rounded-lg ml-6 p-2 "

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,8 +9,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { useSidebar } from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const { setOpen } = useSidebar();
+  const router = useRouter();
+  useEffect(() => {
+    setOpen(false);
+  }, []);
   return (
     <div className="min-h-screen grid bg-white items-center  grid-cols-2 w-full ">
       <div className="h-full w-full pl-2">
@@ -68,8 +76,8 @@ export default function Login() {
                   className=" p-0 h-[45px] !rounded-[12px] border-0 bg-white px-[21px] flex pl-11 items-center  
                placeholder:font-normal placeholder:text-sm placeholder:text-foreground  
                leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none 
-                focus:ring-0 focus:ring-offset-0 focus:ring-transparent  focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title
-                !shadow-[0px_0px_4px_1px_hsla(245,96%,70%,0.3)]"
+               focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground focus:ring-offset-0    focus-visible:ring-offset-0  focus:placeholder:text-sub-title
+                !shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]"
                   placeholder="Enter your email "
                 />
               </div>
@@ -112,25 +120,28 @@ export default function Login() {
                   className=" p-0 h-[45px] !rounded-[12px] border-0 bg-white px-[21px] flex pl-11 items-center  
                placeholder:font-normal placeholder:text-sm placeholder:text-foreground  
                leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none 
-                focus:ring-0 focus:ring-offset-0 focus:ring-transparent  focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title
-                !shadow-[0px_1px_4px_0px_hsla(245,96%,70%,0.2)]"
+                focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground  focus-visible:ring-offset-0  focus:placeholder:text-sub-title
+                !shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]"
                   placeholder="Enter your password"
                 />
               </div>
 
               <div className="flex w-full items-center justify-between pl-2">
-                <div className="flex items-center gap-3 ">
+                <div className=" group flex items-center gap-2 ">
                   <Checkbox
                     id="reminder"
-                    className="cursor-pointer border-0 ring-1  ring-accent"
+                    className="cursor-pointer border-0 ring-1  ring-accent group-hover:scale-105"
                   />
-                  <Label htmlFor="reminder" className="text-sub-heading">
+                  <Label
+                    htmlFor="reminder"
+                    className="text-sub-heading cursor-pointer group-hover:scale-[101%] transition-all duration-100"
+                  >
                     Remember me
                   </Label>
                 </div>
                 <div className="flex items-center gap-3">
                   <Link href={"/"}>
-                    <Label className="text-dark-circle">
+                    <Label className="text-dark-circle hover:scale-[101%] cursor-pointer ">
                       Forgot password ?
                     </Label>
                   </Link>
@@ -138,15 +149,19 @@ export default function Login() {
               </div>
 
               <Button
+                onClick={() => router.push("/")}
                 className={cn(
-                  " w-full mt-5 capitalize text-base font-semibold h-[45px]  bg-sidebar-accent  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
+                  " w-full mt-5 capitalize text-base font-semibold h-[45px]  hover:scale-[101%]  bg-sidebar-accent  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
                 )}
               >
-                <Link href={"/"}> Log In</Link>
+                Log In
               </Button>
               <div className="text-sm text-sub-heading font-medium mt-4 flex gap-1">
                 Don't have an account ?
-                <Link href={"/"} className="text-dark-circle font-medium">
+                <Link
+                  href={"/"}
+                  className="text-dark-circle font-medium  hover:scale-[103%]"
+                >
                   Register
                 </Link>
               </div>

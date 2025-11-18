@@ -102,7 +102,6 @@
   --bot-text: hsla(0, 0%, 33%, 1);
   --hover-border: hsla(245, 96%, 70%, 0.3);
 }
-
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -165,13 +164,13 @@ body {
 
 /* Scrollbar Thumb */
 ::-webkit-scrollbar-thumb {
-  background: hsla(245, 96%, 70%, 1); /* Gray thumb */
+  background: hsla(0, 0%, 33%, 0.2); /* Gray thumb */
   border-radius: 8px;
 }
 
 /* Hover Thumb */
 ::-webkit-scrollbar-thumb:hover {
-  background: hsla(245, 96%, 70%, 1);
+  background: hsla(0, 0%, 33%, 0.2);
 }
 
 /* Scrollbar Track background */

@@ -81,7 +81,7 @@ const defaultData: OpsBotData = {
         {
           key: "leave",
           label: "Leave",
-          icon: "LeaveIcon",
+          icon: "Handshake",
           hoverIcon: "HoverLeaveIcon",
         },
         {

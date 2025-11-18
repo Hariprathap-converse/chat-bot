@@ -13,7 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
 import * as FaIcons from "react-icons/fa";
 import * as MdIcons from "react-icons/md";
@@ -22,7 +22,9 @@ import * as TbIcons from "react-icons/tb";
 import * as AiIcons from "react-icons/ai";
 import * as BsIcons from "react-icons/bs";
 import * as IoIcons from "react-icons/io";
-
+import Profile from "./profile";
+import { AppSidebar } from "./app-sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
 
 const SendIcon = () => (
   <svg
@@ -86,10 +88,19 @@ export const getIcon = (name?: string, className?: string) => {
 
 export default function DynamicHome() {
   const { data } = useOpsBot();
+  const { setOpen } = useSidebar();
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
-
+  useEffect(() => {
+    setOpen(false);
+  }, []);
   return (
-    <div className="bg-background h-full w-full p-[87px] pb-0 flex item-center justify-center">
+    <div className="relative bg-background h-full w-full p-[87px] pb-0 flex item-center justify-center">
+      <div className="absolute right-3 top-1.5 ">
+        <Profile />
+      </div>
+      <div className="absolute left-5 rounded-2xl top-5 ">
+        <AppSidebar />
+      </div>
       <main className="flex flex-col gap-[45px]">
         <div className="flex flex-col items-center gap-[27px]">
           <div className="flex flex-col items-center w-full gap-1.5">
@@ -129,7 +140,7 @@ export default function DynamicHome() {
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[38px] pb-[25px] pt-3"
+              className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
             >
               <div className="flex gap-3 items-center  ">
                 <span>{getIcon(section.icon)}</span>
@@ -149,7 +160,7 @@ export default function DynamicHome() {
                       "group bg-white cursor-pointer w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
                     )}
                   >
-                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[36%] left-[45%] bg-circle   rounded-full"></div>
+                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[39%] left-[46%] bg-circle   rounded-full"></div>
                     <span
                       className={cn(
                         selectedSection == item.key
@@ -165,12 +176,15 @@ export default function DynamicHome() {
                       className={cn(
                         selectedSection == item.key &&
                           "scale-[130%] origin-bottom ",
-                        "relative  group-hover:scale-[130%] origin-bottom  transition-all duration-[800ms] h-[50px]  z-50   "
+                        "relative bottom-2  group-hover:scale-[130%] origin-bottom  transition-all duration-[800ms] h-[50px]  z-50   "
                       )}
                     >
-                      {getIcon(item.icon, "h-[50px] w-[50px] stroke-[1.2px]")}
+                      {getIcon(
+                        item.icon,
+                        "h-[55px] w-[55px] text-heading group-hover:text-foreground stroke-[0.7px] group-hover:stroke-[1px]"
+                      )}
                     </span>
-                    <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300  z-50  text-sm font-medium text-start ">
+                    <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300  z-50  !text-[12px] font-medium text-start ">
                       {item.label}
                     </span>
                   </div>
@@ -180,7 +194,7 @@ export default function DynamicHome() {
           ))}
 
           {selectedSection === null ? (
-            <div className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3">
+            <div className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
               <div className="flex gap-3 items-center">
                 <span className="text-heading text-base font-medium tracking-normal">
                   Quick Operations
