@@ -31,7 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable}  ${inter.variable}  h-full w-full`}
+      suppressHydrationWarning
+    >
       <body className={`${inter.variable}  antialiased bg-background`}>
         <ThemeProvider attribute="class" defaultTheme="light">
           <Toaster richColors position="top-right" />

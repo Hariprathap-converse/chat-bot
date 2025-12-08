@@ -168,7 +168,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open, setOpen } = useSidebar();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
- 
+
   return (
     <Sidebar
       collapsible="icon"

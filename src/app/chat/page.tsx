@@ -240,10 +240,9 @@ const page = () => {
     grouped.push([messages[i], messages[i + 1]]);
   }
 
-  console.log("2", botopen);
   return (
-    <div className="bg-background relative min-h-screen w-full p-[50px] pb-0 pr-1 flex flex-col item-center justify-center">
-      <div className="absolute right-3 top-1.5 ">
+    <div className="bg-background relative min-h-screen w-full pb-0 pr-1 flex flex-col item-center justify-center">
+      <div className="absolute right-3 z-50 top-1.5 ">
         <Profile />
       </div>
       <div className="absolute left-5 rounded-2xl top-5 ">
@@ -252,9 +251,9 @@ const page = () => {
 
       <main
         ref={containerRef}
-        className="flex relative flex-col pb-0 w-full h-full  items-center"
+        className="grid grid-rows-[1fr_auto] justify-centerpb-0 w-full h-full  max-h-screen  overflow-hidden  items-center"
       >
-        <div className="flex flex-col items-center gap-4 mx-auto w-full max-h-[750px] pt-2 overflow-auto">
+        <div className="flex flex-col items-center gap-4 mx-auto w-full h-full pt-2 overflow-auto">
           {messages.length <= 0 && (
             <div
               ref={messagesEndRef}
@@ -274,7 +273,6 @@ const page = () => {
           {/* Chat Conversation */}
           <div className="flex flex-col min-w-[60%] max-w-[61%] gap-0 p-4 ">
             {grouped.map((pair, idx) => {
-              console.log("idx", idx);
               return (
                 <div key={`group-${idx}`} className="flex flex-col gap-1">
                   {/* User Conversation  */}
@@ -510,7 +508,7 @@ const page = () => {
             })}
           </div>
         </div>
-        <div className="flex absolute bottom-2 z-50  flex-col-reverse p-5 w-full max-w-[61%] ">
+        <div className="flex  mx-auto z-50  flex-col-reverse p-5 w-full max-w-[61%] ">
           <div className="flex relative  p-0">
             <div className="p-px  rounded-[14px] w-full  flex items-center shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)]  bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] ">
               <Textarea
@@ -523,7 +521,7 @@ const page = () => {
                   }
                 }}
                 className={cn(
-                  " p-0 min-h-14 rounded-[14px] !max-h-[300px]  resize-none border-0 bg-white px-[21px] pr-[72px] flex  items-center  placeholder:font-normal placeholder:text-base placeholder:text-foreground   leading-[150%] tracking-normal font-normal !text-base text-heading outline-none  max-h-[100px] overflow-auto  focus:ring-0 focus:ring-offset-0 focus:ring-transparent  focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title",
+                  " p-0 min-h-14 max-h-[400px] rounded-[14px]   resize-none border-0 bg-white px-[21px] pr-[72px] flex  items-center  placeholder:font-normal placeholder:text-base placeholder:text-foreground   leading-[150%] tracking-normal font-normal !text-base text-heading outline-none   overflow-auto  focus:ring-0 focus:ring-offset-0 focus:ring-transparent  focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title",
                   input.length > 0 ? "py-4" : "pt-4"
                 )}
                 placeholder={data.chat.inputPlaceholder}
