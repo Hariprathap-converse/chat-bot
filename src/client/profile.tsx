@@ -9,7 +9,7 @@ import { NavChatBot } from "@/Icons/global/home";
 import { History, LogOut, MessageCircleMore, User } from "lucide-react";
 import Link from "next/link";
 
-import React, { useState } from "react";
+import { useState } from "react";
 interface AccountData {
   id: string;
   name: string;
@@ -113,15 +113,21 @@ const Profile = () => {
           </li>
 
           <li className="cursor-pointer border-dashed border-gray-200 px-2  last:border-t last:pt-2">
-            <Link
-              className="group flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground  font-medium "
-              href="/login"
+            <button
+              onClick={async () => {
+                const Cookies = (await import("js-cookie")).default;
+                localStorage.removeItem("token");
+                localStorage.removeItem("refresh_token");
+                Cookies.remove("token");
+                window.location.href = "/login";
+              }}
+              className="w-full group flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground  font-medium "
             >
               <span className="text-foreground  group-hover:text-accent-foreground font-medium">
                 <LogOut className="h-5 w-5 text-foreground  group-hover:text-accent-foreground" />
               </span>
               Logout
-            </Link>
+            </button>
           </li>
         </ul>
       </PopoverContent>

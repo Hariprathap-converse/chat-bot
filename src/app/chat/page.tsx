@@ -251,7 +251,7 @@ const page = () => {
 
       <main
         ref={containerRef}
-        className="grid grid-rows-[1fr_auto] justify-centerpb-0 w-full h-full  max-h-screen  overflow-hidden  items-center"
+        className="grid grid-rows-[1fr_auto] justify-centerpb-0 w-full h-full pt-[40px] max-h-screen  overflow-hidden  items-center"
       >
         <div className="flex flex-col items-center gap-4 mx-auto w-full h-full pt-2 overflow-auto">
           {messages.length <= 0 && (
@@ -400,7 +400,7 @@ const page = () => {
                             <div>
                               <span
                                 className="
-                          absolute -left-[6px] -top-[7.5px] !z-50 -translate-x-full
+                          absolute -left-[6px] -top-[7px] !z-50 -translate-x-full
                           w-[2px] h-[14px] bg-accent
                           rotate-[88deg]
                         "
@@ -427,7 +427,7 @@ const page = () => {
                         <div className="relative z-50 h-[16px]">
                           <div
                             className={cn(
-                              " opacity-0 group-hover:opacity-100 flex  pl-8 max-h-[20px] gap-3 items-center",
+                              " opacity-0 group-hover:opacity-100 flex  pl-8 max-h-[20px] gap-2 items-center",
                               botopen === idx ? "opacity-100" : "opacity-0"
                             )}
                           >
@@ -439,26 +439,31 @@ const page = () => {
                                 onClick={() => handleCopy(idx, pair[1].content)}
                               />
                             )}
+                            <div className="flex items-start group/thumb  gap-1">
+                              <span className={cn(reactions[idx]?.liked ? "text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Good</span>
+                              <ThumbsUp
+                                className={cn(
+                                  "h-[14px] w-[14px] cursor-pointer",
+                                  reactions[idx]?.liked
+                                    ? "text-emerald-500"
+                                    : "text-sub-title group-hover/thumb:text-accent-foreground "
+                                )}
+                                onClick={() => toggleLike(idx)}
+                              />
+                            </div>
+                            <div className="flex items-end group/thumb  gap-1">
+                              <span className={cn(reactions[idx]?.disliked ? "text-red-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Bad</span>
 
-                            <ThumbsUp
-                              className={cn(
-                                "h-[14px] w-[14px] hover:text-accent-foreground cursor-pointer",
-                                reactions[idx]?.liked
-                                  ? "text-emerald-500"
-                                  : "text-sub-title"
-                              )}
-                              onClick={() => toggleLike(idx)}
-                            />
-
-                            <ThumbsDown
-                              className={cn(
-                                "h-[14px] w-[14px] hover:text-accent-foreground cursor-pointer",
-                                reactions[idx]?.disliked
-                                  ? "text-red-500"
-                                  : "text-sub-title"
-                              )}
-                              onClick={() => toggleDislike(idx)}
-                            />
+                              <ThumbsDown
+                                className={cn(
+                                  "h-[14px] w-[14px] cursor-pointer",
+                                  reactions[idx]?.disliked
+                                    ? "text-red-500"
+                                    : "text-sub-title group-hover/thumb:text-accent-foreground"
+                                )}
+                                onClick={() => toggleDislike(idx)}
+                              />
+                            </div>
                             <Popover
                               onOpenChange={(open) =>
                                 setBotOpen(open ? idx : undefined)

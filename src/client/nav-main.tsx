@@ -44,19 +44,19 @@ export function NavMain({
             key={item.title}
             asChild
             defaultOpen={item.isActive}
-            className="group/collapsible"
+            className="group/collapsible w-full "
           >
-            <SidebarMenuItem>
+            <SidebarMenuItem className={cn(open ? "" : "ml-1 ")}>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton
                   onClick={() => {
                     setOpen(true);
                   }}
                   tooltip={item.title}
-                  className="cursor-pointer mx-auto py-[18px] "
+                  className="cursor-pointer mx-auto py-[18px]  min-w-full "
                 >
                   {item.icon && (
-                    <item.icon className="min-w-5 min-h-5  group-hover/collapsible:text-sidebar-accent-foreground  font-medium text-foreground" />
+                    <item.icon className={cn(open ? "" : "ml-[2px] ", "min-w-5 min-h-5  group-hover/collapsible:text-sidebar-accent-foreground  font-medium text-foreground shrink-0")} />
                   )}
                   <span
                     className={cn(

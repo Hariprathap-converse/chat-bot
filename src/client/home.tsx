@@ -25,6 +25,7 @@ import * as IoIcons from "react-icons/io";
 import Profile from "./profile";
 import { AppSidebar } from "./app-sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
 
 const SendIcon = () => (
   <svg
@@ -55,7 +56,7 @@ export const dynamicIconSources: Record<string, any> = {
   ...BsIcons,
   ...IoIcons,
   BotIcon,
-  MessageIcon, // your local custom icons
+  MessageIcon,
   LeaveIcon,
   HoverLeaveIcon,
   RoleIcon,
@@ -64,15 +65,7 @@ export const dynamicIconSources: Record<string, any> = {
   SendIcon,
 };
 
-export const icons: Record<string, any> = {
-  LeaveIcon,
-  HoverLeaveIcon,
-  RoleIcon,
-  TeamIcon,
-  EditIcon,
-  SendIcon,
-  Sparkles,
-};
+
 export const getIcon = (name?: string, className?: string) => {
   if (!name) return null;
 
@@ -93,6 +86,7 @@ export default function DynamicHome() {
   useEffect(() => {
     setOpen(false);
   }, []);
+  const router = useRouter();
   return (
     <div className="relative bg-background h-full w-full p-[87px] pb-0 flex item-center justify-center">
       <div className="absolute right-3 top-1.5 ">
@@ -127,11 +121,16 @@ export default function DynamicHome() {
                leading-[150%] tracking-normal font-normal !text-base text-heading outline-none 
                 focus:ring-0 focus:ring-offset-0 focus:ring-transparent  focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
                 placeholder={data.search.placeholder}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    router.push(`/chat`);
+                  }
+                }}
               />
             </div>
             <Link href={"/chat"}>
               <button className=" absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white  bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center ">
-                {getIcon(data.search.buttonIcon)}{" "}
+                {getIcon(data.search.buttonIcon)}
                 <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
               </button>
             </Link>
@@ -175,7 +174,7 @@ export default function DynamicHome() {
                     <span
                       className={cn(
                         selectedSection == item.key &&
-                          "scale-[130%] origin-bottom ",
+                        "scale-[130%] origin-bottom ",
                         "relative bottom-2  group-hover:scale-[130%] origin-bottom  transition-all duration-[800ms] h-[50px]  z-50   "
                       )}
                     >
@@ -206,6 +205,8 @@ export default function DynamicHome() {
                   <div
                     key={index}
                     className="border group rounded-[7px]  hover:border-hover-border  hover:bg-background cursor-pointer w-[180px] p-[7px] px-3  flex gap-2 items-center"
+                    onClick={() => router.push(`/chat`)}
+
                   >
                     <span>{getIcon(item.icon)}</span>
                     <span className="text-xs font-medium">{item.label}</span>
@@ -231,6 +232,7 @@ export default function DynamicHome() {
                     {footer.items.map((item, index) => (
                       <div
                         key={index}
+                        onClick={() => router.push(`/chat`)}
                         className="border group rounded-[7px] hover:bg-background hover:border-hover-border cursor-pointer p-[7px] min-w-[180px] w-full px-3  flex gap-2 items-center"
                       >
                         <span>
@@ -249,7 +251,7 @@ export default function DynamicHome() {
               ))
           )}
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }
