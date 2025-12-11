@@ -6,6 +6,7 @@ import { OpsBotProvider } from "@/context/json-context";
 import { Toaster } from "sonner";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/client/app-sidebar";
+import { LayoutProvider } from "@/context/layout-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light">
           <Toaster richColors position="top-right" />
           <SidebarProvider defaultOpen={false}>
-            <OpsBotProvider>{children}</OpsBotProvider>
+            <LayoutProvider>
+              <OpsBotProvider>{children}</OpsBotProvider>
+            </LayoutProvider>
           </SidebarProvider>
         </ThemeProvider>
       </body>

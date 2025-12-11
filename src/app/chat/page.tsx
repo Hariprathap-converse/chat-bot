@@ -43,6 +43,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Profile from "@/client/profile";
+import EmployeeDetails from "@/client/dynamic-form/employee-details";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { BsStars } from "react-icons/bs";
+
 const page = () => {
   const { data } = useOpsBot();
   const [messages, setMessages] = useState<
@@ -112,6 +116,7 @@ const page = () => {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [useropen, setUserOpen] = useState<number | undefined>(undefined);
   const [botopen, setBotOpen] = useState<number | undefined>(undefined);
+  const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
   const [reactions, setReactions] = useState<{
     [key: number]: { liked: boolean; disliked: boolean };
   }>({});
@@ -242,7 +247,7 @@ const page = () => {
 
   return (
     <div className="bg-background relative min-h-screen w-full pb-0 pr-1 flex flex-col item-center justify-center">
-      <div className="absolute right-3 z-50 top-1.5 ">
+      <div className="absolute right-3 top-1.5 ">
         <Profile />
       </div>
       <div className="absolute left-5 rounded-2xl top-5 ">
@@ -294,7 +299,7 @@ const page = () => {
                             className="h-[14px]  w-[14px]  cursor-pointer text-sub-title"
                           /> */}
                             {copied[idx] ? (
-                              <CopyCheck className="h-[14px] w-[14px] hover:text-accent-foreground text-green-500" />
+                              <CopyCheck className="h-[14px] w-[14px] hover:text-accent-foreground cursor-pointer text-green-500" />
                             ) : (
                               <Copy
                                 className="h-[14px] w-[14px] hover:text-accent-foreground cursor-pointer text-sub-title"
@@ -430,39 +435,44 @@ const page = () => {
                               " opacity-0 group-hover:opacity-100 flex  pl-8 max-h-[20px] gap-2 items-center",
                               botopen === idx ? "opacity-100" : "opacity-0"
                             )}
-                          >
-                            {copied[idx] ? (
-                              <CopyCheck className="h-[14px] w-[14px] hover:text-accent-foreground text-green-500" />
-                            ) : (
-                              <Copy
-                                className="h-[14px] w-[14px] hover:text-accent-foreground cursor-pointer text-sub-title"
-                                onClick={() => handleCopy(idx, pair[1].content)}
-                              />
-                            )}
-                            <div className="flex items-start group/thumb  gap-1">
-                              <span className={cn(reactions[idx]?.liked ? "text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Good</span>
-                              <ThumbsUp
-                                className={cn(
-                                  "h-[14px] w-[14px] cursor-pointer",
-                                  reactions[idx]?.liked
-                                    ? "text-emerald-500"
-                                    : "text-sub-title group-hover/thumb:text-accent-foreground "
-                                )}
-                                onClick={() => toggleLike(idx)}
-                              />
-                            </div>
-                            <div className="flex items-end group/thumb  gap-1">
-                              <span className={cn(reactions[idx]?.disliked ? "text-red-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Bad</span>
+                          > <div className="flex items-center group/thumb gap-[3px]">
+                              <span className={cn(copied[idx] ? "text-emerald-500 group-hover/thumb:text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Copy</span>
 
-                              <ThumbsDown
-                                className={cn(
-                                  "h-[14px] w-[14px] cursor-pointer",
-                                  reactions[idx]?.disliked
-                                    ? "text-red-500"
-                                    : "text-sub-title group-hover/thumb:text-accent-foreground"
-                                )}
-                                onClick={() => toggleDislike(idx)}
-                              />
+                              {copied[idx] ? (
+                                <CopyCheck className="h-[14px] w-[14px] text-green-500" />
+                              ) : (
+                                <Copy
+                                  className="h-[14px] w-[14px] group-hover/thumb:text-accent-foreground cursor-pointer text-sub-title"
+                                  onClick={() => handleCopy(idx, pair[1].content)}
+                                />
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <div className="flex items-start group/thumb gap-[2px]">
+                                <span className={cn(reactions[idx]?.liked ? "text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Good</span>
+                                <ThumbsUp
+                                  className={cn(
+                                    "h-[14px] w-[14px] cursor-pointer",
+                                    reactions[idx]?.liked
+                                      ? "text-emerald-500"
+                                      : "text-sub-title group-hover/thumb:text-accent-foreground "
+                                  )}
+                                  onClick={() => toggleLike(idx)}
+                                />
+                              </div>
+                              <div className="flex items-end group/thumb  gap-[2px]">
+                                <span className={cn(reactions[idx]?.disliked ? "text-red-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Bad</span>
+
+                                <ThumbsDown
+                                  className={cn(
+                                    "h-[14px] w-[14px] cursor-pointer",
+                                    reactions[idx]?.disliked
+                                      ? "text-red-500"
+                                      : "text-sub-title group-hover/thumb:text-accent-foreground"
+                                  )}
+                                  onClick={() => toggleDislike(idx)}
+                                />
+                              </div>
                             </div>
                             <Popover
                               onOpenChange={(open) =>
@@ -542,6 +552,34 @@ const page = () => {
               {getIcon(data.search.buttonIcon)}
               <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
             </button>
+            {employeeDetailsOpen && (
+              <div className="fixed inset-0 z-50 flex h-full items-center justify-center">
+
+                {/* Overlay */}
+                <div
+                  className="absolute inset-0 bg-black/40"
+                  onClick={() => setEmployeeDetailsOpen(false)}
+                />
+
+                {/* Modal container */}
+                <div
+                  className="relative z-10 !max-w-[1200px] w-[1200px] h-fit overflow-auto max-h-[80%]  p-0 mr-4   bg-background shadow-xl rounded-lg"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <EmployeeDetails onCancel={() => setEmployeeDetailsOpen(false)} />
+                </div>
+              </div>
+            )}
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setEmployeeDetailsOpen(true)}
+              className="absolute z-50 bottom-[10px] -right-12 cursor-pointer p-2 rounded-[30px] font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center"
+            >
+              <BsStars className="min-h-[14px] size-[23px] min-w-[14px]" />
+            </Button>
+
           </div>
         </div>
       </main>

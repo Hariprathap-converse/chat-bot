@@ -46,7 +46,7 @@ export function NavMain({
             defaultOpen={item.isActive}
             className="group/collapsible w-full "
           >
-            <SidebarMenuItem className={cn(open ? "" : "ml-1 ")}>
+            <SidebarMenuItem className={cn(open ? "" : "ml-[2px] max-w-[40px]")}>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton
                   onClick={() => {
@@ -56,7 +56,7 @@ export function NavMain({
                   className="cursor-pointer mx-auto py-[18px]  min-w-full "
                 >
                   {item.icon && (
-                    <item.icon className={cn(open ? "" : "ml-[2px] ", "min-w-5 min-h-5  group-hover/collapsible:text-sidebar-accent-foreground  font-medium text-foreground shrink-0")} />
+                    <item.icon className={cn(open ? "" : "ml-[2px]", "min-w-5 min-h-5  group-hover/collapsible:text-sidebar-accent-foreground  font-medium text-foreground shrink-0")} />
                   )}
                   <span
                     className={cn(

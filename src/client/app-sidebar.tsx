@@ -214,7 +214,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <div
               onClick={() => setOpen(true)}
               className={cn(
-                open ? "" : "ml-1 !pl-[11px]",
+                open ? "" : "ml-2 max-w-[40px]  ",
                 " flex  items-center  rounded-[4px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm text-white font-medium p-2 pr-0  gap-2  shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
               )}
             >
@@ -231,11 +231,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <div
               onClick={() => setOpen(true)}
               className={cn(
-                open ? "" : "ml-1",
+                open ? "" : "ml-2 max-w-[40px]",
                 " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 "
               )}
             >
-              <Settings className={cn(open ? "" : "ml-1", "max-w-5 max-h-5 ml-1 ")} />
+              <Settings className={cn("max-w-5 max-h-5 pl-px")} />
               <span
                 className={cn(
                   " transition-all duration-300 whitespace-nowrap overflow-hidden",
@@ -246,7 +246,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </span>
             </div>
             <div
-
               onClick={async () => {
                 setLoading(true);
                 const Cookies = (await import("js-cookie")).default;
@@ -258,14 +257,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 window.location.href = "/login";
               }}
               className={cn(
-                open ? "" : "ml-1",
+                open ? "" : "ml-2  max-w-[40px]",
                 " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 "
               )}
             >
               {loading ? (
-                <Loader2 className={cn("animate-spin max-w-5 max-h-5 ", open ? "ml-1" : "")} />
+                <Loader2 className={cn("animate-spin max-w-5 max-h-5 ml-[3px] ")} />
               ) : (
-                <LogOut className={cn(open ? "" : "ml-1", "max-w-5 max-h-5 ")} />
+                <LogOut className={cn("max-w-5 max-h-5 ml-[3px]")} />
               )}
               <span
                 className={cn(

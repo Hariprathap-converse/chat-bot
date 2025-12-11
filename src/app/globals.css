@@ -44,6 +44,94 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  /* form css  */
+  --color-form-header-card-background: var(--form-header-card-background);
+  --color-form-header-border: var(--form-header-border);
+  --color-select-secondary-foreground: var(--select-secondary-foreground);
+  --color-info-icon: var(--info-icon);
+  --color-popover-header-foreground: var(--popover-header-foreground);
+  --color-popoversecondaryforground: var(--popover-secondary-forground);
+  --color-popoverRadioForground: var(--popover-radio-foreground);
+
+  --color-arrowIcon: var(--arrow-icon);
+  --color-searchIcon: var(--search-icon);
+  --color-checkboxBorder: var(--checkbox-border);
+  --color-uploadButtonBackground: var(--upload-button-background);
+  --color-uploadButtonForeground: var(--upload-button-foreground);
+
+  --color-metricborder: var(--metric-border);
+  --color-tooltipBackground: var(--tooltip-bg);
+  --color-tooltipForeground: var(--tooltip-foreground);
+
+  --color-mainbackground: var(--mainbackground);
+  --color-parentbackground: var(--parentbackground);
+  --color-accordionTriggerBg: var(--accordion-trigger-bg);
+  --color-selectedValue: var(--selected-value);
+  --color-icon: var(--shadow-color);
+  /* shadow-color maps to tailwind 'custom shadow' */
+  --color-selectOption: var(--select-option);
+  --color-selectOptionMappedSearch: var(--select-option-mapped-search);
+
+  --color-badgeBackground: var(--badge-background);
+  --color-badgeForeground: var(--badge-foreground);
+  --color-disabledBackground: var(--disabled-background);
+  --color-disabledForeground: var(--disabled-foreground);
+
+  --color-switchBackgroundUnchecked: var(--switch-background-unchecked);
+  --color-switchForegroundUnchecked: var(--switch-foreground-unchecked);
+  --color-switchBackgroundChecked: var(--switch-background-checked);
+  --color-switchForegroundChecked: var(--switch-foreground-checked);
+
+  --color-borderFocused: var(--border-focused);
+  --color-dividerBorder: var(--devider-border);
+
+  --color-profileContactContainer: var(--profile-contact-container);
+  --color-profileBannerEditContainer: var(--profile-banner-edit-container);
+  --color-profileText: var(--profile-text);
+  --color-profileBorder: var(--profile-border);
+  --color-profileSider: var(--profile-sider);
+  --color-profileOverlay: var(--profile-overlay);
+
+  --color-dynamicNavBG: var(--dynamic-nav-bg);
+  --color-dynamicNavActive: var(--dynamic-nav-active);
+  --color-dynamicNavText: var(--dynamic-nav-text);
+
+  --color-disabledBg: var(--disabled-bg);
+  --color-disabledText: var(--disabled-text);
+  --color-disabledPlaceholder: var(--disabled-placeholder);
+  --color-descriptionText: var(--description-text);
+
+  /* Select Properties */
+  --color-select-text: var(--select-text);
+  --color-select-lable: var(--select-lable);
+  --color-select-border: var(--select-border);
+  --color-select-border-focused: var(--select-border-focused);
+  --color-select-placeholder: var(--select-placeholder);
+  --color-select-option-disabled: var(--select-option-disabled);
+  --color-select-disable-bg: var(--select-disable-bg);
+  --color-select-view-border: var(--select-view-border);
+  --color-group-select-option: var(--group-select-option);
+  --color-select-loader: var(--select-loader);
+  --color-select-icon: var(--select-icon);
+  --color-multiselect-selected-option: var(--multiselect-selected-option);
+
+  /* Calendar */
+  --color-calender_foreground: var(--text-calender);
+  --color-calender_current: var(--today-calender);
+  --color-calender_background: var(--calender-bg);
+  --color-error_border: var(--error-border);
+  --color-input_feildBorder: var(--input-feildBorder);
+  --color-calender_arrowFillColor: var(--calender-IconfillColor);
+  --color-input_value: var(--input-value);
+
+  /* Shadows */
+  --color-shadow-color: var(--shadow-color);
+  --color-metricborder: var(--metric-border);
+  --color-view-box-shadow: var(--view-box-shadow);
+
+  --color-formHeaderBorder: var(--form-header-border);
+
+
   /* custom  */
   --color-sub-title: var(--sub-title);
   --color-sub-heading: var(--sub-heading);
@@ -58,11 +146,13 @@
 
 :root {
   --radius: 0.625rem;
-  --background: hsla(229, 74%, 98%, 1); /**/
-  --foreground: hsla(0, 0%, 43%, 1); /**/
+  --background: hsla(229, 74%, 98%, 1);
+  /**/
+  --foreground: hsla(0, 0%, 43%, 1);
+  /**/
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: hsla(229, 74%, 98%, 1);
   --popover-foreground: oklch(0.145 0 0);
   --primary: hsla(245, 96%, 70%, 1);
   --primary-foreground: oklch(0.985 0 0);
@@ -73,9 +163,9 @@
   --accent: hsla(245, 96%, 70%, 0.2);
   --accent-foreground: hsla(245, 96%, 70%, 1);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: hsla(0, 0%, 95%, 1);
+  --border: hsla(218, 15%, 86%, 1);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: hsla(245, 96%, 70%, 1);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -91,6 +181,138 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
+  /* Form css */
+  --form-header-background: hsla(0, 0%, 100%, 0.5);
+  --form-header-card-background: hsl(210, 49%, 92%);
+  --transpirant-border: hsl(0, 0%, 100%);
+  --shadow-active: hsla(220, 75%, 45%, 0.04);
+  --select-secondary-foreground: hsla(218, 23%, 38%, 1);
+  --info-icon: hsla(218, 25%, 35%, 0.6);
+
+  --popover-header-foreground: hsla(223, 9%, 52%, 1);
+  --popover-secondary-forground: hsla(221, 10%, 41%, 1);
+  --popover-radio-foreground: hsla(218, 15%, 86%, 1);
+  --form-header-border: hsla(0, 0%, 100%, 1);
+  --arrow-icon: hsla(213, 5%, 53%, 1);
+  --search-icon: hsla(219, 13%, 61%, 1);
+  --checkbox-border: hsla(218, 15%, 86%, 1);
+  --upload-button-background: hsla(0, 0%, 94%, 1);
+  --upload-button-foreground: hsla(221, 10%, 41%, 1);
+
+  --dropdown-hover-background: hsla(0, 0%, 5%, 1);
+  --default-view-text: hsla(218, 23%, 38%, 1);
+  --metric-border: hsla(0, 0%, 100%, 1);
+  --dot-menu-deselected: hsla(0, 0%, 37%, 1);
+  --view-box-shadow: hsla(0, 0%, 0%, 0.15);
+  --tooltip-bg: hsla(219, 12%, 22%, 1);
+  --tooltip-foreground: hsla(0, 0%, 100%, 1);
+  --mapped-search-shadow: hsla(0, 0%, 94%, 1);
+
+  --mainbackground: hsla(210, 33%, 98%, 1);
+  --parentbackground: hsla(212, 49%, 92%, 1);
+  --accordion-trigger-bg: #fbfcfd;
+  --selected-value: hsla(221, 10%, 41%, 1);
+  --shadow-color: hsla(219, 85%, 57%, 0.22);
+  --multiselect-shadow: hsla(0, 0%, 88%, 1);
+  --select-option: hsla(221, 10%, 41%, 1);
+  --select-option-mapped-search: hsla(221, 10%, 41%, 1);
+
+  --badge-background: hsla(0, 0%, 95%, 1);
+  --badge-foreground: hsla(219, 12%, 22%, 1);
+  --disabled-background: hsla(220, 49%, 66%, 1);
+  --disabled-foreground: hsla(0, 0%, 100%, 1);
+
+  --switch-background-unchecked: hsla(218, 15%, 86%, 1);
+  --switch-foreground-unchecked: hsla(0, 0%, 100%, 1);
+  --switch-background-checked: hsla(245, 96%, 70%, 1);
+  --switch-foreground-checked: hsla(0, 0%, 100%, 1);
+
+  --sidebar-background: hsla(206, 28%, 95%, 1);
+
+  --search-icon: hsla(219, 13%, 61%, 1);
+  --border-focused: hsla(218, 15%, 86%, 0.5);
+  --devider-border: hsla(0, 0%, 94%, 1);
+
+  --scroll-siderbar: hsla(204, 17%, 88%, 1);
+  --scroll-secondarysidebar: hsla(212, 49%, 92%, 1);
+  --nav-shadow-color: hsla(202, 11%, 85%, 1);
+  --profile-contact-shadow: hsla(220, 26%, 93%, 1);
+  --profile-contact-container: hsl(0, 0%, 100%);
+  --profile-setup-container-shadow: hsla(220, 26%, 93%, 1);
+  --profile-banner-edit-container: hsl(0, 0%, 100%);
+  --profile-text: hsla(210, 9%, 31%, 1);
+  --profile-border: hsla(0, 0%, 96%, 1);
+  --profile-sider: hsla(220, 8%, 97%, 1);
+  --profile-overlay: hsla(0, 0%, 0%, 0.3);
+  --dynamic-nav-bg: hsla(0, 0%, 96%, 1);
+  --dynamic-nav-active: hsla(0, 0%, 100%, 1);
+  --dynamic-nav-shadow: hsla(0, 0%, 87%, 1);
+  --dynamic-nav-text: hsla(218, 23%, 38%, 1);
+
+  /* Disabled states */
+  --disabled-bg: hsla(0, 0%, 98%, 1);
+  --disabled-text: hsla(219, 13%, 22%, 1);
+  --disabled-placeholder: hsla(0, 0%, 77%, 1);
+
+  /* Description text */
+  --description-text: hsla(223, 9%, 52%, 1);
+
+  /* button muted text color */
+  /* Select Porpertices*/
+
+  /*select Shadow color */
+  --select-text: hsla(219, 12%, 22%, 1);
+  /* lable color */
+  --select-lable: hsla(219, 12%, 22%, 1);
+  /* border color in foucs  */
+  --select-border: hsla(218, 15%, 86%, 1);
+  /* select border color  */
+  --select-border-focused: hsla(218, 15%, 86%, 0.5);
+  /* select placeholder color  */
+  --select-placeholder: hsla(0, 0%, 77%, 1);
+  /* select option  color  */
+  --select-option: hsla(221, 10%, 41%, 1);
+  /* select shadow color */
+  --select-shadow: hsla(0, 0%, 88%, 1);
+  /* select option disable color */
+  --select-option-disabled: hsla(221, 10%, 41%, 0.5);
+  /* select view border color */
+  --select-view-border: hsla(218, 15%, 86%, 0.2);
+  /* group select Option text color*/
+  --group-select-option: hsla(221, 10%, 41%, 1);
+  /*selcet disable bg*/
+  --select-disable-bg: hsla(0, 0%, 98%, 1);
+  /* Select Loader */
+  --select-loader: hsla(0, 0%, 98%, 1);
+  /* Select trigger Icon */
+  --select-icon: hsla(213, 5%, 53%, 1);
+  /*loader shade */
+  --select-loader-shade-start: hsla(0, 0%, 95%, 0);
+  --select-loader-shade-middle: hsla(0, 0%, 92%, 0.6);
+  --select-loader-shade-end: hsla(0, 0%, 95%, 0);
+  /*error Message*/
+  --error-message: hsla(0, 76%, 57%, 1);
+  /* tooltip background color */
+  --tooltip-bg: hsla(219, 12%, 22%, 1);
+
+  /* tooltip text color */
+  --tooltip-foreground: hsla(0, 0%, 100%, 1);
+
+  /* multiselect selected option bg */
+  --multiselect-selected-option: hsla(0, 0%, 95%, 1);
+
+  /* calendar date picker */
+  --text-calender: hsla(219, 12%, 22%, 1);
+  --today-calender: hsla(220, 98%, 74%, 1);
+  --calender-bg: hsl(0, 0%, 98%);
+
+  --error-border: hsl(359, 62%, 74%);
+  --input-feildBorder: hsla(218, 15%, 86%, 1);
+  --calender-IconfillColor: hsla(219, 28%, 64%, 1);
+  --input-value: hsla(219, 12%, 22%, 1);
+
+
+
   /* cutome  */
   --sub-title: hsla(230, 19%, 65%, 1);
   --sub-heading: hsla(245, 32%, 62%, 1);
@@ -102,6 +324,7 @@
   --bot-text: hsla(0, 0%, 33%, 1);
   --hover-border: hsla(245, 96%, 70%, 0.3);
 }
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -136,6 +359,163 @@
   --sidebar-ring: oklch(0.556 0 0);
 
   --border-gradient: linear-gradient(180deg, #3a3a5a 0%, #2a2950 100%);
+  /* text color */
+  --form-header-card-background: hsla(210, 17%, 18%, 1);
+
+  /* form card background color */
+  --form-layout-background: hsl(210, 9%, 14%);
+  --shadow-active: hsla(210, 4%, 11%, 1);
+  --default-view-text: hsla(0, 0%, 76%, 1);
+
+  /* info icon color */
+  --info-icon: hsla(218, 25%, 35%, 0.6);
+
+  /* const header grey */
+  --popover-header-foreground: hsla(223, 9%, 52%, 1);
+
+  /* secondary text color */
+  --popover-secondary-forground: hsla(0, 0%, 75%, 1);
+  --popover-radio-foreground: hsla(220, 5%, 22%, 1);
+
+  /* form header border color */
+  --form-header-border: hsla(210, 4%, 11%, 1);
+
+  /* metric border */
+  --metric-border: hsla(220, 75%, 45%, 0.76);
+
+  /* select secondary text color */
+  --select-secondary-foreground: hsla(0, 0%, 76%, 1);
+
+  /* Icons */
+  --arrow-icon: hsla(0, 0%, 37%, 1);
+  --search-icon: hsla(220, 10%, 28%, 1);
+
+  /* dropdown shadows */
+  --mapped-search-shadow: hsla(210, 4%, 11%, 0.22);
+  --multiselect-shadow: hsla(0, 0%, 88%, 1);
+
+  /* select options */
+  --select-option: hsla(0, 0%, 94%, 1);
+  --select-option-mapped-search: hsla(0, 0%, 60%, 1);
+
+  /* checkbox */
+  --checkbox-border: hsla(220, 5%, 22%, 1);
+
+  /* upload button */
+  --upload-button-background: hsla(210, 9%, 14%, 1);
+  --upload-button-foreground: hsla(0, 0%, 67%, 1);
+
+  /* dropdown */
+  --dropdown-hover-background: hsla(0, 0%, 5%, 1);
+  --dropdown-background: hsla(0, 0%, 9%, 1);
+
+  /* focus border */
+  --border-focused: hsla(240, 1%, 16%, 0.8);
+
+  /* divider */
+  --devider-border: hsla(220, 10%, 28%, 1);
+
+  /* tooltip */
+  --tooltip-bg: hsla(0, 0%, 89%, 1);
+  --tooltip-foreground: hsla(219, 12%, 22%, 1);
+
+  /* badge */
+  --badge-background: hsla(216, 7%, 11%, 1);
+  --badge-foreground: hsla(0, 0%, 98%, 1);
+
+  /* disabled */
+  --disabled-background: hsla(220, 17%, 20%, 1);
+  --disabled-foreground: hsla(0, 0%, 45%, 1);
+  --switch-background-unchecked: hsla(0, 0%, 26%, 1);
+  --switch-foreground-unchecked: hsla(0, 0%, 37%, 1);
+  --switch-background-checked: hsla(245, 96%, 70%, 1);
+  --switch-foreground-checked: hsla(0, 0%, 100%, 1);
+
+  /* background */
+  --mainbackground: hsl(210, 9%, 14%);
+  --parentbackground: hsla(210, 13%, 15%, 1);
+  --accordion-trigger-bg: #09090b;
+
+  /* text + shadow */
+  --selected-value: hsla(216, 14%, 93%, 1);
+  --shadow-color: hsla(0, 0%, 100%, 0.08);
+  --search-icon: hsla(220, 10%, 28%, 1);
+
+  /* scroll areas */
+  --scroll-siderbar: hsla(222, 11%, 18%, 1);
+  --scroll-secondarysidebar: hsla(210, 13%, 15%, 1);
+
+  /* nav */
+  --nav-shadow-color: hsla(0, 0%, 0%, 0);
+
+  /* profile */
+  --profile-contact-shadow: hsla(210, 6%, 7%, 1);
+  --profile-contact-container: hsla(210, 9%, 14%, 1);
+  --profile-setup-container: hsla(210, 4%, 11%, 1);
+  --profile-setup-container-shadow: hsla(210, 5%, 7%, 1);
+  --profile-banner-edit-container: hsla(0, 0%, 9%, 1);
+  --profile-text: hsla(210, 5%, 53%, 1);
+  --profile-border: hsla(220, 4%, 15%, 1);
+  --profile-sider: hsla(0, 0%, 17%, 1);
+  --profile-overlay: hsla(0, 0%, 0%, 0.5);
+
+  /* dynamic nav */
+  --dynamic-nav-bg: hsla(220, 4%, 9%, 1);
+  --dynamic-nav-active: hsla(210, 4%, 11%, 1);
+  --dynamic-nav-shadow: hsla(0, 0%, 0%, 0.75);
+  --dynamic-nav-text: hsla(0, 0%, 76%, 1);
+
+  --icon: hsla(0, 0%, 84%, 1);
+
+  /* disabled set */
+  --disabled-bg: hsla(216, 7%, 14%, 1);
+  --disabled-text: hsla(0, 0%, 98%, 1);
+  --disabled-placeholder: hsla(0, 0%, 37%, 1);
+
+  /* description text */
+  --description-text: hsla(223, 9%, 52%, 1);
+
+  /* select */
+  --select-text: hsla(0, 0%, 98%, 1);
+  --select-lable: hsla(0, 0%, 98%, 1);
+  --select-border: hsla(220, 5%, 22%, 1);
+  --select-border-focused: hsla(220, 5%, 22%, 0.7);
+  --select-placeholder: hsla(0, 0%, 37%, 1);
+  --select-option: #efefef;
+  --select-shadow: hsla(210, 4%, 11%, 1);
+  --select-option-disabled: hsla(0, 0%, 94%, 0.5);
+  --select-view-border: hsla(220, 5%, 22%, 0.2);
+
+  /* select disabled */
+  --select-disable-bg: hsla(216, 7%, 14%, 1);
+
+  /* group select */
+  --group-select-option: hsla(0, 0%, 94%, 1);
+
+  /* loader */
+  --select-loader: hsla(0, 0%, 13%, 1);
+  --select-icon: hsla(0, 0%, 37%, 1);
+  --select-loader-shade-start: hsla(0, 0%, 11%, 0);
+  --select-loader-shade-middle: hsla(0, 0%, 10%, 0.6);
+  --select-loader-shade-end: hsla(0, 0%, 15%, 0);
+  --error-message: hsla(0, 76%, 57%, 1);
+
+  /* tooltip again */
+  --tooltip-bg: hsla(0, 0%, 89%, 1);
+  --tooltip-foreground: hsla(219, 12%, 22%, 1);
+
+  /* multiselect selected option */
+  --multiselect-selected-option: hsla(210, 9%, 14%, 1);
+
+  /* calendar date picker */
+  --text-calender: hsla(0, 0%, 88%, 1);
+  --today-calender: hsla(220, 63%, 23%, 1);
+  --calender-bg: hsl(210, 4%, 11%);
+  --error-border: hsl(359, 43%, 38%);
+  --input-feildBorder: hsla(220, 5%, 22%, 1);
+  --calender-IconfillColor: hsla(0, 0%, 43%, 1);
+  --input-value: hsla(0, 0%, 98%, 1);
+
 }
 
 @layer utilities {
@@ -148,10 +528,12 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
+
 body {
   font-family: "Inter", sans-serif;
 }
@@ -164,7 +546,8 @@ body {
 
 /* Scrollbar Thumb */
 ::-webkit-scrollbar-thumb {
-  background: hsla(0, 0%, 33%, 0.2); /* Gray thumb */
+  background: hsla(0, 0%, 33%, 0.2);
+  /* Gray thumb */
   border-radius: 8px;
 }
 
