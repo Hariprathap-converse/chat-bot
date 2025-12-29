@@ -14,6 +14,7 @@ import {
   FileArchive,
   FileDiff,
   HardDriveDownload,
+  Loader2,
   MoreHorizontal,
   Sparkles,
   ThumbsDown,
@@ -44,8 +45,14 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Profile from "@/client/profile";
 import EmployeeDetails from "@/client/dynamic-form/employee-details";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { BsStars } from "react-icons/bs";
+import AIWebsiteGeneratorLoader from "../loader/3/page";
 
 const page = () => {
   const { data } = useOpsBot();
@@ -117,6 +124,7 @@ const page = () => {
   const [useropen, setUserOpen] = useState<number | undefined>(undefined);
   const [botopen, setBotOpen] = useState<number | undefined>(undefined);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
+  const [genLoader, setGenLoader] = useState(false);
   const [reactions, setReactions] = useState<{
     [key: number]: { liked: boolean; disliked: boolean };
   }>({});
@@ -435,21 +443,43 @@ const page = () => {
                               " opacity-0 group-hover:opacity-100 flex  pl-8 max-h-[20px] gap-2 items-center",
                               botopen === idx ? "opacity-100" : "opacity-0"
                             )}
-                          > <div className="flex items-center group/thumb gap-[3px]">
-                              <span className={cn(copied[idx] ? "text-emerald-500 group-hover/thumb:text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Copy</span>
+                          >
+                            {" "}
+                            <div className="flex items-center group/thumb gap-[3px]">
+                              <span
+                                className={cn(
+                                  copied[idx]
+                                    ? "text-emerald-500 group-hover/thumb:text-emerald-500"
+                                    : "text-foreground group-hover/thumb:text-accent-foreground",
+                                  " cursor-pointer text-xs"
+                                )}
+                              >
+                                Copy
+                              </span>
 
                               {copied[idx] ? (
                                 <CopyCheck className="h-[14px] w-[14px] text-green-500" />
                               ) : (
                                 <Copy
                                   className="h-[14px] w-[14px] group-hover/thumb:text-accent-foreground cursor-pointer text-sub-title"
-                                  onClick={() => handleCopy(idx, pair[1].content)}
+                                  onClick={() =>
+                                    handleCopy(idx, pair[1].content)
+                                  }
                                 />
                               )}
                             </div>
                             <div className="flex items-center gap-1">
                               <div className="flex items-start group/thumb gap-[2px]">
-                                <span className={cn(reactions[idx]?.liked ? "text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Good</span>
+                                <span
+                                  className={cn(
+                                    reactions[idx]?.liked
+                                      ? "text-emerald-500"
+                                      : "text-foreground group-hover/thumb:text-accent-foreground",
+                                    " cursor-pointer text-xs"
+                                  )}
+                                >
+                                  Good
+                                </span>
                                 <ThumbsUp
                                   className={cn(
                                     "h-[14px] w-[14px] cursor-pointer",
@@ -461,7 +491,16 @@ const page = () => {
                                 />
                               </div>
                               <div className="flex items-end group/thumb  gap-[2px]">
-                                <span className={cn(reactions[idx]?.disliked ? "text-red-500" : "text-foreground group-hover/thumb:text-accent-foreground", " cursor-pointer text-xs")}>Bad</span>
+                                <span
+                                  className={cn(
+                                    reactions[idx]?.disliked
+                                      ? "text-red-500"
+                                      : "text-foreground group-hover/thumb:text-accent-foreground",
+                                    " cursor-pointer text-xs"
+                                  )}
+                                >
+                                  Bad
+                                </span>
 
                                 <ThumbsDown
                                   className={cn(
@@ -554,7 +593,6 @@ const page = () => {
             </button>
             {employeeDetailsOpen && (
               <div className="fixed inset-0 z-50 flex h-full items-center justify-center">
-
                 {/* Overlay */}
                 <div
                   className="absolute inset-0 bg-black/40"
@@ -566,11 +604,20 @@ const page = () => {
                   className="relative z-10 !max-w-[1200px] w-[1200px] h-fit overflow-auto max-h-[80%]  p-0 mr-4   bg-background shadow-xl rounded-lg"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <EmployeeDetails onCancel={() => setEmployeeDetailsOpen(false)} />
+                  <EmployeeDetails
+                    onCancel={() => setEmployeeDetailsOpen(false)}
+                  />
                 </div>
               </div>
             )}
-
+            {genLoader && (
+              <div
+                // onClick={() => setGenLoader(false)}
+                className="bg-black/40  min-h-screen w-full flex items-center justify-center p-8 fixed inset-0 z-50"
+              >
+                <AIWebsiteGeneratorLoader />
+              </div>
+            )}
             <Button
               variant="outline"
               size="icon"
@@ -579,7 +626,14 @@ const page = () => {
             >
               <BsStars className="min-h-[14px] size-[23px] min-w-[14px]" />
             </Button>
-
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setGenLoader(true)}
+              className="absolute z-50 bottom-[10px] -right-24 cursor-pointer p-2 rounded-[30px] font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center"
+            >
+              <Loader2 className="min-h-[14px] animate-spin size-[23px] min-w-[14px]" />
+            </Button>
           </div>
         </div>
       </main>

@@ -32,7 +32,7 @@ const Profile = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="flex cursor-pointer flex-row-reverse items-center gap-2 rounded-md px-2 py-1 hover:bg-muted/50 transition">
+        <div className="flex cursor-pointer flex-row-reverse items-center gap-2 rounded-md px-2 py-1 hover:bg-muted/50 transition">
           <Avatar className="h-10 w-10 drop-shadow p-[1px] bg-muted rounded-full">
             {displayUser.profileImage ? (
               <AvatarImage
@@ -51,7 +51,7 @@ const Profile = () => {
               </AvatarFallback>
             )}
           </Avatar>
-        </button>
+        </div>
       </PopoverTrigger>
 
       <PopoverContent className="w-60  p-0 z-[999]" align="end">

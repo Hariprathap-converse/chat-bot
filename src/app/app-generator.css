@@ -1,0 +1,281 @@
+/* @import "tailwindcss";
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@utility shimmer {
+  animation: shimmer 1.4s linear infinite;
+  background-image: linear-gradient(
+    90deg,
+    hsla(0, 0%, 25%,0.3) 20%,
+    hsla(0, 0%, 25%,0.3) 50%,
+    hsla(0, 0%, 25%,0.3) 80%,
+    hsla(0, 0%, 25%,0.3) 80%
+  );
+  background-size: 200% 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+}
+
+
+.ai-row-scan {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-row-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(147, 197, 253, 0.6),
+    transparent
+  );
+  animation: rowScan 0.8s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes rowScan {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(150%); }
+}
+
+
+
+.ai-holo {
+  position: relative;
+}
+
+.ai-holo::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.7),
+    rgba(56, 189, 248, 0.7),
+    rgba(236, 72, 153, 0.7)
+  );
+  opacity: 0.15;
+  filter: blur(10px);
+  animation: holoRotate 4s linear infinite;
+}
+
+@keyframes holoRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ai-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.15) 2px, transparent 2px);
+  background-size: 40px 40px;
+  animation: particleFloat 14s infinite linear;
+  opacity: 0.12;
+}
+
+@keyframes particleFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-80px); }
+}
+
+.ai-token {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: tokenAppear 0.28s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes tokenAppear {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+.ai-glow {
+  position: relative;
+}
+
+.ai-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at center,
+    rgba(99, 102, 241, 0.3),
+    transparent 70%
+  );
+  opacity: 0.4;
+  filter: blur(22px);
+  animation: aiGlowPulse 2.3s infinite ease-in-out;
+}
+
+@keyframes aiGlowPulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.3; }
+}
+
+.ai-bg {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.02) 0px,
+    rgba(255,255,255,0.02) 1px,
+    transparent 1px,
+    transparent 6px
+  );
+  animation: matrixScroll 12s linear infinite;
+}
+
+@keyframes matrixScroll {
+  0% { background-position-y: 0; }
+  100% { background-position-y: 500px; }
+} */
+
+/* -------------------------
+  Brand variable
+------------------------- */
+:root {
+  --brand: #6e8cff; /* change to your brand color */
+}
+
+/* Card / Popover base styles rely on Tailwind. Add supportive classes here. */
+
+/* Holographic frame (glowing border) */
+.ai-holo-frame {
+  box-shadow: 0 8px 28px rgba(50, 60, 120, 0.08), inset 0 0 20px rgba(110,140,255,0.02);
+  border-radius: 8px;
+}
+.ai-holo-frame::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(110,140,255,0.28), rgba(56,189,248,0.18), rgba(236,72,153,0.12));
+  filter: blur(8px);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Token dot (small token-stream bullets) */
+.ai-token-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.7));
+  opacity: 0;
+  transform: translateY(6px) scale(0.9);
+  animation: tokenPop 540ms cubic-bezier(.2,.9,.3,1) forwards;
+}
+@keyframes tokenPop {
+  0% { opacity: 0; transform: translateY(6px) scale(0.92); }
+  60% { opacity: 1; transform: translateY(-2px) scale(1.04); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Row container baseline */
+.ai-row-container {
+  position: relative;
+  padding: 6px;
+  z-index: 2;
+}
+
+/* Card blocks */
+.ai-card-block {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* vertical scanning overlay: moves from top -> bottom for active row */
+.vertical-scan-active::before {
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: -100%;
+  height: 220%;
+  background: linear-gradient(180deg, transparent 0%, rgba(110,140,255,0.28) 45%, rgba(110,140,255,0.18) 55%, transparent 100%);
+  transform: translateY(-100%);
+  animation: verticalScan 0.9s ease-out forwards;
+  pointer-events: none;
+  z-index: 4;
+}
+@keyframes verticalScan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(10%); opacity: 0.9; }
+}
+
+/* subtle holographic glow around card blocks using brand */
+.ai-card-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(110,140,255,0.06), 0 0 30px rgba(110,140,255,0.03);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* particle canvas overlay sits behind everything; style if needed */
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* subtle backdrop matrix (optional) */
+.ai-bg {
+  background-image: radial-gradient(rgba(255,255,255,0.01) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* small helpers to make blocks look card-like on small sizes */
+@media (max-width: 640px) {
+  .ai-card-block { min-height: 32px; }
+}
+
+/* token appear on reveal — optional additional polish */
+.ai-card-block .ai-token-dot:nth-child(1) { animation-duration: 480ms; }
+.ai-card-block .ai-token-dot:nth-child(2) { animation-duration: 520ms; }
+.ai-card-block .ai-token-dot:nth-child(3) { animation-duration: 560ms; }
+.ai-card-block .ai-token-dot:nth-child(4) { animation-duration: 600ms; }
+.ai-card-block .ai-token-dot:nth-child(5) { animation-duration: 640ms; }
+.ai-card-block .ai-token-dot:nth-child(6) { animation-duration: 700ms; }
+
+/* small polish: ensure brand color used as needed */
+:root { --brand: #6e8cff; }
+@keyframes scan {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

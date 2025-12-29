@@ -2,7 +2,7 @@
 
 @import "tailwindcss";
 @import "tw-animate-css";
-
+@import "./app-generator.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -130,7 +130,6 @@
   --color-view-box-shadow: var(--view-box-shadow);
 
   --color-formHeaderBorder: var(--form-header-border);
-
 
   /* custom  */
   --color-sub-title: var(--sub-title);
@@ -310,8 +309,6 @@
   --input-feildBorder: hsla(218, 15%, 86%, 1);
   --calender-IconfillColor: hsla(219, 28%, 64%, 1);
   --input-value: hsla(219, 12%, 22%, 1);
-
-
 
   /* cutome  */
   --sub-title: hsla(230, 19%, 65%, 1);
@@ -515,7 +512,6 @@
   --input-feildBorder: hsla(220, 5%, 22%, 1);
   --calender-IconfillColor: hsla(0, 0%, 43%, 1);
   --input-value: hsla(0, 0%, 98%, 1);
-
 }
 
 @layer utilities {
@@ -559,4 +555,20 @@ body {
 /* Scrollbar Track background */
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
 }
