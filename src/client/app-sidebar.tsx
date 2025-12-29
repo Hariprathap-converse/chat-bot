@@ -46,6 +46,7 @@ import { MdOutlineWbIncandescent } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Navdata = {
   navMain: [
@@ -172,7 +173,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       collapsible="icon"
-      className="absolute h-[880px] shadow-[0px_0px_10px_0px_hsla(212,72%,59%,0.25)] rounded-2xl"
+      className="absolute min-h-[80%] max-h-[calc(100vh-40px)] 2xl:max-h-[900px] 2xl:h-[900px] shadow-[0px_0px_10px_0px_hsla(212,72%,59%,0.25)] rounded-2xl"
       {...props}
     >
       <SidebarHeader
@@ -262,7 +263,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               )}
             >
               {loading ? (
-                <Loader2 className={cn("animate-spin max-w-5 max-h-5 ml-[3px] ")} />
+                <Loader2
+                  className={cn("animate-spin max-w-5 max-h-5 ml-[3px] ")}
+                />
               ) : (
                 <LogOut className={cn("max-w-5 max-h-5 ml-[3px]")} />
               )}

@@ -80,7 +80,7 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
                     {/* User Message */}
                     <div className="flex items-center w-full gap-1">
                         <div className="relative w-full font-medium bg-transparent text-foreground rounded-tl-none text-end px-2 py-0">
-                            <div className="inline-flex max-w-[70%] min-w-[700px] text-left justify-end whitespace-pre-wrap">
+                            <div className="inline-flex 2xl:max-w-[70%] 2xl:min-w-[700px] max-w-[70%] min-w-[75%]  text-left justify-end whitespace-pre-wrap">
                                 <span className="break-all">{message.content}</span>
                             </div>
                         </div>
@@ -115,24 +115,24 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
                 </div>
 
                 {/* Bot Actions */}
-                <div className="relative z-50 h-[16px]">
+                <div className="relative mt-1 z-50 h-[16px]">
                     <div className={cn("opacity-0 group-hover:opacity-100 flex pl-8 max-h-[20px] gap-2 items-center", isOpen ? "opacity-100" : "opacity-0")}>
-                        <div className="flex items-center group/thumb gap-[3px]">
+                        <div className="flex items-center group/thumb gap-[3px] cursor-pointer" onClick={handleCopy}>
                             <span className={cn(copied ? "text-emerald-500 group-hover/thumb:text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", "cursor-pointer text-xs")}>Copy</span>
                             {copied ? (
                                 <CopyCheck className="h-[14px] w-[14px] text-green-500" />
                             ) : (
-                                <Copy className="h-[14px] w-[14px] group-hover/thumb:text-accent-foreground cursor-pointer text-sub-title" onClick={handleCopy} />
+                                <Copy className="h-[14px] w-[14px] group-hover/thumb:text-accent-foreground cursor-pointer text-sub-title"  />
                             )}
                         </div>
                         <div className="flex items-center gap-1">
-                            <div className="flex items-start group/thumb gap-[2px]">
+                            <div className="flex items-start group/thumb gap-[2px]" onClick={toggleLike} >
                                 <span className={cn(reaction.liked ? "text-emerald-500" : "text-foreground group-hover/thumb:text-accent-foreground", "cursor-pointer text-xs")}>Good</span>
-                                <ThumbsUp className={cn("h-[14px] w-[14px] cursor-pointer", reaction.liked ? "text-emerald-500" : "text-sub-title group-hover/thumb:text-accent-foreground")} onClick={toggleLike} />
+                                <ThumbsUp className={cn("h-[14px] w-[14px] cursor-pointer", reaction.liked ? "text-emerald-500" : "text-sub-title group-hover/thumb:text-accent-foreground")} />
                             </div>
-                            <div className="flex items-end group/thumb gap-[2px]">
+                            <div className="flex items-end group/thumb gap-[2px]" onClick={toggleDislike} >
                                 <span className={cn(reaction.disliked ? "text-red-500" : "text-foreground group-hover/thumb:text-accent-foreground", "cursor-pointer text-xs")}>Bad</span>
-                                <ThumbsDown className={cn("h-[14px] w-[14px] cursor-pointer", reaction.disliked ? "text-red-500" : "text-sub-title group-hover/thumb:text-accent-foreground")} onClick={toggleDislike} />
+                                <ThumbsDown className={cn("h-[14px] w-[14px] cursor-pointer", reaction.disliked ? "text-red-500" : "text-sub-title group-hover/thumb:text-accent-foreground")} />
                             </div>
                         </div>
                         <Popover onOpenChange={setIsOpen}>

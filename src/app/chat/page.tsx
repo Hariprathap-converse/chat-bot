@@ -15,15 +15,17 @@ import { useChatMessages } from "@/hooks/use-chat-messages";
 import { EmptyChatState } from "@/components/chat/empty-chat-state";
 import { ChatMessage } from "@/components/chat/chat-message";
 import { ChatInput } from "@/components/chat/chat-input";
-import { ChatActionButtons } from "@/components/chat/chat-action-buttons";
 import {
   EmployeeDetailsModal,
   SkeletonLoaderModal,
   WebsiteGeneratorModal,
 } from "@/components/chat/chat-modals";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 export default function ChatPage() {
   const { data } = useOpsBot();
+  const { open, setOpen } = useSidebar();
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -65,9 +67,15 @@ export default function ChatPage() {
       <div className="absolute right-3 top-1.5">
         <Profile />
       </div>
+      <div className="absolute left-5 top-4">
+        <SidebarTrigger
+          onClick={() => setOpen(true)}
+          className="cursor-pointer"
+        ></SidebarTrigger>
+      </div>
 
       {/* Sidebar */}
-      <div className="absolute left-5 rounded-2xl top-5">
+      <div className="absolute left-5 rounded-2xl top-5 z-50">
         <AppSidebar />
       </div>
 
@@ -80,20 +88,30 @@ export default function ChatPage() {
         <div className="flex flex-col items-center gap-4 mx-auto w-full h-full pt-2 overflow-auto">
           {/* Empty State */}
           {messages.length <= 0 && (
-            <div ref={messagesEndRef} className="flex flex-col items-center gap-[27px]">
-              <EmptyChatState title={data.chat.introTitle} subtitle={data.chat.subtitle} />
+            <div
+              ref={messagesEndRef}
+              className="flex flex-col items-center gap-[27px]"
+            >
+              <EmptyChatState
+                title={data.chat.introTitle}
+                subtitle={data.chat.subtitle}
+              />
             </div>
           )}
 
           {/* Chat Messages */}
-          <div className="flex flex-col min-w-[60%] max-w-[61%] gap-0 p-4">
+          <div className="flex flex-col min-w-[60%] max-w-[90%] md:max-w-[71%] lg:max-w-[61%] gap-0 p-4">
             {grouped.map((pair, idx) => (
               <div key={`group-${idx}`} className="flex flex-col gap-1">
                 {/* User Message */}
-                {pair[0] && <ChatMessage message={pair[0]} index={idx} isUser={true} />}
+                {pair[0] && (
+                  <ChatMessage message={pair[0]} index={idx} isUser={true} />
+                )}
 
                 {/* Bot Message */}
-                {pair[1] && <ChatMessage message={pair[1]} index={idx} isUser={false} />}
+                {pair[1] && (
+                  <ChatMessage message={pair[1]} index={idx} isUser={false} />
+                )}
 
                 <div ref={messagesEndRef} className="h-0 w-0" />
               </div>
@@ -102,7 +120,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input Area */}
-        <div className="flex mx-auto z-50 flex-col-reverse p-5 w-full max-w-[61%]">
+        <div className="flex mx-auto z-40 flex-col-reverse p-5 w-full min-w-[65%]  md:max-w-[74%]  md:max-w-[61%]">
           <ChatInput
             value={input}
             onChange={setInput}
@@ -119,7 +137,10 @@ export default function ChatPage() {
         isOpen={employeeDetailsOpen}
         onClose={() => setEmployeeDetailsOpen(false)}
       />
-      <WebsiteGeneratorModal isOpen={genLoader} onClose={() => setGenLoader(false)} />
+      <WebsiteGeneratorModal
+        isOpen={genLoader}
+        onClose={() => setGenLoader(false)}
+      />
     </div>
   );
 }
