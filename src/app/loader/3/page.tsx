@@ -3,9 +3,20 @@ import { useEffect, useState } from "react";
 import { NavChatBot } from "@/Icons/global/home";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
-// AI generation stages with messages
-const generationStages = [
+/**
+ * Generation stage configuration interface
+ */
+interface GenerationStage {
+  stage: string;
+  messages: string[];
+}
+
+/**
+ * AI generation stages with progressive messages
+ */
+const generationStages: GenerationStage[] = [
   {
     stage: "Analyzing Requirements",
     messages: [
@@ -48,10 +59,12 @@ const generationStages = [
   },
 ];
 
-export default function AIWebsiteGeneratorLoader() {
+export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoader: (value: boolean) => void }) {
   const [currentStage, setCurrentStage] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+
   const stageDone = (i: number) => currentStage > i;
   const stageActive = (i: number) => currentStage === i;
   const stage = generationStages[currentStage];
@@ -79,19 +92,41 @@ export default function AIWebsiteGeneratorLoader() {
   const progress = isCompleted
     ? 100
     : ((currentStage * 3 + currentMessage + 1) /
-        (generationStages.length * 3)) *
-      100;
+      (generationStages.length * 3)) *
+    100;
+
+  /**
+   * Handle preview button click - opens generated site in new tab
+   */
+  const handlePreview = () => {
+    // TODO: Replace with actual generated site URL/port
+    window.open('http://localhost:3001', '_blank');
+  };
+
+  /**
+   * Handle close button click - hides the loader container
+   */
+  const handleClose = () => {
+    setIsVisible(false);
+    setGenLoader(false);
+  };
+
+  // Don't render if closed
+  if (!isVisible) {
+    return null;
+  }
+
 
   return (
     <>
       {/* Popup/Modal Container */}
-      <div className="max-w-4xl w-full bg-card rounded-3xl  shadow-2xl border-2 border-border/50 overflow-hidden animate-in fade-in zoom-in duration-500">
+      <div className="max-w-4xl w-full bg-card rounded-3xl shadow-2xl border-2 border-border/50 overflow-hidden animate-in fade-in zoom-in duration-500">
         {/* Header */}
         <div className="bg-linear-to-r from-accent/10 via-accent/5 to-transparent p-6 border-b border-border/50">
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-3">
               <div className="relative">
-                <div className="w-14 h-14 rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-lg">
                   <svg
                     className="w-7 h-7 text-white"
                     fill="none"
@@ -113,9 +148,6 @@ export default function AIWebsiteGeneratorLoader() {
               </h1>
             </div>
 
-            <p className="text-sub-heading text-lg font-medium">
-              {isCompleted ? "Generation Complete!" : stage.stage}
-            </p>
 
             {/* Progress Bar */}
             <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
@@ -125,18 +157,21 @@ export default function AIWebsiteGeneratorLoader() {
               />
             </div>
 
-            <div className="text-sm text-sub-title font-medium">
+            <p className="text-sub-heading text-lg font-medium">
+              {isCompleted ? "Generation Complete!" : stage.stage}
+            </p>
+            {/* <div className="text-sm text-sub-title font-medium">
               {Math.round(progress)}% Complete
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Content Area */}
-        <div className="p-6 min-h-[500px] max-h-[50vh] overflow-y-auto">
+        <div className="p-6 min-h-[535px] max-h-[50vh] overflow-y-auto">
           {isCompleted ? (
-            // Enhanced Completion State
-            <div className="space-y-1">
-              {/* Success Header */}
+            // Enhanced Completion State with Action Buttons
+            <div className="space-y-6">
+
 
               {/* Website Preview Mockup */}
               <div
@@ -156,7 +191,7 @@ export default function AIWebsiteGeneratorLoader() {
                   </div>
                 </div>
 
-                {/* Website Preview */}
+                {/* Website Preview - Using existing skeleton */}
                 <div className="bg-background rounded-lg p-4 space-y-3 border border-border/30">
                   {/* Header */}
                   <div className="h-12 bg-linear-to-r from-accent/20 to-accent/10 rounded flex items-center px-4 gap-4">
@@ -216,6 +251,34 @@ export default function AIWebsiteGeneratorLoader() {
                   </div>
                 </div>
               </div>
+              {/* Action Buttons */}
+              <div className="flex items-center justify-center gap-4">
+                <button
+                  onClick={handlePreview}
+                  className="px-4 py-2  bg-primary text-primary-foreground rounded-[4px] cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
+                  Preview in New Tab
+                </button>
+                <button
+                  onClick={handleClose}
+                  className="px-4 py-2  bg-muted text-foreground rounded-[4px] cursor-pointer font-medium hover:bg-muted/80 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           ) : (
             <div className="space-y-3">
@@ -228,6 +291,7 @@ export default function AIWebsiteGeneratorLoader() {
                     activeText={message}
                     doneText="Navigation locked ✓"
                   />
+
 
                   <div className="relative h-16 rounded-lg border border-border/40 bg-muted/40 overflow-hidden">
                     {stageActive(0) && <AIScan />}
@@ -262,23 +326,23 @@ export default function AIWebsiteGeneratorLoader() {
               </AISection>
 
               {/* ================= HERO ================= */}
-              <AISection visible={currentStage >= 2}>
+              <AISection visible={currentStage >= 1}>
                 <section>
                   <HeaderLabel
-                    active={stageActive(2)}
-                    done={stageDone(2)}
+                    active={stageActive(1)}
+                    done={stageDone(1)}
                     activeText={message}
                     doneText="Hero generated ✓"
                   />
 
                   <div className="relative h-48 rounded-lg border border-border/40 bg-muted/40 overflow-hidden">
-                    {stageActive(2) && <AIRadial />}
+                    {stageActive(1) && <AIRadial />}
 
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
                       <div
                         className={cn(
                           "h-12 w-3/4 rounded bg-accent/30 transition-all duration-500",
-                          stageDone(2) || currentMessage >= 0
+                          stageDone(1) || currentMessage >= 0
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-2"
                         )}
@@ -286,7 +350,7 @@ export default function AIWebsiteGeneratorLoader() {
                       <div
                         className={cn(
                           "h-6 w-1/2 rounded bg-accent/20 transition-all duration-500 delay-100",
-                          stageDone(2) || currentMessage >= 1
+                          stageDone(1) || currentMessage >= 1
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-2"
                         )}
@@ -297,11 +361,11 @@ export default function AIWebsiteGeneratorLoader() {
               </AISection>
 
               {/* ================= CONTENT ================= */}
-              <AISection visible={currentStage >= 3}>
+              <AISection visible={currentStage >= 2}>
                 <section>
                   <HeaderLabel
-                    active={stageActive(3)}
-                    done={stageDone(3)}
+                    active={stageActive(2)}
+                    done={stageDone(2)}
                     activeText={message}
                     doneText="Content structured ✓"
                   />
@@ -312,7 +376,7 @@ export default function AIWebsiteGeneratorLoader() {
                         key={i}
                         className={cn(
                           "relative h-40 rounded-lg border border-border/40 bg-muted/40 overflow-hidden transition-all duration-500",
-                          stageDone(3) || currentMessage >= i
+                          stageDone(2) || currentMessage >= i
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-2"
                         )}
@@ -330,10 +394,10 @@ export default function AIWebsiteGeneratorLoader() {
               </AISection>
 
               {/* ================= FOOTER ================= */}
-              <AISection visible={currentStage >= 4}>
+              <AISection visible={currentStage >= 3}>
                 <section>
                   <HeaderLabel
-                    active={stageActive(4)}
+                    active={stageActive(3)}
                     done={isCompleted}
                     activeText={message}
                     doneText="Finalized ✓"
@@ -360,54 +424,52 @@ export default function AIWebsiteGeneratorLoader() {
               <NavChatBot />
               <div className="flex gap-1">
                 <div
-                  className="w-[6px] h-[6px] rounded-full bg-accent-foreground animate-bounce"
+                  className="w-[5px] h-[5px] rounded-full bg-accent-foreground animate-bounce"
                   style={{ animationDelay: "0ms" }}
                 />
                 <div
-                  className="w-[6px] h-[6px] rounded-full bg-accent-foreground animate-bounce"
+                  className="w-[5px] h-[5px] rounded-full bg-accent-foreground animate-bounce"
                   style={{ animationDelay: "150ms" }}
                 />
                 <div
-                  className="w-[6px] h-[6px] rounded-full bg-accent-foreground animate-bounce"
+                  className="w-[5px] h-[5px] rounded-full bg-accent-foreground animate-bounce"
                   style={{ animationDelay: "300ms" }}
                 />
               </div>
-              <span className="text-sm text-sub-title animate-pulse">
+              {/* <span className="text-sm text-sub-title animate-pulse">
                 {message}
-              </span>
+              </span> */}
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="bg-muted/30 px-6 py-4 border-t border-border/50">
+        {!isCompleted && < div className="bg-muted/30 px-6 py-4 border-t border-border/50">
           <div className="flex items-center justify-center gap-6 text-sm">
             <div className="flex items-center gap-2">
               <div
-                className={`w-2 h-2 rounded-full ${
-                  isCompleted
-                    ? "bg-green-500"
-                    : "bg-linear-to-r from-[#7468FC] to-[#918FFF]"
-                } animate-pulse`}
+                className={`w-2 h-2 rounded-full ${isCompleted
+                  ? "bg-green-500"
+                  : "bg-linear-to-r from-[#7468FC] to-[#918FFF]"
+                  } animate-pulse`}
               />
               <span className="text-sub-title">
-                {isCompleted ? "Complete" : "AI Processing"}
+                {isCompleted ? "Completed" : "AI Processing"}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <div
-                className={`w-2 h-2 rounded-full ${
-                  isCompleted
-                    ? "bg-green-500"
-                    : "bg-linear-to-r from-[#ED799C] to-[#918FFF]"
-                } animate-pulse`}
+                className={`w-2 h-2 rounded-full ${isCompleted
+                  ? ""
+                  : "bg-linear-to-r from-[#ED799C] to-[#918FFF]"
+                  } animate-pulse`}
               />
               <span className="text-sub-title">
-                {isCompleted ? "Ready" : "Building Components"}
+                {isCompleted ? "" : "Building Components"}
               </span>
             </div>
           </div>
-        </div>
+        </div>}
 
         <style jsx>{`
           @keyframes shimmer {
@@ -422,12 +484,25 @@ export default function AIWebsiteGeneratorLoader() {
             animation: shimmer 2s infinite;
           }
         `}</style>
-      </div>
+      </div >
     </>
   );
 }
 
-function HeaderLabel({ active, done, activeText, doneText }: any) {
+/**
+ * Props interface for HeaderLabel component
+ */
+interface HeaderLabelProps {
+  active: boolean;
+  done: boolean;
+  activeText: string;
+  doneText: string;
+}
+
+/**
+ * HeaderLabel component displaying stage status
+ */
+function HeaderLabel({ active, done, activeText, doneText }: HeaderLabelProps) {
   return (
     <div className="flex items-center gap-2 mb-2">
       <NavChatBot />
@@ -446,7 +521,7 @@ function AIScan() {
 
 function AIRadial() {
   return (
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(130,130,255,.18),transparent_70%)] animate-pulse" />
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(130,130,255,.18),transparent_70%)] animate-[scan_1.6s_linear_infinite]" />
   );
 }
 

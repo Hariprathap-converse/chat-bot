@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
+import { toast } from 'sonner'
 
 import FormContainerProps from './form-container'
 import { useLayout } from '@/context/layout-context'
@@ -10,32 +11,10 @@ export default function EmployeeDetails({ onCancel }: { onCancel?: () => void })
   const { formData, setFormData } = useLayout()
   const [manualGridOverride, setManualGridOverride] = useState(false)
   const [showRequiredFields, setShowRequiredFields] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  // const form = useForm()
-
-  // const fieldValues = form.watch()
-  // const requiredFields = useMemo(() => {
-  //   return formData?.form?.fields?.filter((f) => f.isRequired?.value) ?? []
-  // }, [formData?.form?.fields])
-
-  // const filledCount = useMemo(() => {
-  //   return requiredFields.filter((field) => {
-  //     const val = fieldValues?.[field.id]
-  //     return val !== undefined && val !== '' && val !== null
-  //   }).length
-  // }, [requiredFields, fieldValues])
-
-  // const totalRequired = requiredFields.length
-  // const progress = Math.round((filledCount / totalRequired) * 100)
-
-  // const navWidth = layout.sideNav.isNavOpen
-  //   ? layout.sideNav.width[0]
-  //   : layout.sideNav.width[1]
 
   const updateForm = (updates: any) => {
-    // setLayout((prev: any) => ({
-    //   ...prev,
-    // }))
     setFormData((prev) => ({
       form: {
         ...prev.form,
@@ -43,9 +22,48 @@ export default function EmployeeDetails({ onCancel }: { onCancel?: () => void })
       },
     }))
   }
-  function onSubmit(data: any) {
-    console.log('data', data)
 
+  /**
+   * Handle form submission
+   * - Shows loading state
+   * - Logs form data to console
+   * - Shows success toast
+   * - In future: will send to API
+   */
+  function onSubmit(data: any) {
+    setIsSubmitting(true)
+
+    // Simulate API call
+    setTimeout(() => {
+      // Log the submitted data
+      console.log('📋 Employee Details Form Data:', data)
+
+      // Mock API response
+      const mockResponse = {
+        success: true,
+        message: 'Employee details saved successfully',
+        data: {
+          ...data,
+          id: Math.random().toString(36).substr(2, 9),
+          timestamp: new Date().toISOString(),
+        }
+      }
+
+      console.log('✅ API Response:', mockResponse)
+
+      // Show success toast
+      toast.success('Sent successfully', {
+        description: 'Employee details have been saved',
+        duration: 3000,
+      })
+
+      setIsSubmitting(false)
+
+      // Close the form after successful submission
+      setTimeout(() => {
+        onCancel?.()
+      }, 1000)
+    }, 1500) // Simulate network delay
   }
 
   const setLabelAlignment = (alignment: string) => {
@@ -83,6 +101,7 @@ export default function EmployeeDetails({ onCancel }: { onCancel?: () => void })
         setLabelAlignment={setLabelAlignment}
         setManualGridOverride={setManualGridOverride}
         onCancel={onCancel}
+        isSubmitting={isSubmitting}
       // progress={progress}
       />
     </>

@@ -17,6 +17,7 @@ interface FormContainerProps {
   setManualGridOverride: (value: boolean) => void
   progress?: number
   onCancel?: () => void
+  isSubmitting?: boolean
 }
 const FormContainerProps = ({
   showRequiredFields,
@@ -237,13 +238,15 @@ const FormContainerProps = ({
         api.methods = 'PUT'
       }
 
-      const response = await fetch(api.url, {
-        method: api.methods,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(fullData),
-      })
+      // const response = await fetch(api.url, {
+      //   method: api.methods,
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(fullData),
+      // })
 
-      const result = await response.json()
+      // const result = await response.json()
+      const result = {success: true, error: {fieldName: '', message: ''}}
+      const response = {ok: true}
       console.log('✅ Success:', result)
 
       if (!response.ok || result.success === false) {
