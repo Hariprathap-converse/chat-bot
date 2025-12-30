@@ -562,6 +562,7 @@ body {
     opacity: 0;
     transform: translateY(8px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -612,6 +613,7 @@ body {
 }
 
 @keyframes bounceOnce {
+
   0%,
   100% {
     transform: translateY(0);
@@ -656,6 +658,7 @@ body {
 }
 
 @keyframes bounceColor {
+
   0%,
   50%,
   100% {
@@ -716,50 +719,130 @@ body {
 
 /* Tools Loader Animations */
 @keyframes scan-line {
-    0% { top: 0%; opacity: 0; }
-    5% { opacity: 1; }
-    95% { opacity: 1; }
-    100% { top: 100%; opacity: 0; }
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 
 @keyframes shimmer-skeleton {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes fly-out-right {
-    0% { transform:  translateX(0) scale(1) rotate(0deg); opacity: 1; }
-    20% { transform: translateX(-10px) scale(0.9) rotate(-5deg); opacity: 1; }
-    100% { transform: translateX(400px) scale(0.5) rotate(15deg); opacity: 0; }
+  0% {
+    transform: translateX(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+
+  20% {
+    transform: translateX(-10px) scale(0.9) rotate(-5deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(400px) scale(0.5) rotate(15deg);
+    opacity: 0;
+  }
 }
 
 @keyframes scale-in-center {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes ping-slow {
-   75%, 100% {
+
+  75%,
+  100% {
     transform: scale(2);
     opacity: 0;
   }
 }
 
 .animate-scan {
-    animation: scan-line 2s ease-in-out infinite;
-    background: linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.5), transparent);
+  animation: scan-line 2s ease-in-out infinite;
+  background: linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.5), transparent);
 }
 
 .animate-shimmer {
-    background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.5) 50%, transparent 75%);
-    background-size: 200% 100%;
-    animation: shimmer-skeleton 2s infinite linear;
+  background: linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, 0.5) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer-skeleton 2s infinite linear;
 }
 
 .animate-fly-out {
-    animation: fly-out-right 0.8s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+  animation: fly-out-right 0.8s cubic-bezier(0.5, 0, 0.2, 1) forwards;
 }
 
 .animate-scale-in {
-    animation: scale-in-center 0.3s ease-out forwards;
+  animation: scale-in-center 0.3s ease-out forwards;
+}
+
+@keyframes pulse-fast {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 0.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes paper-plane-fly {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+
+  15% {
+    transform: translate(-5px, 5px) rotate(-5deg);
+  }
+
+  30% {
+    transform: translate(5px, -10px) rotate(5deg);
+  }
+
+  100% {
+    transform: translate(400px, -100px) rotate(30deg);
+    opacity: 0;
+  }
+}
+
+.animate-paper-plane {
+  animation: paper-plane-fly 1.2s ease-in-out forwards;
 }

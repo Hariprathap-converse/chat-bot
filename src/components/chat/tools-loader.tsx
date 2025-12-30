@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Check, Mail, MessageSquare, Smartphone, Zap } from "lucide-react";
+import { Check, Mail, MessageSquare, Smartphone, Zap, Send } from "lucide-react";
 
 interface ToolsLoaderProps {
     type: "email" | "sms" | "calendar" | null;
@@ -18,17 +18,27 @@ export function ToolsLoader({ type, status, target, onComplete }: ToolsLoaderPro
             setInternalStage("scan");
         } else if (status === "sending") {
             setInternalStage("draft");
-            // After a short drafting animation, fly out
-            const timer = setTimeout(() => {
+
+            // Delay flight slightly to let "draft" state register, then fly
+            const flyTimer = setTimeout(() => {
                 setInternalStage("fly");
-            }, 1200);
-            return () => clearTimeout(timer);
+            }, 1000);
+
+            return () => clearTimeout(flyTimer);
         } else if (status === "success") {
-            setInternalStage("done");
-            const timer = setTimeout(() => {
+            // Only show success after flight animation (approx 1.2s)
+            const doneTimer = setTimeout(() => {
+                setInternalStage("done");
+            }, 1000);
+
+            const closeTimer = setTimeout(() => {
                 onComplete?.();
-            }, 1500);
-            return () => clearTimeout(timer);
+            }, 3000); // Wait bit longer on success screen
+
+            return () => {
+                clearTimeout(doneTimer);
+                clearTimeout(closeTimer);
+            }
         }
     }, [status, onComplete]);
 
@@ -40,99 +50,100 @@ export function ToolsLoader({ type, status, target, onComplete }: ToolsLoaderPro
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="relative w-full max-w-[400px] overflow-hidden rounded-2xl bg-white shadow-2xl p-0 ring-1 ring-white/40">
 
-                {/* Header / Top Bar */}
-                <div className="bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-4 flex items-center justify-between">
+                {/* Header - Lighter Colors */}
+                <div className="bg-gradient-to-r from-[#A5B4FC] to-[#818CF8] px-6 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 text-white">
                         <LoaderIcon className="w-5 h-5" />
-                        <span className="font-medium text-sm tracking-wide uppercase opacity-90">
+                        <span className="font-semibold text-sm tracking-wide uppercase drop-shadow-sm">
                             {type === "email" ? "Email Agent" : "Message Agent"}
                         </span>
                     </div>
+                    {/* Faster, Staggered Dot Loader */}
                     <div className="flex gap-1.5">
-                        <div className="w-2 h-2 rounded-full bg-white/30" />
-                        <div className="w-2 h-2 rounded-full bg-white/30" />
-                        <div className="w-2 h-2 rounded-full bg-white/80 animate-pulse" />
+                        <div className="w-2 h-2 rounded-full bg-white/90 animate-pulse-fast" style={{ animationDelay: '0ms' }} />
+                        <div className="w-2 h-2 rounded-full bg-white/90 animate-pulse-fast" style={{ animationDelay: '100ms' }} />
+                        <div className="w-2 h-2 rounded-full bg-white/90 animate-pulse-fast" style={{ animationDelay: '200ms' }} />
                     </div>
                 </div>
 
                 {/* Main Content Area */}
                 <div className="p-6 min-h-[220px] flex flex-col justify-center relative bg-slate-50/50">
 
-                    {/* STAGE 1: SCANNING / PROCESSING */}
+                    {/* STAGE 1: SCANNING - Full progress before moving to draft */}
                     {internalStage === "scan" && (
-                        <div className="flex flex-col items-center animate-scale-in">
-                            <div className="relative w-24 h-24 mb-6">
-                                {/* Ripples */}
-                                <div className="absolute inset-0 rounded-full border-2 border-indigo-500/20 animate-[ping-slow_2s_infinite]" />
-                                <div className="absolute inset-0 rounded-full border-2 border-indigo-500/20 animate-[ping-slow_2s_infinite_0.5s]" />
-
-                                <div className="absolute inset-0 flex items-center justify-center bg-indigo-50 rounded-full border border-indigo-100">
-                                    <LoaderIcon className="w-10 h-10 text-indigo-600" />
-                                </div>
+                        <div className="flex flex-col items-center animate-scale-in w-full">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-6 relative">
+                                <LoaderIcon className="w-8 h-8 text-indigo-400" />
+                                <div className="absolute inset-0 rounded-full border-2 border-indigo-100 animate-[spin_3s_linear_infinite] border-t-indigo-400" />
                             </div>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-2">Analyzing Request</h3>
-                            <p className="text-slate-500 text-center text-sm px-4">
-                                Extracting details for {target}...
+
+                            <h3 className="text-lg font-bold text-slate-700 mb-1">
+                                Processing...
+                            </h3>
+                            <p className="text-slate-500 text-center text-xs px-4 font-mono mb-4">
+                                Parsing request details
                             </p>
-                            <div className="w-32 h-1 bg-slate-200 rounded-full mt-6 overflow-hidden">
-                                <div className="h-full bg-indigo-500 w-1/3 animate-[slideRight_1s_infinite_linear]" />
+
+                            {/* Clean Progress Bar */}
+                            <div className="w-48 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                <div className="h-full bg-indigo-500 w-1/3 animate-[slideRight_1s_infinite_ease-in-out]" />
                             </div>
                         </div>
                     )}
 
-                    {/* STAGE 2: DRAFTING / SKELETON */}
+                    {/* STAGE 2: DRAFTING / SKELETON / FLY */}
                     {(internalStage === "draft" || internalStage === "fly") && (
                         <div className={cn(
-                            "relative w-full bg-white rounded-xl border border-slate-200 shadow-sm p-4 mx-auto transition-all duration-500",
-                            internalStage === "fly" ? "animate-fly-out" : "animate-scale-in"
+                            "relative w-full bg-white rounded-xl border border-slate-200 shadow-sm p-4 mx-auto transition-all duration-300",
+                            internalStage === "fly" ? "animate-paper-plane" : "animate-scale-in"
                         )}>
+                            {/* Paper Plane Icon for Flight */}
                             {internalStage === "fly" && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
-                                    <Check className="w-12 h-12 text-green-500 bg-green-100 rounded-full p-2" />
+                                <div className="absolute -right-6 -top-6 rotate-12 z-20">
+                                    <Send className="w-16 h-16 text-indigo-500 drop-shadow-lg fill-indigo-100" />
                                 </div>
                             )}
 
-                            {/* Fake Email Interface */}
+                            {/* Email Card Interface */}
                             <div className="flex items-center gap-3 mb-4 border-b border-slate-100 pb-3">
-                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-                                    <span className="text-xs font-bold text-slate-400">TO</span>
+                                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
+                                    <span className="text-[10px] font-bold text-slate-400">TO</span>
                                 </div>
-                                <div className="flex-1">
-                                    <div className="text-xs text-slate-400 font-semibold mb-1">RECIPIENT</div>
-                                    <div className="text-sm font-medium text-slate-800 font-mono bg-slate-50 px-2 py-1 rounded border border-slate-100 inline-block">
+                                <div className="flex-1 min-w-0">
+                                    <div className="text-[10px] text-slate-400 font-bold tracking-wider mb-0.5">RECIPIENT</div>
+                                    <div className="text-sm font-semibold text-slate-800 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 inline-block truncate max-w-full">
                                         {target}
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
-                                <div className="h-2 w-3/4 bg-slate-100 rounded animate-pulse" />
-                                <div className="h-2 w-full bg-slate-100 rounded animate-pulse delay-75" />
-                                <div className="h-2 w-5/6 bg-slate-100 rounded animate-pulse delay-150" />
+                            <div className="space-y-2.5 opacity-60">
+                                <div className="h-2 w-3/4 bg-slate-200 rounded" />
+                                <div className="h-2 w-full bg-slate-200 rounded delay-75" />
+                                <div className="h-2 w-5/6 bg-slate-200 rounded delay-150" />
                             </div>
-
-                            {/* Scan effect overlay */}
-                            <div className="absolute inset-0 pointer-events-none animate-scan z-10" />
                         </div>
                     )}
 
                     {/* STAGE 3: SUCCESS STATE */}
                     {internalStage === "done" && (
                         <div className="flex flex-col items-center justify-center h-full animate-scale-in">
-                            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-inner ring-4 ring-green-50">
-                                <Check className="w-10 h-10 text-green-600" />
+                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4 shadow-sm ring-4 ring-white">
+                                <Check className="w-8 h-8 text-green-600 animate-in zoom-in duration-300" />
                             </div>
-                            <h2 className="text-xl font-bold text-slate-800">Has been Sent!</h2>
-                            <p className="text-slate-500 mt-1">Operation completed successfully.</p>
+                            <h2 className="text-xl font-bold text-slate-800 tracking-tight">Sent Successfully</h2>
+                            <p className="text-slate-500 mt-1 text-sm">Action completed.</p>
                         </div>
                     )}
 
                 </div>
 
                 {/* Footer info */}
-                <div className="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-mono uppercase">
-                    <span>AI Agent Active</span>
-                    <span>{(status === 'processing' || status === 'idle') ? 'Wait...' : '0.4s'}</span>
+                <div className="bg-slate-50 px-6 py-2.5 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-mono uppercase tracking-widest">
+                    <span className="flex items-center gap-1.5">
+                        <span className={cn("w-1.5 h-1.5 rounded-full", status === 'success' ? "bg-green-500" : "bg-indigo-400 animate-pulse")} />
+                        Agent Active
+                    </span>
                 </div>
             </div>
         </div>
