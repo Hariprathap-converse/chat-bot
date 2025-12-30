@@ -68,31 +68,35 @@ export function useChatMessages() {
   const [showEmployeeLoader, setShowEmployeeLoader] = useState(false);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
   const [genLoader, setGenLoader] = useState(false);
+  const [botTyping, setBotTyping] = useState(false);
 
   const sendMessage = () => {
     if (!input.trim()) return;
 
-    const userMessage = input.trim().toLowerCase();
+    const userText = input.trim();
+    const userMessage = userText.toLowerCase();
 
     // Add user message
-    setMessages((prev) => [...prev, { role: "user", content: input }]);
+    setMessages((prev) => [...prev, { role: "user", content: userText }]);
+    setInput("");
 
-    // Check for keyword triggers
+    // BOT STARTS TYPING
+    setBotTyping(true);
+
+    // Keyword flows
     if (
       userMessage.includes("employee details") ||
       userMessage.includes("employee details form")
     ) {
-      // Show employee details form with skeleton loader
       setShowEmployeeLoader(true);
 
-      // Simulate loading time for skeleton
       setTimeout(() => {
         setShowEmployeeLoader(false);
         setEmployeeDetailsOpen(true);
-      }, 2000); // 2 second skeleton loader
+      }, 2000);
 
-      // Add bot response
       setTimeout(() => {
+        setBotTyping(false);
         setMessages((prev) => [
           ...prev,
           { role: "bot", content: "Loading your Employee Details form..." },
@@ -102,27 +106,25 @@ export function useChatMessages() {
       userMessage.includes("generate website") ||
       userMessage.includes("website generator")
     ) {
-      // Show website generator loader
       setGenLoader(true);
 
-      // Add bot response
       setTimeout(() => {
+        setBotTyping(false);
         setMessages((prev) => [
           ...prev,
           { role: "bot", content: "Generating your website..." },
         ]);
       }, 500);
     } else {
-      // Regular bot response
+      // Simulated delayed bot response
       setTimeout(() => {
+        setBotTyping(false);
         setMessages((prev) => [
           ...prev,
-          { role: "bot", content: `Bot response to "${input}"` },
+          { role: "bot", content: `Bot response to "${userText}"` },
         ]);
-      }, 500);
+      }, 5000);
     }
-
-    setInput("");
   };
 
   return {
@@ -135,5 +137,6 @@ export function useChatMessages() {
     setEmployeeDetailsOpen,
     genLoader,
     setGenLoader,
+    botTyping,
   };
 }

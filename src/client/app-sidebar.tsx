@@ -173,15 +173,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       collapsible="icon"
-      className="absolute min-h-[80%] max-h-[calc(100vh-40px)] 2xl:max-h-[900px] 2xl:h-[900px] shadow-[0px_0px_10px_0px_hsla(212,72%,59%,0.25)] rounded-2xl"
+      className="absolute min-h-[80%] max-h-[calc(100vh-40px)] shadow-[0px_0px_10px_0px_hsla(212,72%,59%,0.25)] rounded-2xl"
       {...props}
     >
       <SidebarHeader
         className={cn(
           !open
-            ? "flex flex-col-reverse  transition-all duration-500 "
+            ? "flex flex-col-reverse  transition-all !duration-500 "
             : "grid grid-cols-[1fr_auto] w-full transition-all duration-0 pr-5  px-5 ",
-          "rounded-2xl pt-5 cursor-pointer items-center gap-4 mb-1 "
+          "rounded-2xl pt-5 cursor-pointer items-center gap-4 mb-1  "
         )}
       >
         <Link

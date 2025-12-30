@@ -51,16 +51,16 @@ export default function ForgotPassword() {
     };
 
     return (
-        <div className="min-h-screen grid bg-white items-center grid-cols-2 w-full">
-            <div className="h-full w-full pl-2">
+        <div className="min-h-screen grid bg-white items-center grid-cols-1 lg:grid-cols-2 w-full">
+            <div className="hidden lg:block h-full w-full pl-2">
                 <img
                     src="/backgroundImage.png"
                     alt="Image"
                     className="object-fit w-full h-[940px]"
                 />
             </div>
-            <div className="w-full flex items-center justify-center">
-                <Card className="w-[590px] h-[550px] backdrop-blur-2xl bg-white rounded-[55px] border-0 shadow-none ring-3 p-10 ring-white">
+            <div className="w-full h-full flex items-center justify-center p-4">
+                <Card className="w-full max-w-[590px] h-auto py-10 backdrop-blur-2xl bg-white rounded-[55px] border-0 shadow-none ring-3 px-6 sm:px-10 ring-white">
                     <CardHeader>
                         <div className="flex flex-col items-center justify-center gap-5">
                             <span className="pl-1 flex gap-2 items-center justify-center transition-all duration-300">
@@ -78,7 +78,7 @@ export default function ForgotPassword() {
                         </div>
                     </CardHeader>
                     <CardContent className="flex items-center justify-center">
-                        <div className="flex flex-col items-center space-y-4 gap-2 w-[450px]">
+                        <div className="flex flex-col items-center space-y-4 gap-2 w-full max-w-[450px]">
 
                             <div className="w-full space-y-1">
                                 <div className="grid gap-2 w-full relative">

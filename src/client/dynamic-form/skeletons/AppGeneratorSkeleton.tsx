@@ -140,7 +140,7 @@ export default function WebsiteAutoGenerator() {
 
         <div className="space-y-4">
           {current.rows.slice(0, visible).map((row, i) => (
-            <div key={i} className="flex gap-4">
+            <div key={i} className="flex gap-4 flex-wrap">
               {row.map((cls, j) => (
                 <div
                   key={j}

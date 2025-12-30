@@ -88,18 +88,18 @@ export default function DynamicHome() {
   }, []);
   const router = useRouter();
   return (
-    <div className="relative bg-background h-full w-full p-[87px] pb-0 flex item-center justify-center">
-      <div className="absolute right-3 top-1.5 ">
+    <div className="relative bg-background h-full w-full p-4 md:p-[87px] pb-0 flex item-center justify-center">
+      <div className="absolute right-3 top-1.5 z-10">
         <Profile />
       </div>
-      <div className="absolute left-5 rounded-2xl top-5 ">
+      <div className="absolute left-5 rounded-2xl top-5 z-10 hidden md:block">
         <AppSidebar />
       </div>
-      <main className="flex flex-col gap-[45px]">
-        <div className="flex flex-col items-center gap-[27px]">
-          <div className="flex flex-col items-center w-full gap-1.5">
+      <main className="flex flex-col gap-[45px] w-full max-w-[1198px]">
+        <div className="flex flex-col items-center gap-[27px] mt-10 md:mt-0">
+          <div className="flex flex-col items-center w-full gap-1.5 px-4 text-center">
             <span>{getIcon(data.header.customIcon)}</span>
-            <span className="bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold text-[45px] leading-[150%]  tracking-normal">
+            <span className="bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold text-[32px] md:text-[45px] leading-[150%] tracking-normal">
               {data.header.title}
             </span>
 
@@ -107,19 +107,19 @@ export default function DynamicHome() {
               {data.header.subtitle}
             </span>
           </div>
-          <span className="text-sub-heading font-medium leading-[150%] text-base tracking-normal">
+          <span className="text-sub-heading font-medium leading-[150%] text-base tracking-normal text-center px-4">
             {data.header.description}
           </span>
         </div>
 
-        <div className="flex flex-col gap-[23px]  w-[1098px]">
-          <div className="flex relative max-w-[1198px] p-0">
-            <div className="p-px rounded-[14px] w-full  shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)]  bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] max-w-[1198px]">
+        <div className="flex flex-col gap-[23px] w-full items-center">
+          <div className="flex relative w-full h-auto p-0">
+            <div className="p-px rounded-[14px] w-full shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)]">
               <Input
-                className=" p-0 h-14 rounded-[14px] border-0 bg-white px-[21px] flex  items-center  
+                className="p-0 h-14 rounded-[14px] border-0 bg-white px-[21px] flex items-center  
                placeholder:font-normal placeholder:text-base placeholder:text-foreground  
                leading-[150%] tracking-normal font-normal !text-base text-heading outline-none 
-                focus:ring-0 focus:ring-offset-0 focus:ring-transparent  focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
+                focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
                 placeholder={data.search.placeholder}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -129,7 +129,7 @@ export default function DynamicHome() {
               />
             </div>
             <Link href={"/chat"}>
-              <button className=" absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white  bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center ">
+              <button className="absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center">
                 {getIcon(data.search.buttonIcon)}
                 <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
               </button>
@@ -139,9 +139,9 @@ export default function DynamicHome() {
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
+              className="w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
             >
-              <div className="flex gap-3 items-center  ">
+              <div className="flex gap-3 items-center">
                 <span>{getIcon(section.icon)}</span>
 
                 <span className="text-heading text-base font-medium tracking-normal">
@@ -149,23 +149,23 @@ export default function DynamicHome() {
                 </span>
               </div>
 
-              <div className="flex gap-[39px]">
+              <div className="flex gap-[39px] flex-wrap justify-center md:justify-start">
                 {section.items.map((item, i) => (
                   <div
                     key={i}
                     onClick={() => setSelectedSection(item.key)}
                     className={cn(
                       selectedSection == item.key ? "border-hover-border" : "",
-                      "group bg-white cursor-pointer w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
+                      "group bg-white cursor-pointer w-[150px] md:w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
                     )}
                   >
-                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[39%] left-[46%] bg-circle   rounded-full"></div>
+                    <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[39%] left-[46%] bg-circle rounded-full"></div>
                     <span
                       className={cn(
                         selectedSection == item.key
                           ? "opacity-100"
                           : " opacity-0 group-hover:opacity-100",
-                        "absolute top-3 right-4  translate-y-1  group-hover:translate-y-0 transition-all duration-500 ease-out "
+                        "absolute top-3 right-4 translate-y-1 group-hover:translate-y-0 transition-all duration-500 ease-out "
                       )}
                     >
                       <Sparkles className="text-[hsla(245,96%,70%,1)] h-5 w-5" />
@@ -175,7 +175,7 @@ export default function DynamicHome() {
                       className={cn(
                         selectedSection == item.key &&
                         "scale-[130%] origin-bottom ",
-                        "relative bottom-2  group-hover:scale-[130%] origin-bottom  transition-all duration-[800ms] h-[50px]  z-50   "
+                        "relative bottom-2 group-hover:scale-[130%] origin-bottom transition-all duration-[800ms] h-[50px] z-50"
                       )}
                     >
                       {getIcon(
@@ -183,7 +183,7 @@ export default function DynamicHome() {
                         "h-[55px] w-[55px] text-heading group-hover:text-foreground stroke-[0.7px] group-hover:stroke-[1px]"
                       )}
                     </span>
-                    <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300  z-50  !text-[12px] font-medium text-start ">
+                    <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300 z-50 !text-[12px] font-medium text-start">
                       {item.label}
                     </span>
                   </div>
@@ -193,18 +193,18 @@ export default function DynamicHome() {
           ))}
 
           {selectedSection === null ? (
-            <div className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
+            <div className="w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
               <div className="flex gap-3 items-center">
                 <span className="text-heading text-base font-medium tracking-normal">
                   Quick Operations
                 </span>
               </div>
 
-              <div className="grid grid-cols-5 gap-[11px]">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[11px]">
                 {data.footerSection[0].items.slice(0, 6).map((item, index) => (
                   <div
                     key={index}
-                    className="border group rounded-[7px]  hover:border-hover-border  hover:bg-background cursor-pointer w-[180px] p-[7px] px-3  flex gap-2 items-center"
+                    className="border group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
                     onClick={() => router.push(`/chat`)}
 
                   >
@@ -220,7 +220,7 @@ export default function DynamicHome() {
               .map((footer, idx) => (
                 <div
                   key={idx}
-                  className="max-w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3"
+                  className="w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3"
                 >
                   <div className="flex gap-3 items-center">
                     <span className="text-heading text-base font-medium tracking-normal">
@@ -228,12 +228,12 @@ export default function DynamicHome() {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-5 gap-[11px]">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[11px]">
                     {footer.items.map((item, index) => (
                       <div
                         key={index}
                         onClick={() => router.push(`/chat`)}
-                        className="border group rounded-[7px] hover:bg-background hover:border-hover-border cursor-pointer p-[7px] min-w-[180px] w-full px-3  flex gap-2 items-center"
+                        className="border group rounded-[7px] hover:bg-background hover:border-hover-border cursor-pointer p-[7px] w-full px-3 flex gap-2 items-center"
                       >
                         <span>
                           {getIcon(

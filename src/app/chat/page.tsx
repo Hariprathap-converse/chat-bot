@@ -21,10 +21,11 @@ import {
   WebsiteGeneratorModal,
 } from "@/components/chat/chat-modals";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { BotTypingLoader } from "@/components/chat/dot-loader";
 
 export default function ChatPage() {
   const { data } = useOpsBot();
-  const { open, setOpen } = useSidebar();
+  const { setOpen } = useSidebar();
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -38,6 +39,7 @@ export default function ChatPage() {
     employeeDetailsOpen,
     setEmployeeDetailsOpen,
     genLoader,
+    botTyping,
     setGenLoader,
   } = useChatMessages();
 
@@ -103,24 +105,24 @@ export default function ChatPage() {
           <div className="flex flex-col min-w-[60%] max-w-[90%] md:max-w-[71%] lg:max-w-[61%] gap-0 p-4">
             {grouped.map((pair, idx) => (
               <div key={`group-${idx}`} className="flex flex-col gap-1">
-                {/* User Message */}
                 {pair[0] && (
-                  <ChatMessage message={pair[0]} index={idx} isUser={true} />
+                  <ChatMessage message={pair[0]} index={idx} isUser />
                 )}
-
-                {/* Bot Message */}
                 {pair[1] && (
                   <ChatMessage message={pair[1]} index={idx} isUser={false} />
                 )}
-
-                <div ref={messagesEndRef} className="h-0 w-0" />
               </div>
             ))}
+
+            {/* BOT TYPING LOADER */}
+            {botTyping && <BotTypingLoader />}
+
+            <div ref={messagesEndRef} />
           </div>
         </div>
 
         {/* Input Area */}
-        <div className="flex mx-auto z-40 flex-col-reverse p-5 w-full min-w-[65%]  md:max-w-[74%]  md:max-w-[61%]">
+        <div className="flex mx-auto z-40 flex-col-reverse p-5 w-full min-w-[65%]  md:max-w-[70%] lg:max-w-[65%] xl:min-w-[61%] 2xl:max-w-[700px] ">
           <ChatInput
             value={input}
             onChange={setInput}
