@@ -70,6 +70,11 @@ export function useChatMessages() {
   const [genLoader, setGenLoader] = useState(false);
   const [botTyping, setBotTyping] = useState(false);
 
+  // Tools State
+  const [toolType, setToolType] = useState<"email" | "sms" | "calendar" | null>(null);
+  const [toolStatus, setToolStatus] = useState<"idle" | "processing" | "sending" | "success" | "error">("idle");
+  const [toolTarget, setToolTarget] = useState<string>("");
+
   const sendMessage = () => {
     if (!input.trim()) return;
 
@@ -80,7 +85,52 @@ export function useChatMessages() {
     setMessages((prev) => [...prev, { role: "user", content: userText }]);
     setInput("");
 
-    // BOT STARTS TYPING
+    // Regex for Email: "send email to <email> as <content>"
+    const emailMatch = userText.match(
+      /(?:send|sending|email)\s+(?:a|an)?\s*(?:mail|email)\s*(?:to)?\s*([^\s]+)\s+(?:as|with|saying)?\s+(.+)/i
+    );
+    // Regex for SMS: "send sms to <number> as <content>" (Placeholder logic)
+    const smsMatch = userText.match(/(?:send|sending)\s+(?:a|an)?\s*sms\s+to\s+([^\s]+)\s+as\s+(.+)/i);
+
+    if (emailMatch) {
+      const targetEmail = emailMatch[1];
+      const content = emailMatch[2]; // usable later
+
+      setToolType("email");
+      setToolTarget(targetEmail);
+      setToolStatus("processing");
+
+      setTimeout(() => {
+        setToolStatus("sending");
+      }, 1500);
+
+      setTimeout(() => {
+        setToolStatus("success");
+      }, 3500);
+
+      return; // stop normal bot flow
+    }
+
+    if (smsMatch) {
+      const targetNumber = smsMatch[1];
+
+      setToolType("sms");
+      setToolTarget(targetNumber);
+      setToolStatus("processing");
+
+      setTimeout(() => {
+        setToolStatus("sending");
+      }, 1500);
+
+      setTimeout(() => {
+        setToolStatus("success");
+      }, 3500);
+
+      return;
+    }
+
+
+    // BOT STARTS TYPING (Default Flow)
     setBotTyping(true);
 
     // Keyword flows
@@ -123,8 +173,21 @@ export function useChatMessages() {
           ...prev,
           { role: "bot", content: `Bot response to "${userText}"` },
         ]);
-      }, 5000);
+      }, 5000); // Intentionally long delay as per existing code, maybe user likes it?
     }
+  };
+
+  const resetTool = () => {
+    // Add success message to chat history after tool completes
+    if (toolStatus === "success") {
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: `${toolType === 'email' ? 'Email' : 'SMS'} sent successfully to ${toolTarget}!` },
+      ]);
+    }
+    setToolType(null);
+    setToolStatus("idle");
+    setToolTarget("");
   };
 
   return {
@@ -138,5 +201,10 @@ export function useChatMessages() {
     genLoader,
     setGenLoader,
     botTyping,
+    // Tool exports
+    toolType,
+    toolStatus,
+    toolTarget,
+    resetTool
   };
 }

@@ -22,6 +22,7 @@ import {
 } from "@/components/chat/chat-modals";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { BotTypingLoader } from "@/components/chat/dot-loader";
+import { ToolsLoader } from "@/components/chat/tools-loader";
 
 export default function ChatPage() {
   const { data } = useOpsBot();
@@ -41,6 +42,10 @@ export default function ChatPage() {
     genLoader,
     botTyping,
     setGenLoader,
+    toolType,
+    toolStatus,
+    toolTarget,
+    resetTool,
   } = useChatMessages();
 
   // Auto-scroll to bottom on new messages
@@ -142,6 +147,12 @@ export default function ChatPage() {
       <WebsiteGeneratorModal
         isOpen={genLoader}
         onClose={() => setGenLoader(false)}
+      />
+      <ToolsLoader
+        type={toolType}
+        status={toolStatus}
+        target={toolTarget}
+        onComplete={resetTool}
       />
     </div>
   );
