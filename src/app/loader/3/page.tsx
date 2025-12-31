@@ -59,7 +59,7 @@ const generationStages: GenerationStage[] = [
   },
 ];
 
-export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoader: (value: boolean) => void }) {
+export default function AIWebsiteGeneratorLoader() {
   const [currentStage, setCurrentStage] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -103,13 +103,6 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
     window.open('http://localhost:3001', '_blank');
   };
 
-  /**
-   * Handle close button click - hides the loader container
-   */
-  const handleClose = () => {
-    setIsVisible(false);
-    setGenLoader(false);
-  };
 
   // Don't render if closed
   if (!isVisible) {
@@ -119,16 +112,16 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
 
   return (
     <>
-      {/* Popup/Modal Container */}
-      <div className="max-w-4xl w-full bg-card rounded-3xl shadow-2xl border-2 border-border/50 overflow-hidden animate-in fade-in zoom-in duration-500">
-        {/* Header */}
-        <div className="bg-linear-to-r from-accent/10 via-accent/5 to-transparent p-6 border-b border-border/50">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center gap-3">
+      {/* Container - Refactored for Compact Inline Display */}
+      <div className="w-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden animate-in fade-in zoom-in duration-500 my-2">
+        {/* Header - Compact */}
+        <div className="bg-linear-to-r from-accent/10 via-accent/5 to-transparent px-5 py-3 border-b border-border/50">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-12 h-12 rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-lg">
+                <div className="w-8 h-8 rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-md">
                   <svg
-                    className="w-7 h-7 text-white"
+                    className="w-4 h-4 text-white"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -141,124 +134,102 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                     />
                   </svg>
                 </div>
-                <div className="absolute inset-0 rounded-full bg-linear-to-br from-[#7468FC] to-[#918FFF] blur-xl opacity-40 animate-pulse" />
+                <div className="absolute inset-0 rounded-full bg-linear-to-br from-[#7468FC] to-[#918FFF] blur-md opacity-40 animate-pulse" />
               </div>
-              <h1 className="bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold text-4xl">
-                AI Website Generator
-              </h1>
+              <div className="flex-1">
+                <h1 className="bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold text-lg leading-tight">
+                  AI Website Generator
+                </h1>
+                <p className="text-xs text-muted-foreground font-medium">
+                  {isCompleted ? "Generation Complete" : stage.stage}
+                </p>
+              </div>
+
             </div>
 
 
-            {/* Progress Bar */}
-            <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+            {/* Progress Bar - Compact */}
+            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
               <div
                 className="h-full bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
-
-            <p className="text-sub-heading text-lg font-medium">
-              {isCompleted ? "Generation Complete!" : stage.stage}
-            </p>
-            {/* <div className="text-sm text-sub-title font-medium">
-              {Math.round(progress)}% Complete
-            </div> */}
           </div>
         </div>
 
-        {/* Content Area */}
-        <div className="p-6 min-h-[535px] max-h-[50vh] overflow-y-auto">
+        {/* Content Area - Significantly Reduced Height & Padding */}
+        <div className="p-4 bg-muted/5 min-h-[320px] max-h-[400px] overflow-y-auto custom-scrollbar">
           {isCompleted ? (
             // Enhanced Completion State with Action Buttons
-            <div className="space-y-6">
-
-
-              {/* Website Preview Mockup */}
+            <div className="space-y-4">
+              {/* Website Preview Mockup - Compact */}
               <div
-                className="bg-muted/30 rounded-2xl p-6 border border-border/50 animate-in fade-in slide-in-from-bottom-4 duration-700"
+                className="bg-card rounded-xl p-4 border border-border/50 animate-in fade-in slide-in-from-bottom-4 duration-700 shadow-sm"
                 style={{ animationDelay: "300ms" }}
               >
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-400" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 rounded-full bg-red-400" />
+                    <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                    <div className="w-2 h-2 rounded-full bg-green-400" />
                   </div>
-                  <div className="flex-1 bg-muted rounded-md h-6 flex items-center px-3">
-                    <span className="text-xs text-sub-title">
+                  <div className="flex-1 bg-muted rounded h-4 flex items-center px-2">
+                    <span className="text-[10px] text-muted-foreground">
                       https://your-website.com
                     </span>
                   </div>
                 </div>
 
-                {/* Website Preview - Using existing skeleton */}
-                <div className="bg-background rounded-lg p-4 space-y-3 border border-border/30">
+                {/* Website Preview - Using existing skeleton - Compact Scale */}
+                <div className="bg-background rounded-lg p-3 space-y-2 border border-border/30">
                   {/* Header */}
-                  <div className="h-12 bg-linear-to-r from-accent/20 to-accent/10 rounded flex items-center px-4 gap-4">
-                    <div className="h-6 w-24 bg-accent/30 rounded animate-pulse" />
+                  <div className="h-8 bg-linear-to-r from-accent/20 to-accent/10 rounded flex items-center px-3 gap-3">
+                    <div className="h-3 w-16 bg-accent/30 rounded" />
                     <div className="flex-1" />
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                       {[1, 2, 3].map((i) => (
                         <div
                           key={i}
-                          className="h-4 w-16 bg-accent/20 rounded animate-pulse"
-                          style={{ animationDelay: `${i * 100}ms` }}
+                          className="h-2 w-10 bg-accent/20 rounded"
                         />
                       ))}
                     </div>
                   </div>
 
                   {/* Hero */}
-                  <div className="h-32 bg-linear-to-br from-accent/20 to-accent/5 rounded flex flex-col items-center justify-center gap-2 p-4">
-                    <div className="h-8 w-2/3 bg-accent/30 rounded animate-pulse" />
-                    <div
-                      className="h-4 w-1/2 bg-accent/20 rounded animate-pulse"
-                      style={{ animationDelay: "200ms" }}
-                    />
-                    <div className="flex gap-2 mt-2">
-                      <div
-                        className="h-8 w-24 bg-accent/40 rounded-lg animate-pulse"
-                        style={{ animationDelay: "400ms" }}
-                      />
-                      <div
-                        className="h-8 w-24 bg-accent/40 rounded-lg animate-pulse"
-                        style={{ animationDelay: "600ms" }}
-                      />
+                  <div className="h-24 bg-linear-to-br from-accent/20 to-accent/5 rounded flex flex-col items-center justify-center gap-2 p-2">
+                    <div className="h-4 w-2/3 bg-accent/30 rounded" />
+                    <div className="h-2 w-1/2 bg-accent/20 rounded" />
+                    <div className="flex gap-2 mt-1">
+                      <div className="h-5 w-16 bg-accent/40 rounded-md" />
+                      <div className="h-5 w-16 bg-accent/40 rounded-md" />
                     </div>
                   </div>
 
                   {/* Content Grid */}
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 gap-2">
                     {[1, 2, 3].map((i) => (
                       <div
                         key={i}
-                        className="h-24 bg-accent/10 rounded p-2 space-y-2"
+                        className="h-16 bg-accent/10 rounded p-1.5 space-y-1.5"
                       >
-                        <div
-                          className="h-12 bg-accent/20 rounded animate-pulse"
-                          style={{ animationDelay: `${i * 100}ms` }}
-                        />
-                        <div
-                          className="h-2 bg-accent/15 rounded animate-pulse"
-                          style={{ animationDelay: `${i * 150}ms` }}
-                        />
-                        <div
-                          className="h-2 w-2/3 bg-accent/15 rounded animate-pulse"
-                          style={{ animationDelay: `${i * 200}ms` }}
-                        />
+                        <div className="h-6 bg-accent/20 rounded" />
+                        <div className="h-1.5 bg-accent/15 rounded" />
+                        <div className="h-1.5 w-2/3 bg-accent/15 rounded" />
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-              {/* Action Buttons */}
-              <div className="flex items-center justify-center gap-4">
+              {/* Action Buttons - Compact */}
+              <div className="flex items-center justify-center gap-3 pt-2">
                 <button
                   onClick={handlePreview}
-                  className="px-4 py-2  bg-primary text-primary-foreground rounded-[4px] cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+                  className="px-4 py-1.5 bg-primary text-primary-foreground text-sm rounded-md cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -270,13 +241,7 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                       d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                     />
                   </svg>
-                  Preview in New Tab
-                </button>
-                <button
-                  onClick={handleClose}
-                  className="px-4 py-2  bg-muted text-foreground rounded-[4px] cursor-pointer font-medium hover:bg-muted/80 transition-colors"
-                >
-                  Close
+                  Preview
                 </button>
               </div>
             </div>
@@ -289,29 +254,29 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                     active={stageActive(0)}
                     done={stageDone(0)}
                     activeText={message}
-                    doneText="Navigation locked ✓"
+                    doneText="Navigation & Structure"
                   />
 
 
-                  <div className="relative h-16 rounded-lg border border-border/40 bg-muted/40 overflow-hidden">
+                  <div className="relative h-12 rounded-lg border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/50 overflow-hidden">
                     {stageActive(0) && <AIScan />}
 
-                    <div className="absolute inset-0 flex items-center justify-between px-6">
+                    <div className="absolute inset-0 flex items-center justify-between px-4">
                       <div
                         className={cn(
-                          "h-8 w-32 rounded bg-accent/30 transition-all duration-500",
+                          "h-5 w-24 rounded bg-accent/30 transition-all duration-500",
                           stageDone(0) || currentMessage >= 1
                             ? "opacity-100 scale-100"
-                            : "opacity-40 scale-95"
+                            : "opacity-0 scale-95"
                         )}
                       />
 
-                      <div className="flex gap-4">
+                      <div className="flex gap-2">
                         {[1, 2, 3, 4].map((i) => (
                           <div
                             key={i}
                             className={cn(
-                              "h-6 w-16 rounded bg-accent/20 transition-all duration-500",
+                              "h-3 w-10 rounded bg-accent/20 transition-all duration-500",
                               stageDone(0) || currentMessage >= 2
                                 ? "opacity-100 translate-y-0"
                                 : "opacity-0 translate-y-1"
@@ -332,16 +297,16 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                     active={stageActive(1)}
                     done={stageDone(1)}
                     activeText={message}
-                    doneText="Hero generated ✓"
+                    doneText="Hero Section"
                   />
 
-                  <div className="relative h-48 rounded-lg border border-border/40 bg-muted/40 overflow-hidden">
+                  <div className="relative h-32 rounded-lg border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/50 overflow-hidden">
                     {stageActive(1) && <AIRadial />}
 
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6">
                       <div
                         className={cn(
-                          "h-12 w-3/4 rounded bg-accent/30 transition-all duration-500",
+                          "h-8 w-3/4 rounded bg-accent/30 transition-all duration-500",
                           stageDone(1) || currentMessage >= 0
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-2"
@@ -349,7 +314,7 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                       />
                       <div
                         className={cn(
-                          "h-6 w-1/2 rounded bg-accent/20 transition-all duration-500 delay-100",
+                          "h-4 w-1/2 rounded bg-accent/20 transition-all duration-500 delay-100",
                           stageDone(1) || currentMessage >= 1
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-2"
@@ -367,25 +332,25 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                     active={stageActive(2)}
                     done={stageDone(2)}
                     activeText={message}
-                    doneText="Content structured ✓"
+                    doneText="Content Blocks"
                   />
 
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-3">
                     {[0, 1, 2].map((i) => (
                       <div
                         key={i}
                         className={cn(
-                          "relative h-40 rounded-lg border border-border/40 bg-muted/40 overflow-hidden transition-all duration-500",
+                          "relative h-24 rounded-lg border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/50 overflow-hidden transition-all duration-500",
                           stageDone(2) || currentMessage >= i
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-2"
                         )}
                         style={{ transitionDelay: `${i * 120}ms` }}
                       >
-                        <div className="absolute inset-0 p-4 space-y-2">
-                          <div className="h-20 rounded bg-accent/30" />
-                          <div className="h-4 w-3/4 rounded bg-accent/20" />
-                          <div className="h-3 w-1/2 rounded bg-accent/15" />
+                        <div className="absolute inset-0 p-3 space-y-2">
+                          <div className="h-10 rounded bg-accent/30" />
+                          <div className="h-2 w-3/4 rounded bg-accent/20" />
+                          <div className="h-2 w-1/2 rounded bg-accent/15" />
                         </div>
                       </div>
                     ))}
@@ -400,16 +365,16 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                     active={stageActive(3)}
                     done={isCompleted}
                     activeText={message}
-                    doneText="Finalized ✓"
+                    doneText="Footer & Finalizing"
                   />
 
-                  <div className="h-24 rounded-lg border border-border/40 bg-muted/40 flex items-center justify-between px-6">
-                    <div className="h-8 w-24 rounded bg-accent/30" />
-                    <div className="flex gap-6">
+                  <div className="h-16 rounded-lg border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/50 flex items-center justify-between px-4">
+                    <div className="h-5 w-20 rounded bg-accent/30" />
+                    <div className="flex gap-4">
                       {[1, 2, 3].map((i) => (
-                        <div key={i} className="space-y-2">
-                          <div className="h-4 w-20 rounded bg-accent/20" />
-                          <div className="h-3 w-16 rounded bg-accent/15" />
+                        <div key={i} className="space-y-1.5">
+                          <div className="h-3 w-12 rounded bg-accent/20" />
+                          <div className="h-2 w-8 rounded bg-accent/15" />
                         </div>
                       ))}
                     </div>
@@ -418,54 +383,20 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
               </AISection>
             </div>
           )}
-          {/* Current Progress Indicator */}
-          {!isCompleted && (
-            <div className="flex items-center gap-3 py-4 animate-in fade-in duration-300">
-              <NavChatBot />
-              <div className="flex gap-1">
-                <div
-                  className="w-[5px] h-[5px] rounded-full bg-accent-foreground animate-bounce"
-                  style={{ animationDelay: "0ms" }}
-                />
-                <div
-                  className="w-[5px] h-[5px] rounded-full bg-accent-foreground animate-bounce"
-                  style={{ animationDelay: "150ms" }}
-                />
-                <div
-                  className="w-[5px] h-[5px] rounded-full bg-accent-foreground animate-bounce"
-                  style={{ animationDelay: "300ms" }}
-                />
-              </div>
-              {/* <span className="text-sm text-sub-title animate-pulse">
-                {message}
-              </span> */}
-            </div>
-          )}
         </div>
 
         {/* Footer */}
-        {!isCompleted && < div className="bg-muted/30 px-6 py-4 border-t border-border/50">
-          <div className="flex items-center justify-center gap-6 text-sm">
-            <div className="flex items-center gap-2">
+        {!isCompleted && <div className="bg-muted/30 px-5 py-2.5 border-t border-border/50">
+          <div className="flex items-center justify-center gap-4 text-xs font-medium">
+            <div className="flex items-center gap-1.5">
               <div
-                className={`w-2 h-2 rounded-full ${isCompleted
+                className={`w-1.5 h-1.5 rounded-full ${isCompleted
                   ? "bg-green-500"
                   : "bg-linear-to-r from-[#7468FC] to-[#918FFF]"
                   } animate-pulse`}
               />
-              <span className="text-sub-title">
+              <span className="text-muted-foreground">
                 {isCompleted ? "Completed" : "AI Processing"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div
-                className={`w-2 h-2 rounded-full ${isCompleted
-                  ? ""
-                  : "bg-linear-to-r from-[#ED799C] to-[#918FFF]"
-                  } animate-pulse`}
-              />
-              <span className="text-sub-title">
-                {isCompleted ? "" : "Building Components"}
               </span>
             </div>
           </div>
@@ -482,6 +413,20 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
           }
           .animate-shimmer {
             animation: shimmer 2s infinite;
+          }
+           /* Custom Scrollbar for compact view */
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+          }
+          .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
           }
         `}</style>
       </div >
@@ -504,9 +449,9 @@ interface HeaderLabelProps {
  */
 function HeaderLabel({ active, done, activeText, doneText }: HeaderLabelProps) {
   return (
-    <div className="flex items-center gap-2 mb-2">
-      <NavChatBot />
-      <span className="text-xs font-medium text-sub-heading">
+    <div className="flex items-center gap-2 mb-1.5">
+      <NavChatBot className="w-4 h-4" />
+      <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">
         {active ? activeText : doneText}
       </span>
     </div>
@@ -536,7 +481,7 @@ function AISection({ visible, children }: AISectionProps) {
       className={cn(
         "transition-all duration-700 ease-out",
         visible
-          ? "opacity-100 translate-y-0 max-h-[600px]"
+          ? "opacity-100 translate-y-0 max-h-[400px]"
           : "opacity-0 translate-y-3 max-h-0 pointer-events-none"
       )}
     >

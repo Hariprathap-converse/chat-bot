@@ -1,5 +1,5 @@
 
-import AIWebsiteGeneratorLoader from "@/app/loader/3/page";
+
 import EmployeeDetails from "@/client/dynamic-form/employee-details";
 
 interface EmployeeDetailsModalProps {
@@ -65,18 +65,4 @@ export function SkeletonLoaderModal({ isOpen }: SkeletonLoaderModalProps) {
     );
 }
 
-interface WebsiteGeneratorModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
 
-export function WebsiteGeneratorModal({ isOpen, onClose }: WebsiteGeneratorModalProps) {
-    if (!isOpen) return null;
-
-
-    return (
-        <div className="bg-black/40 min-h-screen w-full flex items-center justify-center p-8 fixed inset-0 z-50">
-            <AIWebsiteGeneratorLoader setGenLoader={onClose} />
-        </div>
-    );
-}
