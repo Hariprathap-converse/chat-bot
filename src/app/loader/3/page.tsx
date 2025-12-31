@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavChatBot } from "@/Icons/global/home";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -65,8 +65,6 @@ export default function AIWebsiteGeneratorLoader() {
   const [isVisible, setIsVisible] = useState(true);
   const [elapsed, setElapsed] = useState(0);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-
   const stageDone = (i: number) => currentStage > i;
   const stageActive = (i: number) => currentStage === i;
   const stage = generationStages[currentStage];
@@ -102,16 +100,6 @@ export default function AIWebsiteGeneratorLoader() {
 
     return () => clearTimeout(timeout);
   }, [currentMessage, currentStage, isCompleted, stage.messages.length]);
-
-  // Auto-scroll to bottom on new updates
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({
-        top: scrollRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }
-  }, [currentStage, currentMessage, isCompleted]);
 
   const progress = isCompleted
     ? 100
@@ -206,11 +194,8 @@ export default function AIWebsiteGeneratorLoader() {
           </div>
         </div>
 
-        {/* Content Area - Auto Scrolling */}
-        <div
-          ref={scrollRef}
-          className="p-4 bg-muted/5 min-h-[320px] max-h-[400px] overflow-y-auto custom-scrollbar"
-        >
+        {/* Content Area - Removed max-h and auto-scroll */}
+        <div className="p-4 bg-muted/5 min-h-[459px] overflow-auto max-h-[460px]">
           {isCompleted ? (
             // Enhanced Completion State with Taller Preview
             <div className="space-y-4 h-full flex flex-col justify-center">
@@ -273,6 +258,17 @@ export default function AIWebsiteGeneratorLoader() {
                     ))}
                   </div>
                 </div>
+              </div>
+
+              {/* Time Display Below Preview Panel */}
+              <div className="flex justify-between items-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest px-1">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                  Completed
+                </span>
+                <span className="font-mono">
+                  {elapsed.toFixed(1)}s
+                </span>
               </div>
             </div>
           ) : (
@@ -350,6 +346,23 @@ export default function AIWebsiteGeneratorLoader() {
                             : "opacity-0 translate-y-2"
                         )}
                       />
+                      <div className="flex gap-2 mt-1">
+                        <div
+                          className={cn(
+                            "h-6 w-20 rounded bg-accent/40 transition-all duration-500 delay-100",
+                            stageDone(1) || currentMessage >= 2
+                              ? "opacity-100 translate-y-0"
+                              : "opacity-0 translate-y-2"
+                          )}
+                        />
+                        <div
+                          className={cn(
+                            "h-6 w-20 rounded bg-accent/40 transition-all duration-500 delay-100",
+                            stageDone(1) || currentMessage >= 2
+                              ? "opacity-100 translate-y-0"
+                              : "opacity-0 translate-y-2"
+                          )}
+                        />                      </div>
                     </div>
                   </div>
                 </section>
@@ -370,7 +383,7 @@ export default function AIWebsiteGeneratorLoader() {
                       <div
                         key={i}
                         className={cn(
-                          "relative h-24 rounded-lg border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/50 overflow-hidden transition-all duration-500",
+                          "relative h-28 rounded-lg border border-border/40 bg-zinc-50/50 dark:bg-zinc-900/50 overflow-hidden transition-all duration-500",
                           stageDone(2) || currentMessage >= i
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-2"
@@ -379,8 +392,8 @@ export default function AIWebsiteGeneratorLoader() {
                       >
                         <div className="absolute inset-0 p-3 space-y-2">
                           <div className="h-10 rounded bg-accent/30" />
-                          <div className="h-2 w-3/4 rounded bg-accent/20" />
-                          <div className="h-2 w-1/2 rounded bg-accent/15" />
+                          <div className="h-4 w-3/4 rounded bg-accent/20" />
+                          <div className="h-4 w-1/2 rounded bg-accent/15" />
                         </div>
                       </div>
                     ))}
@@ -415,23 +428,23 @@ export default function AIWebsiteGeneratorLoader() {
           )}
         </div>
 
-        {/* Footer with Timer */}
-        <div className="bg-muted/30 px-5 py-2.5 border-t border-border/50 flex justify-between items-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
-          <span className="flex items-center gap-1.5">
-            <span
-              className={cn(
-                "w-1.5 h-1.5 rounded-full",
-                isCompleted
-                  ? "bg-green-500"
-                  : "bg-[#7468FC] animate-pulse"
-              )}
-            />
-            {isCompleted ? "Completed" : "AI Processing"}
-          </span>
-          <span className="font-mono">
-            {isCompleted ? "Done" : `${elapsed.toFixed(1)}s`}
-          </span>
-        </div>
+        {/* Footer with Timer - Hide when completed */}
+        {!isCompleted && (
+          <div className="bg-muted/30 px-5 py-2.5 border-t border-border/50 flex justify-between items-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+            <span className="flex items-center gap-1.5">
+              <span
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  "bg-[#7468FC] animate-pulse"
+                )}
+              />
+              AI Processing
+            </span>
+            <span className="font-mono">
+              {elapsed.toFixed(1)}s
+            </span>
+          </div>
+        )}
 
         <style jsx>{`
           @keyframes shimmer {
@@ -444,20 +457,6 @@ export default function AIWebsiteGeneratorLoader() {
           }
           .animate-shimmer {
             animation: shimmer 2s infinite;
-          }
-           /* Custom Scrollbar for compact view */
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-          }
-          .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.2);
           }
         `}</style>
       </div >
