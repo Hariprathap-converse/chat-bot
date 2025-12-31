@@ -1,9 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavChatBot } from "@/Icons/global/home";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 /**
  * Generation stage configuration interface
@@ -64,11 +63,26 @@ export default function AIWebsiteGeneratorLoader() {
   const [currentMessage, setCurrentMessage] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [elapsed, setElapsed] = useState(0);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const stageDone = (i: number) => currentStage > i;
   const stageActive = (i: number) => currentStage === i;
   const stage = generationStages[currentStage];
   const message = stage.messages[currentMessage];
+
+  // Timer logic
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (!isCompleted) {
+      const startTime = Date.now();
+      interval = setInterval(() => {
+        setElapsed((Date.now() - startTime) / 1000);
+      }, 100);
+    }
+    return () => clearInterval(interval);
+  }, [isCompleted]);
 
   // Smooth message progression without typing animation
   useEffect(() => {
@@ -88,6 +102,16 @@ export default function AIWebsiteGeneratorLoader() {
 
     return () => clearTimeout(timeout);
   }, [currentMessage, currentStage, isCompleted, stage.messages.length]);
+
+  // Auto-scroll to bottom on new updates
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [currentStage, currentMessage, isCompleted]);
 
   const progress = isCompleted
     ? 100
@@ -114,122 +138,47 @@ export default function AIWebsiteGeneratorLoader() {
     <>
       {/* Container - Refactored for Compact Inline Display */}
       <div className="w-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden animate-in fade-in zoom-in duration-500 my-2">
-        {/* Header - Compact */}
+        {/* Header - Compact with Preview Button in Heading */}
         <div className="bg-linear-to-r from-accent/10 via-accent/5 to-transparent px-5 py-3 border-b border-border/50">
           <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-8 h-8 rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-md">
-                  <svg
-                    className="w-4 h-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-8 h-8 rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-md">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                  <div className="absolute inset-0 rounded-full bg-linear-to-br from-[#7468FC] to-[#918FFF] blur-md opacity-40 animate-pulse" />
                 </div>
-                <div className="absolute inset-0 rounded-full bg-linear-to-br from-[#7468FC] to-[#918FFF] blur-md opacity-40 animate-pulse" />
-              </div>
-              <div className="flex-1">
-                <h1 className="bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold text-lg leading-tight">
-                  AI Website Generator
-                </h1>
-                <p className="text-xs text-muted-foreground font-medium">
-                  {isCompleted ? "Generation Complete" : stage.stage}
-                </p>
-              </div>
-
-            </div>
-
-
-            {/* Progress Bar - Compact */}
-            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
-              <div
-                className="h-full bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] transition-all duration-500 ease-out"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Content Area - Significantly Reduced Height & Padding */}
-        <div className="p-4 bg-muted/5 min-h-[320px] max-h-[400px] overflow-y-auto custom-scrollbar">
-          {isCompleted ? (
-            // Enhanced Completion State with Action Buttons
-            <div className="space-y-4">
-              {/* Website Preview Mockup - Compact */}
-              <div
-                className="bg-card rounded-xl p-4 border border-border/50 animate-in fade-in slide-in-from-bottom-4 duration-700 shadow-sm"
-                style={{ animationDelay: "300ms" }}
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 rounded-full bg-red-400" />
-                    <div className="w-2 h-2 rounded-full bg-yellow-400" />
-                    <div className="w-2 h-2 rounded-full bg-green-400" />
-                  </div>
-                  <div className="flex-1 bg-muted rounded h-4 flex items-center px-2">
-                    <span className="text-[10px] text-muted-foreground">
-                      https://your-website.com
-                    </span>
-                  </div>
-                </div>
-
-                {/* Website Preview - Using existing skeleton - Compact Scale */}
-                <div className="bg-background rounded-lg p-3 space-y-2 border border-border/30">
-                  {/* Header */}
-                  <div className="h-8 bg-linear-to-r from-accent/20 to-accent/10 rounded flex items-center px-3 gap-3">
-                    <div className="h-3 w-16 bg-accent/30 rounded" />
-                    <div className="flex-1" />
-                    <div className="flex gap-2">
-                      {[1, 2, 3].map((i) => (
-                        <div
-                          key={i}
-                          className="h-2 w-10 bg-accent/20 rounded"
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Hero */}
-                  <div className="h-24 bg-linear-to-br from-accent/20 to-accent/5 rounded flex flex-col items-center justify-center gap-2 p-2">
-                    <div className="h-4 w-2/3 bg-accent/30 rounded" />
-                    <div className="h-2 w-1/2 bg-accent/20 rounded" />
-                    <div className="flex gap-2 mt-1">
-                      <div className="h-5 w-16 bg-accent/40 rounded-md" />
-                      <div className="h-5 w-16 bg-accent/40 rounded-md" />
-                    </div>
-                  </div>
-
-                  {/* Content Grid */}
-                  <div className="grid grid-cols-3 gap-2">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="h-16 bg-accent/10 rounded p-1.5 space-y-1.5"
-                      >
-                        <div className="h-6 bg-accent/20 rounded" />
-                        <div className="h-1.5 bg-accent/15 rounded" />
-                        <div className="h-1.5 w-2/3 bg-accent/15 rounded" />
-                      </div>
-                    ))}
-                  </div>
+                <div className="">
+                  <h1 className="bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold text-lg leading-tight">
+                    AI Website Generator
+                  </h1>
+                  <p className="text-xs text-muted-foreground font-medium">
+                    {isCompleted ? "Generation Complete" : stage.stage}
+                  </p>
                 </div>
               </div>
-              {/* Action Buttons - Compact */}
-              <div className="flex items-center justify-center gap-3 pt-2">
+
+              {/* Preview Button positioned in Header when completed */}
+              {isCompleted && (
                 <button
                   onClick={handlePreview}
-                  className="px-4 py-1.5 bg-primary text-primary-foreground text-sm rounded-md cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
+                  className="px-3 py-1.5 bg-primary text-primary-foreground text-xs rounded-md cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center gap-1.5 shadow-sm animate-in fade-in slide-in-from-right-4"
                 >
                   <svg
-                    className="w-4 h-4"
+                    className="w-3.5 h-3.5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -243,10 +192,91 @@ export default function AIWebsiteGeneratorLoader() {
                   </svg>
                   Preview
                 </button>
+              )}
+            </div>
+
+
+            {/* Progress Bar - Compact */}
+            <div className="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+              <div
+                className="h-full bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] transition-all duration-500 ease-out"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Content Area - Auto Scrolling */}
+        <div
+          ref={scrollRef}
+          className="p-4 bg-muted/5 min-h-[320px] max-h-[400px] overflow-y-auto custom-scrollbar"
+        >
+          {isCompleted ? (
+            // Enhanced Completion State with Taller Preview
+            <div className="space-y-4 h-full flex flex-col justify-center">
+              {/* Website Preview Mockup - Taller */}
+              <div
+                className="bg-card rounded-xl p-4 border border-border/50 animate-in fade-in slide-in-from-bottom-4 duration-700 shadow-sm flex-1 flex flex-col"
+                style={{ animationDelay: "300ms", minHeight: "360px" }}
+              >
+                <div className="flex items-center gap-2 mb-3 shrink-0">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 rounded-full bg-red-400" />
+                    <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                    <div className="w-2 h-2 rounded-full bg-green-400" />
+                  </div>
+                  <div className="flex-1 bg-muted rounded h-4 flex items-center px-2">
+                    <span className="text-[10px] text-muted-foreground">
+                      https://your-website.com
+                    </span>
+                  </div>
+                </div>
+
+                {/* Website Preview - Expanded Height */}
+                <div className="bg-background rounded-lg p-3 space-y-3 border border-border/30 flex-1 flex flex-col overflow-hidden">
+                  {/* Header */}
+                  <div className="h-8 bg-linear-to-r from-accent/20 to-accent/10 rounded flex items-center px-3 gap-3 shrink-0">
+                    <div className="h-3 w-16 bg-accent/30 rounded" />
+                    <div className="flex-1" />
+                    <div className="flex gap-2">
+                      {[1, 2, 3].map((i) => (
+                        <div
+                          key={i}
+                          className="h-2 w-10 bg-accent/20 rounded"
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Hero - Expanded */}
+                  <div className="h-40 bg-linear-to-br from-accent/20 to-accent/5 rounded flex flex-col items-center justify-center gap-3 p-4 shrink-0">
+                    <div className="h-6 w-3/4 bg-accent/30 rounded" />
+                    <div className="h-3 w-1/2 bg-accent/20 rounded" />
+                    <div className="flex gap-2 mt-2">
+                      <div className="h-6 w-20 bg-accent/40 rounded-md" />
+                      <div className="h-6 w-20 bg-accent/40 rounded-md" />
+                    </div>
+                  </div>
+
+                  {/* Content Grid - Expanded to fill remaining space */}
+                  <div className="grid grid-cols-3 gap-3 flex-1">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="bg-accent/10 rounded p-2 space-y-2 h-full flex flex-col"
+                      >
+                        <div className="h-8 bg-accent/20 rounded shrink-0" />
+                        <div className="h-2 bg-accent/15 rounded shrink-0" />
+                        <div className="h-2 w-2/3 bg-accent/15 rounded shrink-0" />
+                        <div className="flex-1 bg-accent/5 rounded mt-1" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-3 pb-2">
               {/* ================= NAV ================= */}
               <AISection visible={currentStage >= 0}>
                 <section>
@@ -385,22 +415,23 @@ export default function AIWebsiteGeneratorLoader() {
           )}
         </div>
 
-        {/* Footer */}
-        {!isCompleted && <div className="bg-muted/30 px-5 py-2.5 border-t border-border/50">
-          <div className="flex items-center justify-center gap-4 text-xs font-medium">
-            <div className="flex items-center gap-1.5">
-              <div
-                className={`w-1.5 h-1.5 rounded-full ${isCompleted
+        {/* Footer with Timer */}
+        <div className="bg-muted/30 px-5 py-2.5 border-t border-border/50 flex justify-between items-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+          <span className="flex items-center gap-1.5">
+            <span
+              className={cn(
+                "w-1.5 h-1.5 rounded-full",
+                isCompleted
                   ? "bg-green-500"
-                  : "bg-linear-to-r from-[#7468FC] to-[#918FFF]"
-                  } animate-pulse`}
-              />
-              <span className="text-muted-foreground">
-                {isCompleted ? "Completed" : "AI Processing"}
-              </span>
-            </div>
-          </div>
-        </div>}
+                  : "bg-[#7468FC] animate-pulse"
+              )}
+            />
+            {isCompleted ? "Completed" : "AI Processing"}
+          </span>
+          <span className="font-mono">
+            {isCompleted ? "Done" : `${elapsed.toFixed(1)}s`}
+          </span>
+        </div>
 
         <style jsx>{`
           @keyframes shimmer {
