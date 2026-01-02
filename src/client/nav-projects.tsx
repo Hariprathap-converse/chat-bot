@@ -38,7 +38,15 @@ export function NavProjects({
   const { isMobile } = useSidebar();
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden pt-0">
+    // <SidebarGroup className="group-data-[collapsible=icon]:hidden pt-0">
+    <SidebarGroup
+      className="
+    pt-0
+    transition-opacity duration-200
+    group-data-[collapsible=icon]:hidden
+    group-data-[collapsible=icon]:pointer-events-none
+  "
+    >
       <SidebarGroupLabel className="text-sm text-sub-heading font-medium mb-1">
         Projects
       </SidebarGroupLabel>
@@ -47,15 +55,19 @@ export function NavProjects({
           <SidebarMenuItem key={item.name}>
             <DropdownMenu>
               <DropdownMenuTrigger className="mt-1 rounded-[4px] w-full">
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton className="w-full min-h-[44px]" asChild>
                   <a
                     href={item.url}
                     className="py-[18px] flex  justify-between w-full font-medium text-foreground !rounded-[4px]"
                   >
-                    <div className="flex w-full gap-2">
-                      <item.icon className="w-5 h-5 " />
-                      <span>{item.name}</span>
+                    <div className="flex w-full gap-2 items-center min-w-0">
+                      <item.icon className="w-5 h-5 shrink-0" />
+                      <span className="whitespace-nowrap overflow-hidden text-ellipsis transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:translate-x-2 group-data-[collapsible=icon]:transition-none
+    group-data-[collapsible=icon]:w-0">
+                        {item.name}
+                      </span>
                     </div>
+
                     <MoreHorizontal />
                   </a>
                 </SidebarMenuButton>

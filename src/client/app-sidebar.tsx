@@ -1,52 +1,29 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Layout,
   Loader2,
-  LogOut,
-  Map,
-  Menu,
-  MessageCircleOff,
-  MessageCirclePlus,
+  LogOut, MessageCirclePlus,
   PieChart,
-  Settings,
-  Settings2,
-  SquareTerminal,
+  Settings
 } from "lucide-react";
 
 import {
   Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-  SidebarTrigger,
-  useSidebar,
+  SidebarContent, SidebarHeader, SidebarTrigger,
+  useSidebar
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
-import { BotIcon, NavChatBot } from "@/Icons/global/home";
+import { NavChatBot } from "@/Icons/global/home";
 import { NavProjects } from "@/client/nav-projects";
 
 import { cn } from "@/lib/utils";
-import { useOpsBot } from "@/context/json-context";
 import { BiCategory } from "react-icons/bi";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { BsStars } from "react-icons/bs";
 import { MdOutlineWbIncandescent } from "react-icons/md";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 const Navdata = {
   navMain: [

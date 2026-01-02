@@ -106,7 +106,9 @@ export function useChatMessages() {
       /(?:send|sending|email)\s+(?:a|an)?\s*(?:mail|email)\s*(?:to)?\s*([^\s]+)\s+(?:as|with|saying)?\s+(.+)/i
     );
     // Regex for SMS
-    const smsMatch = userText.match(/(?:send|sending)\s+(?:a|an)?\s*sms\s+to\s+([^\s]+)\s+as\s+(.+)/i);
+    const smsMatch = userText.match(
+      /(?:send|sending)\s+(?:a|an)?\s*sms\s+to\s+([^\s]+)\s+as\s+(.+)/i
+    );
 
     if (emailMatch) {
       const targetEmail = emailMatch[1];
@@ -118,8 +120,8 @@ export function useChatMessages() {
           role: "bot",
           content: "",
           type: "email-tool",
-          toolData: { target: targetEmail, status: "processing" }
-        }
+          toolData: { target: targetEmail, status: "processing" },
+        },
       ]);
       return;
     }
@@ -134,12 +136,11 @@ export function useChatMessages() {
           role: "bot",
           content: "",
           type: "sms-tool",
-          toolData: { target: targetNumber, status: "processing" }
-        }
+          toolData: { target: targetNumber, status: "processing" },
+        },
       ]);
       return;
     }
-
 
     // BOT STARTS TYPING (Default Flow)
     setBotTyping(true);
@@ -164,7 +165,7 @@ export function useChatMessages() {
             id: (Date.now() + 2).toString(),
             role: "bot",
             content: "Loading your Employee Details form...",
-            type: "text"
+            type: "text",
           },
         ]);
       }, 500);
@@ -181,7 +182,7 @@ export function useChatMessages() {
             id: (Date.now() + 3).toString(),
             role: "bot",
             content: "Generating your website...",
-            type: "website-loader"
+            type: "website-loader",
           },
         ]);
       }, 500);
@@ -195,7 +196,7 @@ export function useChatMessages() {
             id: (Date.now() + 4).toString(),
             role: "bot",
             content: `Bot response to "${userText}"`,
-            type: "text"
+            type: "text",
           },
         ]);
       }, 5000);
@@ -213,4 +214,3 @@ export function useChatMessages() {
     botTyping,
   };
 }
-
