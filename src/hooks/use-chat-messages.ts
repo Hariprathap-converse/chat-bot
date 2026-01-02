@@ -3,6 +3,7 @@
  * Handles message management and keyword detection
  */
 import { useState } from "react";
+import { toast } from "sonner";
 
 export interface Message {
   id: string;
@@ -84,6 +85,89 @@ export function useChatMessages() {
   const [showEmployeeLoader, setShowEmployeeLoader] = useState(false);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
   const [botTyping, setBotTyping] = useState(false);
+  const sendEmailTool = async (
+    messageId: string,
+    to: string,
+    subject: string,
+    message: string
+  ) => {
+    try {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? { ...msg, toolData: { ...msg.toolData, status: "idle" } }
+            : msg
+        )
+      );
+      setTimeout(() => {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId
+              ? { ...msg, toolData: { ...msg.toolData, status: "sending" } }
+              : msg
+          )
+        );
+      }, 2000);
+      const res = await fetch("http://localhost:8000/auth/tools-send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipient_email: to,
+          subject: subject,
+          body: message,
+        }),
+      });
+
+      // const res = await new Promise<Response>((resolve) => {
+      //   setTimeout(() => {
+      //     resolve(new Response(null, { status: 200 }));
+      //   }, 4000); // Simulate 2 second delay
+      // });
+      const result = await res.json();
+      if (!result.success) {
+        toast.error(result.message || "Failed to send email");
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId
+              ? {
+                  ...msg,
+                  toolData: { ...msg.toolData, status: "error" },
+                  content: result.message ?? "Failed to send email",
+                }
+              : msg
+          )
+        );
+      } else {
+        toast.success(result.message || "Email sent successfully");
+      }
+      if (!res.ok) throw new Error("Email failed");
+
+      // Success
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                toolData: { ...msg.toolData, status: "success" },
+                content: `Email sent to ${to}`,
+              }
+            : msg
+        )
+      );
+    } catch (err) {
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                toolData: { ...msg.toolData, status: "error" },
+                content: "Failed to send email",
+              }
+            : msg
+        )
+      );
+    }
+  };
 
   const sendMessage = () => {
     if (!input.trim()) return;
@@ -102,8 +186,11 @@ export function useChatMessages() {
     setInput("");
 
     // Regex for Email
+    // const emailMatch = userText.match(
+    //   /(?:send|sending|email)\s+(?:a|an)?\s*(?:mail|email)\s*(?:to)?\s*([^\s]+)\s+(?:as|with|saying)?\s+(.+)/i
+    // );
     const emailMatch = userText.match(
-      /(?:send|sending|email)\s+(?:a|an)?\s*(?:mail|email)\s*(?:to)?\s*([^\s]+)\s+(?:as|with|saying)?\s+(.+)/i
+      /send\s+(?:an?\s+)?email\s+to\s+([^\s]+)\s+(?:with\s+)?subject\s+(.+?)\s+(?:message|body|saying|as|with)\s+(.+)/i
     );
     // Regex for SMS
     const smsMatch = userText.match(
@@ -112,17 +199,29 @@ export function useChatMessages() {
 
     if (emailMatch) {
       const targetEmail = emailMatch[1];
+      console.log("targetEmail: ", targetEmail);
+      const subject = emailMatch[2];
+      console.log("subject: ", subject);
+      const body = emailMatch[3];
+      console.log("body: ", body);
+
+      const toolMessageId = (Date.now() + 1).toString();
 
       setMessages((prev) => [
         ...prev,
         {
-          id: (Date.now() + 1).toString(),
+          id: toolMessageId,
           role: "bot",
           content: "",
           type: "email-tool",
-          toolData: { target: targetEmail, status: "processing" },
+          toolData: {
+            target: targetEmail,
+            status: "processing",
+          },
         },
       ]);
+
+      sendEmailTool(toolMessageId, targetEmail, subject, body);
       return;
     }
 

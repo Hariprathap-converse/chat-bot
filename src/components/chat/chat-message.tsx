@@ -123,9 +123,7 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
               <div className="relative w-full font-medium bg-transparent text-foreground rounded-tl-none text-end px-2 py-0">
                 {/* <div className="inline-flex 2xl:max-w-[70%] 2xl:min-w-[800px] max-w-[70%] min-w-[75%]  text-left justify-end whitespace-pre-wrap"> */}
                 <div className="inline-flex xl:max-w-[70%] xl:min-w-[800px] max-w-[70%] min-w-[75%]  text-left justify-end whitespace-pre-wrap">
-
                   <span className="break-all">{message.content}</span>
-
                 </div>
               </div>
             </div>
@@ -171,7 +169,7 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
             <ToolsLoader
               type={message.type === "email-tool" ? "email" : "sms"}
               target={message.toolData?.target}
-              initialStatus={message.toolData?.status}
+              status={message.toolData?.status ?? "processing"}
             />
           </div>
         </div>

@@ -5,15 +5,15 @@ import { Check, Mail, MessageSquare, Smartphone, Zap } from "lucide-react";
 interface ToolsLoaderProps {
   type: "email" | "sms" | "calendar" | null;
   target?: string;
-  initialStatus?: "idle" | "processing" | "sending" | "success" | "error";
+  status?: "idle" | "processing" | "sending" | "success" | "error";
 }
 
 export function ToolsLoader({
   type,
   target,
-  initialStatus = "processing",
+  status = "processing",
 }: ToolsLoaderProps) {
-  const [status, setStatus] = useState(initialStatus);
+  // const [status, setStatus] = useState(initialStatus);
   const [internalStage, setInternalStage] = useState<
     "scan" | "draft" | "fly" | "done"
   >("scan");
@@ -32,38 +32,51 @@ export function ToolsLoader({
   }, [status]);
 
   // Simulation Sequence
+  // useEffect(() => {
+  //   if (status === "processing") {
+  //     setInternalStage("scan");
+
+  //     const processingTimer = setTimeout(() => {
+  //       setStatus("sending");
+  //     }, 1500);
+
+  //     return () => clearTimeout(processingTimer);
+  //   } else if (status === "sending") {
+  //     setInternalStage("draft");
+
+  //     const flyTimer = setTimeout(() => {
+  //       setInternalStage("fly");
+  //     }, 1500);
+
+  //     const successTimer = setTimeout(() => {
+  //       setStatus("success");
+  //     }, 3500); // Total sending time
+
+  //     return () => {
+  //       clearTimeout(flyTimer);
+  //       clearTimeout(successTimer);
+  //     };
+  //   } else if (status === "success") {
+  //     const doneTimer = setTimeout(() => {
+  //       setInternalStage("done");
+  //     }, 1200); // Wait for flight to finish
+
+  //     return () => {
+  //       clearTimeout(doneTimer);
+  //     };
+  //   }
+  // }, [status]);
+  
   useEffect(() => {
     if (status === "processing") {
       setInternalStage("scan");
-
-      const processingTimer = setTimeout(() => {
-        setStatus("sending");
-      }, 1500);
-
-      return () => clearTimeout(processingTimer);
-    } else if (status === "sending") {
+    }
+    if (status === "sending") {
       setInternalStage("draft");
-
-      const flyTimer = setTimeout(() => {
-        setInternalStage("fly");
-      }, 1500);
-
-      const successTimer = setTimeout(() => {
-        setStatus("success");
-      }, 3500); // Total sending time
-
-      return () => {
-        clearTimeout(flyTimer);
-        clearTimeout(successTimer);
-      };
-    } else if (status === "success") {
-      const doneTimer = setTimeout(() => {
-        setInternalStage("done");
-      }, 1200); // Wait for flight to finish
-
-      return () => {
-        clearTimeout(doneTimer);
-      };
+      setTimeout(() => setInternalStage("fly"), 600);
+    }
+    if (status === "success") {
+      setInternalStage("done");
     }
   }, [status]);
 
@@ -93,19 +106,23 @@ export function ToolsLoader({
             <div
               className={cn(
                 "w-2 h-2 rounded-full transition-colors duration-300",
-                status === 'processing' ? "bg-indigo-500 animate-[pulse_1s_infinite]" : "bg-slate-200"
+                status === "processing"
+                  ? "bg-indigo-500 animate-[pulse_1s_infinite]"
+                  : "bg-slate-200"
               )}
             />
             <div
               className={cn(
                 "w-2 h-2 rounded-full transition-colors duration-300",
-                status === 'sending' ? "bg-indigo-500 animate-[pulse_1s_infinite]" : "bg-slate-200"
+                status === "sending"
+                  ? "bg-indigo-500 animate-[pulse_1s_infinite]"
+                  : "bg-slate-200"
               )}
             />
             <div
               className={cn(
                 "w-2 h-2 rounded-full transition-colors duration-300",
-                status === 'success' ? "bg-green-500" : "bg-slate-200"
+                status === "success" ? "bg-green-500" : "bg-slate-200"
               )}
             />
           </div>

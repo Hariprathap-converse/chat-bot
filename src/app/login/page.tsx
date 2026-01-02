@@ -83,8 +83,9 @@ export default function Login() {
           </CardHeader>
           <CardContent className=" flex items-center justify-center">
             <form
-              onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center space-y-4 gap-2 w-full max-w-[450px]">
-
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col items-center space-y-4 gap-2 w-full max-w-[450px]"
+            >
               <div className="w-full space-y-1">
                 <div className="grid gap-2  w-full relative ">
                   <span className="absolute top-[29%] left-3">
@@ -125,7 +126,9 @@ export default function Login() {
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-red-500 text-sm pt-1 px-2">{errors.email.message}</p>
+                  <p className="text-red-500 text-sm pt-1 px-2">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
 
@@ -177,7 +180,9 @@ export default function Login() {
                   />
                 </div>
                 {errors.password && (
-                  <p className="text-red-500 text-sm pt-1 px-2">{errors.password.message}</p>
+                  <p className="text-red-500 text-sm pt-1 px-2">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
 
