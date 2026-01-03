@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Check, Mail, MessageSquare, Smartphone, Zap } from "lucide-react";
+import { Check, Mail, MessageSquare, Smartphone, Zap, X } from "lucide-react";
 
 interface ToolsLoaderProps {
   type: "email" | "sms" | "calendar" | null;
@@ -15,7 +15,7 @@ export function ToolsLoader({
 }: ToolsLoaderProps) {
   // const [status, setStatus] = useState(initialStatus);
   const [internalStage, setInternalStage] = useState<
-    "scan" | "draft" | "fly" | "done"
+    "scan" | "draft" | "fly" | "done" | "error"
   >("scan");
   const [elapsed, setElapsed] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(true);
@@ -32,13 +32,13 @@ export function ToolsLoader({
     return () => clearInterval(interval);
   }, [status]);
 
-  // Auto-close logic on success
+  // Auto-close logic on success or error
   useEffect(() => {
-    if (status === "success") {
-      setInternalStage("done");
+    if (status === "success" || status === "error") {
+      setInternalStage(status === "success" ? "done" : "error");
       const timeout = setTimeout(() => {
         setIsPopupOpen(false);
-      }, 2500); // Wait 2.5s before closing popup
+      }, 3500); // Wait 3.5s before closing popup
       return () => clearTimeout(timeout);
     }
   }, [status]);
@@ -70,19 +70,44 @@ export function ToolsLoader({
       <div
         className={cn(
           "relative overflow-hidden bg-white shadow-xl border border-slate-100 transition-all duration-300",
-          isPopupOpen ? "w-full max-w-sm rounded-2xl" : "w-full rounded-2xl my-2"
+          isPopupOpen
+            ? "w-full max-w-sm rounded-2xl"
+            : "w-full rounded-2xl my-2"
         )}
       >
         {/* Refactored Header: White bg, Gradient Text */}
         <div className="bg-white/80 backdrop-blur-sm px-5 py-3 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-2.5">
             {/* Icon with gradient background shape or color */}
-            <div className="w-8 h-8 rounded-full bg-linear-to-br from-violet-500/10 to-indigo-500/10 flex items-center justify-center">
-              <LoaderIcon className="w-4 h-4 text-indigo-600" />
+            <div
+              className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center",
+                status === "error"
+                  ? "bg-red-50"
+                  : "bg-linear-to-br from-violet-500/10 to-indigo-500/10"
+              )}
+            >
+              <LoaderIcon
+                className={cn(
+                  "w-4 h-4",
+                  status === "error" ? "text-red-500" : "text-indigo-600"
+                )}
+              />
             </div>
 
-            <span className="font-bold text-sm tracking-wide uppercase bg-linear-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-              {type === "email" ? "Email Agent" : "Message Agent"}
+            <span
+              className={cn(
+                "font-bold text-sm tracking-wide uppercase bg-clip-text text-transparent",
+                status === "error"
+                  ? "bg-red-500"
+                  : "bg-linear-to-r from-violet-600 to-indigo-600"
+              )}
+            >
+              {status === "error"
+                ? "Failed"
+                : type === "email"
+                ? "Email Agent"
+                : "Message Agent"}
             </span>
           </div>
 
@@ -107,7 +132,11 @@ export function ToolsLoader({
             <div
               className={cn(
                 "w-2 h-2 rounded-full transition-colors duration-300",
-                status === "success" ? "bg-green-500" : "bg-slate-200"
+                status === "success"
+                  ? "bg-green-500"
+                  : status === "error"
+                  ? "bg-red-500"
+                  : "bg-slate-200"
               )}
             />
           </div>
@@ -191,6 +220,28 @@ export function ToolsLoader({
               </div>
             </div>
           )}
+
+          {/* STAGE 4: ERROR STATE */}
+          {internalStage === "error" && (
+            <div className="flex flex-col items-center justify-center h-full animate-scale-in py-2">
+              <div className="relative mb-3">
+                <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center shadow-sm">
+                  <X className="w-8 h-8 text-red-500 animate-[scale-in-center_0.4s_cubic-bezier(0.25,0.46,0.45,0.94)_both]" />
+                </div>
+                <div className="absolute inset-0 rounded-full border border-red-200 animate-[ping_1s_ease-out]" />
+              </div>
+
+              <h2 className="text-lg font-bold text-slate-800 tracking-tight">
+                Failed to Send
+              </h2>
+              <div className="flex items-center gap-1.5 mt-2 bg-red-50/50 px-3 py-1 rounded-full border border-red-100">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span className="text-[10px] uppercase font-bold text-red-700 tracking-wider">
+                  Error
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer info */}
@@ -201,14 +252,18 @@ export function ToolsLoader({
                 "w-1.5 h-1.5 rounded-full",
                 status === "success"
                   ? "bg-green-500"
+                  : status === "error"
+                  ? "bg-red-500"
                   : "bg-indigo-500 animate-pulse"
               )}
             />
-            System Active
+            {status === "error" ? "System Error" : "System Active"}
           </span>
           <span className="font-mono">
             {status === "processing" || status === "sending"
               ? `${elapsed.toFixed(1)}s`
+              : status === "error"
+              ? "Failed"
               : "Complete"}
           </span>
         </div>
