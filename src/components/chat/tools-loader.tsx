@@ -18,6 +18,7 @@ export function ToolsLoader({
     "scan" | "draft" | "fly" | "done"
   >("scan");
   const [elapsed, setElapsed] = useState(0);
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
 
   // Timer logic
   useEffect(() => {
@@ -31,53 +32,25 @@ export function ToolsLoader({
     return () => clearInterval(interval);
   }, [status]);
 
-  // Simulation Sequence
-  // useEffect(() => {
-  //   if (status === "processing") {
-  //     setInternalStage("scan");
+  // Auto-close logic on success
+  useEffect(() => {
+    if (status === "success") {
+      setInternalStage("done");
+      const timeout = setTimeout(() => {
+        setIsPopupOpen(false);
+      }, 2500); // Wait 2.5s before closing popup
+      return () => clearTimeout(timeout);
+    }
+  }, [status]);
 
-  //     const processingTimer = setTimeout(() => {
-  //       setStatus("sending");
-  //     }, 1500);
-
-  //     return () => clearTimeout(processingTimer);
-  //   } else if (status === "sending") {
-  //     setInternalStage("draft");
-
-  //     const flyTimer = setTimeout(() => {
-  //       setInternalStage("fly");
-  //     }, 1500);
-
-  //     const successTimer = setTimeout(() => {
-  //       setStatus("success");
-  //     }, 3500); // Total sending time
-
-  //     return () => {
-  //       clearTimeout(flyTimer);
-  //       clearTimeout(successTimer);
-  //     };
-  //   } else if (status === "success") {
-  //     const doneTimer = setTimeout(() => {
-  //       setInternalStage("done");
-  //     }, 1200); // Wait for flight to finish
-
-  //     return () => {
-  //       clearTimeout(doneTimer);
-  //     };
-  //   }
-  // }, [status]);
-  
   useEffect(() => {
     if (status === "processing") {
       setInternalStage("scan");
     }
     if (status === "sending") {
       setInternalStage("draft");
-      setTimeout(() => setInternalStage("fly"), 600);
     }
-    if (status === "success") {
-      setInternalStage("done");
-    }
+    // Success is handled in the auto-close effect
   }, [status]);
 
   if (!type) return null;
@@ -86,17 +59,29 @@ export function ToolsLoader({
     type === "email" ? Mail : type === "sms" ? Smartphone : Zap;
 
   return (
-    <div className="w-full flex items-center justify-center animate-in fade-in duration-300 my-2">
-      <div className="relative w-full overflow-hidden rounded-2xl bg-white shadow-xl border border-slate-100">
+    <div
+      className={cn(
+        "transition-all duration-300 ease-in-out",
+        isPopupOpen
+          ? "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in"
+          : "contents" // Inline mode
+      )}
+    >
+      <div
+        className={cn(
+          "relative overflow-hidden bg-white shadow-xl border border-slate-100 transition-all duration-300",
+          isPopupOpen ? "w-full max-w-sm rounded-2xl" : "w-full rounded-2xl my-2"
+        )}
+      >
         {/* Refactored Header: White bg, Gradient Text */}
         <div className="bg-white/80 backdrop-blur-sm px-5 py-3 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-2.5">
             {/* Icon with gradient background shape or color */}
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500/10 to-indigo-500/10 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-violet-500/10 to-indigo-500/10 flex items-center justify-center">
               <LoaderIcon className="w-4 h-4 text-indigo-600" />
             </div>
 
-            <span className="font-bold text-sm tracking-wide uppercase bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="font-bold text-sm tracking-wide uppercase bg-linear-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
               {type === "email" ? "Email Agent" : "Message Agent"}
             </span>
           </div>
@@ -146,7 +131,7 @@ export function ToolsLoader({
               </p>
 
               <div className="w-40 h-1 bg-slate-100 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 animate-progress-bar" />
+                <div className="h-full bg-linear-to-r from-violet-500 to-indigo-500 animate-progress-bar" />
               </div>
             </div>
           )}

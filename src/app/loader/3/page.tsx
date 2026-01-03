@@ -364,7 +364,7 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                   className={cn(
                     "flex items-center gap-3 pt-2",
                     isPopupOpen
-                      ? "justify-start"
+                      ? "justify-center"
                       : "justify-center flex-col sm:flex-row"
                   )}
                 >

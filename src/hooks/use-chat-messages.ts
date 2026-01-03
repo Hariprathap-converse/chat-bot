@@ -124,6 +124,7 @@ export function useChatMessages() {
       //   }, 4000); // Simulate 2 second delay
       // });
       const result = await res.json();
+      console.log("result: ", result);
       if (!result.success) {
         toast.error(result.message || "Failed to send email");
         setMessages((prev) =>
@@ -140,7 +141,20 @@ export function useChatMessages() {
       } else {
         toast.success(result.message || "Email sent successfully");
       }
-      if (!res.ok) throw new Error("Email failed");
+      if (!res.ok) {
+        toast.error(result.message || "Failed to send email");
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId
+              ? {
+                  ...msg,
+                  toolData: { ...msg.toolData, status: "error" },
+                  content: result.message ?? "Failed to send email",
+                }
+              : msg
+          )
+        );
+      }
 
       // Success
       setMessages((prev) =>
@@ -154,14 +168,23 @@ export function useChatMessages() {
             : msg
         )
       );
-    } catch (err) {
+    } catch (err: any) {
+      console.error("Email error:", err);
+
+      const errorMessage =
+        err.message === "Failed to fetch"
+          ? "Email service is unreachable"
+          : err.message || "Failed to send email";
+
+      toast.error(errorMessage);
+
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === messageId
             ? {
                 ...msg,
                 toolData: { ...msg.toolData, status: "error" },
-                content: "Failed to send email",
+                content: errorMessage,
               }
             : msg
         )
