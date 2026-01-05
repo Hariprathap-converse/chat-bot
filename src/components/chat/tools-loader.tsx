@@ -76,38 +76,15 @@ export function ToolsLoader({
         )}
       >
         {/* Refactored Header: White bg, Gradient Text */}
-        <div className="bg-white/80 backdrop-blur-sm px-5 py-3 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
+        <div className="bg-white/80 backdrop-blur-sm px-5 py-2 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-2.5">
             {/* Icon with gradient background shape or color */}
-            <div
-              className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center",
-                status === "error"
-                  ? "bg-red-50"
-                  : "bg-linear-to-br from-violet-500/10 to-indigo-500/10"
-              )}
-            >
-              <LoaderIcon
-                className={cn(
-                  "w-4 h-4",
-                  status === "error" ? "text-red-500" : "text-indigo-600"
-                )}
-              />
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-violet-500/10 to-indigo-500/10 flex items-center justify-center">
+              <LoaderIcon className="w-4 h-4 text-indigo-600" />
             </div>
 
-            <span
-              className={cn(
-                "font-bold text-sm tracking-wide uppercase bg-clip-text text-transparent",
-                status === "error"
-                  ? "bg-red-500"
-                  : "bg-linear-to-r from-violet-600 to-indigo-600"
-              )}
-            >
-              {status === "error"
-                ? "Failed"
-                : type === "email"
-                ? "Email Agent"
-                : "Message Agent"}
+            <span className="font-bold text-sm tracking-wide uppercase bg-linear-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+              {type === "email" ? "Email Agent" : "Message Agent"}
             </span>
           </div>
 
@@ -115,7 +92,7 @@ export function ToolsLoader({
           <div className="flex gap-1.5">
             <div
               className={cn(
-                "w-2 h-2 rounded-full transition-colors duration-300",
+                "w-[7px] h-[7px] rounded-full transition-colors duration-300",
                 status === "processing"
                   ? "bg-indigo-500 animate-[pulse_1s_infinite]"
                   : "bg-slate-200"
@@ -123,7 +100,7 @@ export function ToolsLoader({
             />
             <div
               className={cn(
-                "w-2 h-2 rounded-full transition-colors duration-300",
+                "w-[7px] h-[7px] rounded-full transition-colors duration-300",
                 status === "sending"
                   ? "bg-indigo-500 animate-[pulse_1s_infinite]"
                   : "bg-slate-200"
@@ -131,7 +108,7 @@ export function ToolsLoader({
             />
             <div
               className={cn(
-                "w-2 h-2 rounded-full transition-colors duration-300",
+                "w-[7px] h-[7px] rounded-full transition-colors duration-300",
                 status === "success"
                   ? "bg-green-500"
                   : status === "error"
@@ -143,7 +120,15 @@ export function ToolsLoader({
         </div>
 
         {/* Main Content Area */}
-        <div className="p-5 min-h-[200px] flex flex-col justify-center relative bg-slate-50/30">
+        <div
+          className={cn(
+            internalStage === "error"
+              ? "p-0 min-h-[50px]"
+              : "min-h-[200px] p-5 flex flex-col justify-center relative",
+            "bg-slate-50/30",
+            isPopupOpen && "!min-h-[200px]"
+          )}
+        >
           {/* STAGE 1: SCANNING */}
           {internalStage === "scan" && (
             <div className="flex flex-col items-center animate-scale-in w-full py-2">
@@ -222,51 +207,107 @@ export function ToolsLoader({
           )}
 
           {/* STAGE 4: ERROR STATE */}
-          {internalStage === "error" && (
-            <div className="flex flex-col items-center justify-center h-full animate-scale-in py-2">
-              <div className="relative mb-3">
-                <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center shadow-sm">
-                  <X className="w-8 h-8 text-red-500 animate-[scale-in-center_0.4s_cubic-bezier(0.25,0.46,0.45,0.94)_both]" />
-                </div>
-                <div className="absolute inset-0 rounded-full border border-red-200 animate-[ping_1s_ease-out]" />
-              </div>
+          {isPopupOpen && internalStage === "error" && (
+            <div className="flex items-center justify-center animate-scale-in">
+              <div
+                className={cn(
+                  isPopupOpen ? "min-h-[200px]" : "min-h-[100px]",
+                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 "
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center shadow-sm shrink-0">
+                    <X className="w-6 h-6 text-white animate-[shake_0.5s_cubic-bezier(.36,.07,.19,.97)_both]" />
+                  </div>
 
-              <h2 className="text-lg font-bold text-slate-800 tracking-tight">
-                Failed to Send
-              </h2>
-              <div className="flex items-center gap-1.5 mt-2 bg-red-50/50 px-3 py-1 rounded-full border border-red-100">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                <span className="text-[10px] uppercase font-bold text-red-700 tracking-wider">
-                  Error
-                </span>
+                  <div className="flex flex-col min-w-0 text-left">
+                    <h2 className="text-base font-bold text-slate-800 leading-tight">
+                      Failed to Send
+                    </h2>
+                    <p className="text-[11px] text-red-600/70 font-medium truncate mt-0.5">
+                      Action could not be completed
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* STAGE 4: ERROR STATE */}
+          {!isPopupOpen && internalStage === "error" && (
+            <div className="flex items-center justify-center animate-scale-in">
+              <div
+                className={cn(
+                  isPopupOpen ? "min-h-[200px]" : "min-h-[50px]",
+                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 "
+                )}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex flex-col min-w-0 gap-0.5 text-left">
+                    <h2 className="text-base font-bold text-slate-800 leading-tight flex items-center gap-2">
+                      <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center shadow-sm shrink-0">
+                        <X className="w-3 h-3 text-white animate-[shake_0.5s_cubic-bezier(.36,.07,.19,.97)_both]" />
+                      </div>
+                      Failed to Send
+                    </h2>
+                    <p className="text-[11px] text-red-600/70 font-medium truncate mt-0.5">
+                      Action could not be completed
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           )}
         </div>
 
         {/* Footer info */}
-        <div className="bg-slate-50/50 px-5 py-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-          <span className="flex items-center gap-1.5">
-            <span
-              className={cn(
-                "w-1.5 h-1.5 rounded-full",
-                status === "success"
-                  ? "bg-green-500"
-                  : status === "error"
-                  ? "bg-red-500"
-                  : "bg-indigo-500 animate-pulse"
-              )}
-            />
-            {status === "error" ? "System Error" : "System Active"}
-          </span>
-          <span className="font-mono">
-            {status === "processing" || status === "sending"
-              ? `${elapsed.toFixed(1)}s`
-              : status === "error"
-              ? "Failed"
-              : "Complete"}
-          </span>
-        </div>
+        {!isPopupOpen && internalStage == "error" && (
+          <div className="bg-slate-50/50 px-5 py-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            <span className="flex items-center gap-1.5">
+              <span
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  status === "success"
+                    ? "bg-green-500"
+                    : status === "error"
+                    ? "bg-red-500"
+                    : "bg-indigo-500 animate-pulse"
+                )}
+              />
+              {status === "error" ? "System Error" : "System Active"}
+            </span>
+            <span className="font-mono">
+              {status === "processing" || status === "sending"
+                ? `${elapsed.toFixed(1)}s`
+                : status === "error"
+                ? "Failed"
+                : "Complete"}
+            </span>
+          </div>
+        )}
+        {isPopupOpen && (
+          <div className="bg-slate-50/50 px-5 py-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            <span className="flex items-center gap-1.5">
+              <span
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full",
+                  status === "success"
+                    ? "bg-green-500"
+                    : status === "error"
+                    ? "bg-red-500"
+                    : "bg-indigo-500 animate-pulse"
+                )}
+              />
+              {status === "error" ? "System Error" : "System Active"}
+            </span>
+            <span className="font-mono">
+              {status === "processing" || status === "sending"
+                ? `${elapsed.toFixed(1)}s`
+                : status === "error"
+                ? "Failed"
+                : "Complete"}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
