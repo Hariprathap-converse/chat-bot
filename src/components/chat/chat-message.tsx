@@ -32,9 +32,15 @@ interface ChatMessageProps {
   message: Message;
   index: number;
   isUser: boolean;
+  scrollToBottom?: () => void;
 }
 
-export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
+export function ChatMessage({
+  message,
+  index,
+  isUser,
+  scrollToBottom,
+}: ChatMessageProps) {
   const [copied, setCopied] = useState(false);
   const [reaction, setReaction] = useState<{
     liked: boolean;
@@ -151,7 +157,7 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
             <NavChatBot />
           </div>
           <div className="w-full max-w-full lg:max-w-4xl">
-            <AIWebsiteGeneratorLoader />
+            <AIWebsiteGeneratorLoader onPopupClose={scrollToBottom} />
           </div>
         </div>
       </div>
@@ -171,6 +177,7 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
                 type={message.type === "email-tool" ? "email" : "sms"}
                 target={message.toolData?.target}
                 status={message.toolData?.status ?? "processing"}
+                onPopupClose={scrollToBottom}
               />
             </div>
           </div>

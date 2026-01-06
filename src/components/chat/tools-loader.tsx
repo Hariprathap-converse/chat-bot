@@ -6,12 +6,14 @@ interface ToolsLoaderProps {
   type: "email" | "sms" | "calendar" | null;
   target?: string;
   status?: "idle" | "processing" | "sending" | "success" | "error";
+  onPopupClose?: () => void;
 }
 
 export function ToolsLoader({
   type,
   target,
   status = "processing",
+  onPopupClose,
 }: ToolsLoaderProps) {
   // const [status, setStatus] = useState(initialStatus);
   const [internalStage, setInternalStage] = useState<
@@ -38,10 +40,16 @@ export function ToolsLoader({
       setInternalStage(status === "success" ? "done" : "error");
       const timeout = setTimeout(() => {
         setIsPopupOpen(false);
+        // Delay callback to allow DOM to update (transition from fixed to inline)
+        setTimeout(() => {
+          if (onPopupClose) {
+            onPopupClose();
+          }
+        }, 100);
       }, 3500); // Wait 3.5s before closing popup
       return () => clearTimeout(timeout);
     }
-  }, [status]);
+  }, [status, onPopupClose]);
 
   useEffect(() => {
     if (status === "processing") {
@@ -112,8 +120,8 @@ export function ToolsLoader({
                 status === "success"
                   ? "bg-green-500"
                   : status === "error"
-                  ? "bg-red-500"
-                  : "bg-slate-200"
+                    ? "bg-red-500"
+                    : "bg-slate-200"
               )}
             />
           </div>
@@ -269,8 +277,8 @@ export function ToolsLoader({
                   status === "success"
                     ? "bg-green-500"
                     : status === "error"
-                    ? "bg-red-500"
-                    : "bg-indigo-500 animate-pulse"
+                      ? "bg-red-500"
+                      : "bg-indigo-500 animate-pulse"
                 )}
               />
               {status === "error" ? "System Error" : "System Active"}
@@ -279,8 +287,8 @@ export function ToolsLoader({
               {status === "processing" || status === "sending"
                 ? `${elapsed.toFixed(1)}s`
                 : status === "error"
-                ? "Failed"
-                : "Complete"}
+                  ? "Failed"
+                  : "Complete"}
             </span>
           </div>
         )}
@@ -293,8 +301,8 @@ export function ToolsLoader({
                   status === "success"
                     ? "bg-green-500"
                     : status === "error"
-                    ? "bg-red-500"
-                    : "bg-indigo-500 animate-pulse"
+                      ? "bg-red-500"
+                      : "bg-indigo-500 animate-pulse"
                 )}
               />
               {status === "error" ? "System Error" : "System Active"}
@@ -303,8 +311,8 @@ export function ToolsLoader({
               {status === "processing" || status === "sending"
                 ? `${elapsed.toFixed(1)}s`
                 : status === "error"
-                ? "Failed"
-                : "Complete"}
+                  ? "Failed"
+                  : "Complete"}
             </span>
           </div>
         )}

@@ -57,7 +57,13 @@ const generationStages: GenerationStage[] = [
   },
 ];
 
-export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoader?: (value: boolean) => void }) {
+export default function AIWebsiteGeneratorLoader({
+  setGenLoader,
+  onPopupClose,
+}: {
+  setGenLoader?: (value: boolean) => void;
+  onPopupClose?: () => void;
+}) {
   const [currentStage, setCurrentStage] = useState(0);
   const [currentMessage, setCurrentMessage] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -96,7 +102,10 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
     if (!isPopupOpen && isCompleted && containerRef.current) {
       // Small delay to allow transition to start rendering the inline state correctly
       setTimeout(() => {
-        containerRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+        containerRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
       }, 100);
     }
   }, [isPopupOpen, isCompleted]);
@@ -112,7 +121,7 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
    */
   const handlePreview = () => {
     // TODO: Replace with actual generated site URL/port
-    window.open('http://localhost:3001', '_blank');
+    window.open("http://localhost:3001", "_blank");
   };
 
   /**
@@ -123,6 +132,12 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
     if (setGenLoader) {
       setGenLoader(false);
     }
+    // Delay to ensuring DOM updates (popup -> inline) before scrolling
+    setTimeout(() => {
+      if (onPopupClose) {
+        onPopupClose();
+      }
+    }, 100);
   };
 
   // Don't render if closed (completely hidden, if that state is ever reached)
@@ -370,7 +385,7 @@ export default function AIWebsiteGeneratorLoader({ setGenLoader }: { setGenLoade
                 >
                   <button
                     onClick={handlePreview}
-                    className={cn(isPopupOpen ? "text-sm" : "text-xs" ,"w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground  rounded-md cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm")}
+                    className={cn(isPopupOpen ? "text-sm" : "text-xs", "w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground  rounded-md cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm")}
                   >
                     <svg
                       className="w-4 h-4"

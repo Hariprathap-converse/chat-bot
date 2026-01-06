@@ -40,8 +40,8 @@ export default function ChatPage() {
     botTyping,
   } = useChatMessages();
 
-  // Auto-scroll to bottom on new messages
-  useEffect(() => {
+  // Scroll function
+  const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
         behavior: "smooth",
@@ -52,6 +52,11 @@ export default function ChatPage() {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
+  };
+
+  // Auto-scroll to bottom on new messages
+  useEffect(() => {
+    scrollToBottom();
   }, [messages]);
 
   // Group messages into pairs (user + bot)
@@ -103,10 +108,20 @@ export default function ChatPage() {
             {grouped.map((pair, idx) => (
               <div key={`group-${idx}`} className="flex flex-col gap-1">
                 {pair[0] && (
-                  <ChatMessage message={pair[0]} index={idx} isUser />
+                  <ChatMessage
+                    message={pair[0]}
+                    index={idx}
+                    isUser
+                    scrollToBottom={scrollToBottom}
+                  />
                 )}
                 {pair[1] && (
-                  <ChatMessage message={pair[1]} index={idx} isUser={false} />
+                  <ChatMessage
+                    message={pair[1]}
+                    index={idx}
+                    isUser={false}
+                    scrollToBottom={scrollToBottom}
+                  />
                 )}
               </div>
             ))}
