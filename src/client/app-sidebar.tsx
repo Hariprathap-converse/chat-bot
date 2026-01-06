@@ -3,15 +3,18 @@
 import React, { useState } from "react";
 import {
   Loader2,
-  LogOut, MessageCirclePlus,
+  LogOut,
+  MessageCirclePlus,
   PieChart,
-  Settings
+  Settings,
 } from "lucide-react";
 
 import {
   Sidebar,
-  SidebarContent, SidebarHeader, SidebarTrigger,
-  useSidebar
+  SidebarContent,
+  SidebarHeader,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
 import { NavChatBot } from "@/Icons/global/home";
@@ -158,7 +161,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           !open
             ? "flex flex-col-reverse  transition-all !duration-500 "
             : "grid grid-cols-[1fr_auto] w-full transition-all duration-0 pr-5  px-5 ",
-          "rounded-2xl pt-5 cursor-pointer items-center gap-4 mb-1  "
+          "rounded-2xl pt-5 cursor-pointer items-center gap-4 mb-1  ",
         )}
       >
         <Link
@@ -181,7 +184,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div
           className={cn(
             open ? "" : "",
-            "flex h-full flex-col overflow-hidden w-full justify-between pb-4 "
+            "flex h-full flex-col overflow-hidden w-full justify-between pb-4 ",
           )}
         >
           <div>
@@ -193,14 +196,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               onClick={() => setOpen(true)}
               className={cn(
                 open ? "" : "ml-2 max-w-[40px]  ",
-                " flex  items-center  rounded-[4px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm text-white font-medium p-2 pr-0  gap-2  shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
+                " flex  items-center  rounded-[4px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm text-white font-medium p-2 pr-0  gap-2  shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
               )}
             >
               <MessageCirclePlus className="max-w-5 max-h-5 " />
               <span
                 className={cn(
                   " transition-all duration-300 whitespace-nowrap overflow-hidden",
-                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 "
+                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
                 )}
               >
                 New Chat
@@ -210,14 +213,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               onClick={() => setOpen(true)}
               className={cn(
                 open ? "" : "ml-2 max-w-[40px]",
-                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 "
+                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
               )}
             >
               <Settings className={cn("max-w-5 max-h-5 pl-px")} />
               <span
                 className={cn(
                   " transition-all duration-300 whitespace-nowrap overflow-hidden",
-                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 "
+                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
                 )}
               >
                 Settings
@@ -236,7 +239,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               }}
               className={cn(
                 open ? "" : "ml-2  max-w-[40px]",
-                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 "
+                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
               )}
             >
               {loading ? (
@@ -249,7 +252,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <span
                 className={cn(
                   " transition-all duration-300 whitespace-nowrap overflow-hidden",
-                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 "
+                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
                 )}
               >
                 {loading ? "Logging out..." : "Logout"}

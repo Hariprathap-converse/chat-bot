@@ -77,7 +77,7 @@ export function ChatMessage({
           <div
             className={cn(
               "opacity-0 group-hover:opacity-100 flex gap-3 items-center h-[10px]",
-              isOpen ? "opacity-100" : "opacity-0"
+              isOpen ? "opacity-100" : "opacity-0",
             )}
           >
             {copied ? (
@@ -211,7 +211,7 @@ export function ChatMessage({
           <div
             className={cn(
               "opacity-0 group-hover:opacity-100 flex pl-8 max-h-[20px] gap-2 items-center",
-              isOpen ? "opacity-100" : "opacity-0"
+              isOpen ? "opacity-100" : "opacity-0",
             )}
           >
             <div
@@ -223,7 +223,7 @@ export function ChatMessage({
                   copied
                     ? "text-emerald-500 group-hover/thumb:text-emerald-500"
                     : "text-foreground group-hover/thumb:text-accent-foreground",
-                  "cursor-pointer text-xs"
+                  "cursor-pointer text-xs",
                 )}
               >
                 Copy
@@ -244,7 +244,7 @@ export function ChatMessage({
                     reaction.liked
                       ? "text-emerald-500"
                       : "text-foreground group-hover/thumb:text-accent-foreground",
-                    "cursor-pointer text-xs"
+                    "cursor-pointer text-xs",
                   )}
                 >
                   Good
@@ -254,7 +254,7 @@ export function ChatMessage({
                     "h-[14px] w-[14px] cursor-pointer",
                     reaction.liked
                       ? "text-emerald-500"
-                      : "text-sub-title group-hover/thumb:text-accent-foreground"
+                      : "text-sub-title group-hover/thumb:text-accent-foreground",
                   )}
                 />
               </div>
@@ -267,7 +267,7 @@ export function ChatMessage({
                     reaction.disliked
                       ? "text-red-700"
                       : "text-foreground group-hover/thumb:text-accent-foreground",
-                    "cursor-pointer text-xs"
+                    "cursor-pointer text-xs",
                   )}
                 >
                   Bad
@@ -277,7 +277,7 @@ export function ChatMessage({
                     "h-[14px] w-[14px] cursor-pointer",
                     reaction.disliked
                       ? "text-red-700"
-                      : "text-sub-title group-hover/thumb:text-accent-foreground"
+                      : "text-sub-title group-hover/thumb:text-accent-foreground",
                   )}
                 />
               </div>

@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/tootip-wrapper";
 import { Input } from "@/components/ui/input";
 
-interface TruncateTooltipInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> { }
+interface TruncateTooltipInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 export const TruncateTooltipInput = forwardRef<
   HTMLInputElement,

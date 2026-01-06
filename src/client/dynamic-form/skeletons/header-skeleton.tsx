@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HeaderSkeleton() {
   return (
@@ -19,5 +19,5 @@ export default function HeaderSkeleton() {
         {/* <Skeleton className="w-[30px] h-[30px] rounded-fullanimate-pulse " /> */}
       </div>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const ImageChange = () => (
   <svg
@@ -37,6 +37,6 @@ const ImageChange = () => (
       strokeLinejoin="round"
     />
   </svg>
-)
+);
 
-export default ImageChange
+export default ImageChange;

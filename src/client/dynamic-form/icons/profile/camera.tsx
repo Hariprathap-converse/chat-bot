@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const CameraIcon = () => (
   <svg
@@ -20,4 +20,4 @@ export const CameraIcon = () => (
     />
     <path d="M18 8H17" stroke="white" strokeWidth="2" strokeLinecap="round" />
   </svg>
-)
+);

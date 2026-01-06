@@ -7,7 +7,7 @@ export { ChatInput } from "./chat-input";
 export { EmptyChatState } from "./empty-chat-state";
 export { ChatActionButtons } from "./chat-action-buttons";
 export {
-    EmployeeDetailsModal,
-    SkeletonLoaderModal,
-    // WebsiteGeneratorModal,
+  EmployeeDetailsModal,
+  SkeletonLoaderModal,
+  // WebsiteGeneratorModal,
 } from "./chat-modals";

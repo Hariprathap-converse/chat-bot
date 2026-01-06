@@ -3,19 +3,19 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tootip-wrapper'
+} from "@/components/ui/tootip-wrapper";
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from "react";
 
 type OverflowSpanProps = {
-  level: number
-  text: string
-  isActive: boolean
-  navSettings: any
-  isSheetOpen?: any
-  className?: string
-  style?: React.CSSProperties
-}
+  level: number;
+  text: string;
+  isActive: boolean;
+  navSettings: any;
+  isSheetOpen?: any;
+  className?: string;
+  style?: React.CSSProperties;
+};
 
 const OverflowSpan: React.FC<OverflowSpanProps> = ({
   level,
@@ -23,37 +23,36 @@ const OverflowSpan: React.FC<OverflowSpanProps> = ({
   isActive,
   navSettings,
   isSheetOpen,
-  className = '',
+  className = "",
   style,
 }) => {
-  const spanRef = useRef<HTMLSpanElement>(null)
-  const [isOverflowing, setIsOverflowing] = useState(false)
+  const spanRef = useRef<HTMLSpanElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
   useEffect(() => {
     const checkOverflow = () => {
       if (spanRef.current) {
         setIsOverflowing(
-          spanRef.current.scrollWidth > spanRef.current.clientWidth
-
-        )
+          spanRef.current.scrollWidth > spanRef.current.clientWidth,
+        );
       }
-    }
+    };
 
-    checkOverflow()
-    window.addEventListener('resize', checkOverflow)
-    return () => window.removeEventListener('resize', checkOverflow)
-  }, [text, navSettings.isNavOpen, navSettings, isSheetOpen])
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [text, navSettings.isNavOpen, navSettings, isSheetOpen]);
 
   const baseStyles = {
-    '--text-color': isActive ? 'hsl(var(--primary))' : 'hsl(var(--foreground))',
-    '--fw': isActive ? 'medium' : navSettings.textWeight,
+    "--text-color": isActive ? "hsl(var(--primary))" : "hsl(var(--foreground))",
+    "--fw": isActive ? "medium" : navSettings.textWeight,
     fontSize: navSettings.textSize,
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    display: 'inline-block',
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    display: "inline-block",
     ...style,
-  } as React.CSSProperties
+  } as React.CSSProperties;
   const content = (
     <span
       ref={spanRef}
@@ -62,7 +61,7 @@ const OverflowSpan: React.FC<OverflowSpanProps> = ({
     >
       {text}
     </span>
-  )
+  );
 
   if (isOverflowing && level) {
     return (
@@ -78,10 +77,10 @@ const OverflowSpan: React.FC<OverflowSpanProps> = ({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-    )
+    );
   }
 
-  return content
-}
+  return content;
+};
 
-export default OverflowSpan
+export default OverflowSpan;

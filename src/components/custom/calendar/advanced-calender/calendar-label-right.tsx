@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { LabelRightElementProps } from "@/types/components/calender";
 
-
 export const CalenderlabelRightElement: React.FC<LabelRightElementProps> = ({
   config,
   formConfig,

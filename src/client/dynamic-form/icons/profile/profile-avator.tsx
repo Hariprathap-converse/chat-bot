@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const ProfileAvator = () => (
   <svg
@@ -20,6 +20,6 @@ const ProfileAvator = () => (
       strokeWidth="3"
     />
   </svg>
-)
+);
 
-export default ProfileAvator
+export default ProfileAvator;

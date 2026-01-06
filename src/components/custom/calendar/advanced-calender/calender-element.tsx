@@ -1,9 +1,9 @@
-import { CalendarElementProps } from '@/types/components/calender'
-import { CalendarHeader } from './calendar-hearder'
-import { CalendarMonthGrid } from './calendar-month-grid'
-import { CalendarYearGrid } from './calendar-year-grid'
-import { cn } from '@/lib/utils'
-import { Calendar } from '@/components/ui/modified-calendar'
+import { CalendarElementProps } from "@/types/components/calender";
+import { CalendarHeader } from "./calendar-hearder";
+import { CalendarMonthGrid } from "./calendar-month-grid";
+import { CalendarYearGrid } from "./calendar-year-grid";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/modified-calendar";
 
 export const CalendarElement: React.FC<CalendarElementProps> = ({
   view,
@@ -32,27 +32,27 @@ export const CalendarElement: React.FC<CalendarElementProps> = ({
       <div className="xs:w-[90px] xss:w-[100px] sm:w-[104px] 3xl:w-[127px] duration-1000 p-2 relative !z-50 dark:!shadow-[-2px_0px_10px_0px_#00000033_inset] !shadow-[inset_-2px_0px_10px_0px_#0000000A]">
         <div className="space-y-[10px] xs:space-y-[8px] pl-[9px] 3xl:pl-[8px] sm:space-y-[11px] sm:pt-[8px] sm:pl-[7px] 3xl:pt-[8px] relative z-0 3xl:space-y-[12px] pt-[22px] xs:pt-0 xs:pl-0">
           {presetOptions.map((preset) => {
-            const dateValue = preset.getValue()
-            const isDisabled = preset.disabled || isDateDisabled(dateValue)
+            const dateValue = preset.getValue();
+            const isDisabled = preset.disabled || isDateDisabled(dateValue);
             return (
               <div
                 key={preset.label}
                 tabIndex={isDisabled == true ? -1 : 0}
                 className={cn(
-                  'xs:text-[10px] xss:text-[11px] sm:text-[10px] text-nowrap focus-visible:!text-primary focus-visible:outline-none w-full select-none justify-start 3xl:text-[12px] inter font-normal',
+                  "xs:text-[10px] xss:text-[11px] sm:text-[10px] text-nowrap focus-visible:!text-primary focus-visible:outline-none w-full select-none justify-start 3xl:text-[12px] inter font-normal",
                   isDisabled
-                    ? 'text-[#979a9e] cursor-not-allowed'
-                    : 'cursor-pointer !text-[#31363F] dark:!text-[#EFEFEF] hover:!text-primary dark:hover:!text-primary !hover:font-medium hover:translate-x-[0.3px] delay-200'
+                    ? "text-[#979a9e] cursor-not-allowed"
+                    : "cursor-pointer !text-[#31363F] dark:!text-[#EFEFEF] hover:!text-primary dark:hover:!text-primary !hover:font-medium hover:translate-x-[0.3px] delay-200",
                 )}
                 onClick={() => {
                   if (!isDisabled) {
-                    handlePresetClick(dateValue)
+                    handlePresetClick(dateValue);
                   }
                 }}
               >
                 {preset.label}
               </div>
-            )
+            );
           })}
         </div>
       </div>
@@ -71,7 +71,7 @@ export const CalendarElement: React.FC<CalendarElementProps> = ({
           setYearPage={setYearPage}
         />
 
-        {view === 'month' ? (
+        {view === "month" ? (
           <CalendarMonthGrid
             month={month}
             date={date}
@@ -81,7 +81,7 @@ export const CalendarElement: React.FC<CalendarElementProps> = ({
             isMonthFullyDisabled={isMonthFullyDisabled}
             getZonedNow={getZonedNow}
           />
-        ) : view === 'year' ? (
+        ) : view === "year" ? (
           <CalendarYearGrid
             month={month}
             date={date}
@@ -100,7 +100,7 @@ export const CalendarElement: React.FC<CalendarElementProps> = ({
             mode="single"
             selected={date}
             onSelect={(selectedDate) => {
-              handleDateSelect(selectedDate)
+              handleDateSelect(selectedDate);
             }}
             month={month}
             onMonthChange={setMonth}
@@ -113,5 +113,5 @@ export const CalendarElement: React.FC<CalendarElementProps> = ({
         )}
       </div>
     </div>
-  )
-}
+  );
+};

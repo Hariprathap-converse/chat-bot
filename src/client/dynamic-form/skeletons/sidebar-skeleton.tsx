@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SidebarSkeleton() {
   return (
@@ -10,5 +10,5 @@ export default function SidebarSkeleton() {
       <Skeleton className="h-9 rounded-md bg-muted" />
       <Skeleton className="h-9 rounded-md bg-muted" />
     </div>
-  )
+  );
 }

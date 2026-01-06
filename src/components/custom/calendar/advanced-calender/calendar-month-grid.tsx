@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 import { CalendarMonthGridProps } from "@/types/components/calender";
 import { toZonedTime } from "date-fns-tz";
 
-
 export const CalendarMonthGrid: React.FC<CalendarMonthGridProps> = ({
   month,
   date,
@@ -54,7 +53,7 @@ export const CalendarMonthGrid: React.FC<CalendarMonthGridProps> = ({
               if (isDisabled) return;
               const newDate = toZonedTime(
                 new Date(selectedYear, index, 1),
-                timeZone
+                timeZone,
               );
               setMonth(newDate);
               setView("day");
@@ -74,7 +73,7 @@ export const CalendarMonthGrid: React.FC<CalendarMonthGridProps> = ({
                   : !isSelected &&
                       !isCurrent &&
                       !isDisabled &&
-                      "hover:font-medium duration-300 text-calender_foreground hover:text-primary"
+                      "hover:font-medium duration-300 text-calender_foreground hover:text-primary",
               )}
             >
               <div className="pb-[1.5px] inter sm:pb-0">{monthName}</div>

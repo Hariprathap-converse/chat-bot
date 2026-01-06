@@ -46,7 +46,9 @@ export function NavMain({
             defaultOpen={item.isActive}
             className="group/collapsible w-full "
           >
-            <SidebarMenuItem className={cn(open ? "" : "ml-[2px] max-w-[40px]")}>
+            <SidebarMenuItem
+              className={cn(open ? "" : "ml-[2px] max-w-[40px]")}
+            >
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton
                   onClick={() => {
@@ -56,12 +58,17 @@ export function NavMain({
                   className="cursor-pointer mx-auto py-[18px]  min-w-full "
                 >
                   {item.icon && (
-                    <item.icon className={cn(open ? "" : "ml-[2px]", "min-w-5 min-h-5  group-hover/collapsible:text-sidebar-accent-foreground  font-medium text-foreground shrink-0")} />
+                    <item.icon
+                      className={cn(
+                        open ? "" : "ml-[2px]",
+                        "min-w-5 min-h-5  group-hover/collapsible:text-sidebar-accent-foreground  font-medium text-foreground shrink-0",
+                      )}
+                    />
                   )}
                   <span
                     className={cn(
                       open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
-                      "font-medium text-foreground group-hover/collapsible:text-sidebar-accent-foreground  transition-all duration-300 whitespace-nowrap overflow-hidden "
+                      "font-medium text-foreground group-hover/collapsible:text-sidebar-accent-foreground  transition-all duration-300 whitespace-nowrap overflow-hidden ",
                     )}
                   >
                     {item.title}
@@ -69,7 +76,7 @@ export function NavMain({
                   <ChevronRight
                     className={cn(
                       open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
-                      "ml-auto max-h-[15px] max-w-[15px] transition-transform group-hover/collapsible:text-sidebar-accent-foreground  duration-200 font-medium text-foreground group-data-[state=open]/collapsible:rotate-90"
+                      "ml-auto max-h-[15px] max-w-[15px] transition-transform group-hover/collapsible:text-sidebar-accent-foreground  duration-200 font-medium text-foreground group-data-[state=open]/collapsible:rotate-90",
                     )}
                   />
                 </SidebarMenuButton>

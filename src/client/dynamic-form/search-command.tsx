@@ -4,70 +4,70 @@ import {
   CommandList,
   CommandEmpty,
   CommandItem,
-} from '@/components/ui/command'
-import { useMemo, useState } from 'react'
+} from "@/components/ui/command";
+import { useMemo, useState } from "react";
 
 interface SearchCommandProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  navItems: NavItem[]
-  navSettings: any
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  navItems: NavItem[];
+  navSettings: any;
 }
 
 export type NavItem = {
-  title: string
-  url?: string
-  icon?: string
-  isActive?: boolean
-  items?: NavItem[]
-}
+  title: string;
+  url?: string;
+  icon?: string;
+  isActive?: boolean;
+  items?: NavItem[];
+};
 
 export type SearchItem = {
-  label: string
-  url?: string
-}
+  label: string;
+  url?: string;
+};
 export function flattenNavItems(
   items: NavItem[],
-  parentPath = ''
+  parentPath = "",
 ): SearchItem[] {
-  let result: SearchItem[] = []
+  let result: SearchItem[] = [];
 
   for (const item of items) {
     const currentPath = parentPath
       ? `${parentPath} > ${item.title}`
-      : item.title
+      : item.title;
 
-    const hasChildren = item.items && item.items.length > 0
+    const hasChildren = item.items && item.items.length > 0;
     if (item.url && !hasChildren) {
-      result.push({ label: currentPath, url: item.url })
+      result.push({ label: currentPath, url: item.url });
     }
 
     if (hasChildren) {
-      result = result.concat(flattenNavItems(item.items!, currentPath))
+      result = result.concat(flattenNavItems(item.items!, currentPath));
     }
   }
 
-  return result
+  return result;
 }
 
 function highlightMatch(text: string, query: string) {
-  if (!query) return text
+  if (!query) return text;
 
-  const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
-  const regex = new RegExp(`(${escapedQuery})`, 'gi')
+  const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+  const regex = new RegExp(`(${escapedQuery})`, "gi");
 
-  const parts = text.split(regex)
+  const parts = text.split(regex);
 
   return parts.map((part, index) => {
-    const isMatch = part.toLowerCase() === query.toLowerCase()
+    const isMatch = part.toLowerCase() === query.toLowerCase();
     return isMatch ? (
       <strong key={index} className="font-bold  ">
         {part}
       </strong>
     ) : (
       <span key={index}>{part}</span>
-    )
-  })
+    );
+  });
 }
 
 export function SearchCommand({
@@ -76,28 +76,28 @@ export function SearchCommand({
   navItems,
   navSettings,
 }: SearchCommandProps) {
-  const [searchTerm, setSearchTerm] = useState('')
-  const searchItems = useMemo(() => flattenNavItems(navItems), [navItems])
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchItems = useMemo(() => flattenNavItems(navItems), [navItems]);
   const filteredItems = useMemo(() => {
-    const query = searchTerm.trim().toLowerCase()
+    const query = searchTerm.trim().toLowerCase();
     return searchItems.filter((item) =>
-      item.label.toLowerCase().includes(query)
-    )
-  }, [searchTerm, searchItems])
-  if (!open) return null
+      item.label.toLowerCase().includes(query),
+    );
+  }, [searchTerm, searchItems]);
+  if (!open) return null;
 
   return (
     <div
       className="fixed inset-0 z-[999] bg-black/15 flex justify-center items-start pt-[75px] p-4"
       onClick={() => {
-        onOpenChange(false)
+        onOpenChange(false);
       }}
     >
       <div
         className=" bg-black/15  w-[85%]   md:w-[600px] h-fit rounded-sm "
         onClick={(e) => {
-          e.stopPropagation()
-          e.preventDefault()
+          e.stopPropagation();
+          e.preventDefault();
         }}
       >
         <Command className=" bg-sidebar rounded-sm">
@@ -120,16 +120,16 @@ export function SearchCommand({
                 <CommandItem
                   style={
                     {
-                      '--fw': navSettings.textWeight,
-                      fontSize: '0.9375rem',
+                      "--fw": navSettings.textWeight,
+                      fontSize: "0.9375rem",
                     } as React.CSSProperties
                   }
                   className="text-foreground bg-sidebar sm:pl-[50px] hover:text-primary hover:bg-transparent data-[selected=true]:bg-transparent cursor-pointer"
                   key={index}
                   onSelect={() => {
-                    if (item.url) window.location.href = item.url
-                    onOpenChange(false)
-                    setSearchTerm('')
+                    if (item.url) window.location.href = item.url;
+                    onOpenChange(false);
+                    setSearchTerm("");
                   }}
                 >
                   <span className="hover:text-primary ">
@@ -142,5 +142,5 @@ export function SearchCommand({
         </Command>
       </div>
     </div>
-  )
+  );
 }

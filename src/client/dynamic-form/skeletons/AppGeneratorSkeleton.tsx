@@ -131,8 +131,9 @@ export default function WebsiteAutoGenerator() {
   return (
     <div className="p-8 max-w-3xl mx-auto">
       <div
-        className={`transition-opacity duration-700 ${fadingOut ? "opacity-0" : "opacity-100"
-          }`}
+        className={`transition-opacity duration-700 ${
+          fadingOut ? "opacity-0" : "opacity-100"
+        }`}
       >
         <div className="mb-4 text-sm text-neutral-500 uppercase tracking-wide">
           {current.name} generating…

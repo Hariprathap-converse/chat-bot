@@ -29,4 +29,3 @@ export interface CustomFilterDropdownProps {
   column_name: string;
   options?: { label: string; value: string }[];
 }
-

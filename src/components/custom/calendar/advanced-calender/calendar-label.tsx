@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils";
 import { LabelElementProps } from "@/types/components/calender";
 import { DATE_FORMATS } from "@/utils/calender/date-formates";
 
-
 export const CalendarLabelElement: React.FC<LabelElementProps> = ({
   config,
   formConfig,
@@ -61,7 +60,7 @@ export const CalendarLabelElement: React.FC<LabelElementProps> = ({
           className={cn(
             fontSizeClasses[formConfig.fontSize],
             "font-normal dark:text-[#FAFAFA] text-[#31363F]",
-            config.isRequired?.value && "after:content-['*'] after:ml-0.5 "
+            config.isRequired?.value && "after:content-['*'] after:ml-0.5 ",
           )}
         >
           {config.label}

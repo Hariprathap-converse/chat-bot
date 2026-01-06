@@ -1,7 +1,7 @@
-'use client'
-import * as React from 'react'
-import { cn } from '@/lib/utils'
-import { parse, isValid, format as formatDate } from 'date-fns'
+"use client";
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { parse, isValid, format as formatDate } from "date-fns";
 import {
   addDays,
   eachDayOfInterval,
@@ -17,20 +17,20 @@ import {
   startOfQuarter,
   startOfYear,
   subDays,
-} from 'date-fns'
-import { useState } from 'react'
-import { CalenderlabelRightElement } from './advanced-calender/calendar-label-right'
-import { CalendarInputElement } from './advanced-calender/calendar-input-element'
-import { CalendarLabelElement } from './advanced-calender/calendar-label'
-import { DATE_FORMATS, monthNames } from '@/utils/calender/date-formates'
-import { useDateInput } from './advanced-calender/hooks/useDateInput'
-import { parseFormat } from '@/utils/calender/date-input-parser'
+} from "date-fns";
+import { useState } from "react";
+import { CalenderlabelRightElement } from "./advanced-calender/calendar-label-right";
+import { CalendarInputElement } from "./advanced-calender/calendar-input-element";
+import { CalendarLabelElement } from "./advanced-calender/calendar-label";
+import { DATE_FORMATS, monthNames } from "@/utils/calender/date-formates";
+import { useDateInput } from "./advanced-calender/hooks/useDateInput";
+import { parseFormat } from "@/utils/calender/date-input-parser";
 import {
   CalenderProps,
   DateFormatKey,
   DateFormatPart,
-} from '@/types/components/calender'
-import { toZonedTime } from 'date-fns-tz'
+} from "@/types/components/calender";
+import { toZonedTime } from "date-fns-tz";
 
 export function DateTimePicker({
   config,
@@ -49,90 +49,90 @@ export function DateTimePicker({
     disableToday: false,
     disableTomorrow: false,
     disableYesterday: false,
-    disableStartDate: new Date('0000-00-00'),
-    disableEndDate: new Date('0000-00-00'),
+    disableStartDate: new Date("0000-00-00"),
+    disableEndDate: new Date("0000-00-00"),
     disabledYearIndexes: [],
     disableWeekends: false,
     disabledWeekdays: [],
     weekStartsOn: 1,
-    disablePastDates: new Date('0000-00-00'),
-    disableFutureDates: new Date('0000-00-00'),
+    disablePastDates: new Date("0000-00-00"),
+    disableFutureDates: new Date("0000-00-00"),
     disabledYearMonthPairs: [],
     allowedDateRange: {
-      from: new Date('0000-00-00'),
-      to: new Date('0000-00-00'),
+      from: new Date("0000-00-00"),
+      to: new Date("0000-00-00"),
     },
   },
 }: CalenderProps) {
-  const [date, setDate] = React.useState<Date | undefined>(value)
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [month, setMonth] = React.useState<Date>(value || new Date())
-  const [view, setView] = React.useState<'day' | 'month' | 'year'>('day')
-  const [yearPage, setYearPage] = React.useState(0)
-  const [isFocused, setIsFocused] = React.useState(false)
-  const [isHovered, setIsHovered] = React.useState(false)
-  const [hasBeenModified, setHasBeenModified] = React.useState(false)
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  const calendarRef = React.useRef<HTMLDivElement>(null)
+  const [date, setDate] = React.useState<Date | undefined>(value);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [month, setMonth] = React.useState<Date>(value || new Date());
+  const [view, setView] = React.useState<"day" | "month" | "year">("day");
+  const [yearPage, setYearPage] = React.useState(0);
+  const [isFocused, setIsFocused] = React.useState(false);
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [hasBeenModified, setHasBeenModified] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const calendarRef = React.useRef<HTMLDivElement>(null);
   const [selectedFormat, setSelectedFormat] = React.useState<DateFormatKey>(
-    config.dateFormat || 'DD/MM/YYYY'
-  )
-  const [typedDate, setTypedDate] = useState<string>('')
-  const [inputDay, setInputDay] = useState<number | null>(null)
-  const [inputMonth, setInputMonth] = useState<number | null>(null)
-  const [inputYear, setInputYear] = useState<number | null>(null)
-  const [count, setCount] = useState(-1)
-  const format = dateFormat?.toLowerCase() ?? 'MM-DD-YYYY'
-  const parts = React.useMemo(() => parseFormat(format), [format])
-  const [monthName, setMonthName] = useState<string | null>(null)
-  const refs = React.useRef<Record<string, HTMLDivElement | null>>({})
-  const typedBuffer = React.useRef('')
+    config.dateFormat || "DD/MM/YYYY",
+  );
+  const [typedDate, setTypedDate] = useState<string>("");
+  const [inputDay, setInputDay] = useState<number | null>(null);
+  const [inputMonth, setInputMonth] = useState<number | null>(null);
+  const [inputYear, setInputYear] = useState<number | null>(null);
+  const [count, setCount] = useState(-1);
+  const format = dateFormat?.toLowerCase() ?? "MM-DD-YYYY";
+  const parts = React.useMemo(() => parseFormat(format), [format]);
+  const [monthName, setMonthName] = useState<string | null>(null);
+  const refs = React.useRef<Record<string, HTMLDivElement | null>>({});
+  const typedBuffer = React.useRef("");
   const buffers = React.useRef<{
-    day: string
-    month: string
-    year: string
-    monthName: string
+    day: string;
+    month: string;
+    year: string;
+    monthName: string;
   }>({
-    day: '',
-    month: '',
-    year: '',
-    monthName: '',
-  })
+    day: "",
+    month: "",
+    year: "",
+    monthName: "",
+  });
 
   const shouldOpenCalender = !(
     !inputDay &&
     (!inputMonth || !monthName) &&
     !inputYear
-  )
+  );
 
-  const clamp = (num: number, min: number, max: number, state?: 'year') => {
-    if (num > max) return state == 'year' ? MIN_YEAR : min // wrap forward
-    if (num < min) return max // wrap backward
-    return num
-  }
+  const clamp = (num: number, min: number, max: number, state?: "year") => {
+    if (num > max) return state == "year" ? MIN_YEAR : min; // wrap forward
+    if (num < min) return max; // wrap backward
+    return num;
+  };
 
-  const timeZone = 'Asia/Kolkata'
-  const getZonedNow = () => toZonedTime(new Date(), timeZone)
+  const timeZone = "Asia/Kolkata";
+  const getZonedNow = () => toZonedTime(new Date(), timeZone);
 
-  const MIN_YEAR = 1900
-  const MAX_YEAR = 2099
-  const YEARS_PER_PAGE = 16
-  const TOTAL_YEARS = MAX_YEAR - MIN_YEAR + 1
-  const TOTAL_PAGES = Math.ceil(TOTAL_YEARS / YEARS_PER_PAGE)
+  const MIN_YEAR = 1900;
+  const MAX_YEAR = 2099;
+  const YEARS_PER_PAGE = 16;
+  const TOTAL_YEARS = MAX_YEAR - MIN_YEAR + 1;
+  const TOTAL_PAGES = Math.ceil(TOTAL_YEARS / YEARS_PER_PAGE);
 
   const fontSizeClasses = {
-    small: 'text-sm',
-    medium: 'text-base',
-    large: 'text-lg',
-  }
+    small: "text-sm",
+    medium: "text-base",
+    large: "text-lg",
+  };
 
-  const currentFormatConfig = DATE_FORMATS[selectedFormat]
+  const currentFormatConfig = DATE_FORMATS[selectedFormat];
 
   React.useEffect(() => {
-    const currentYear = toZonedTime(month, timeZone).getFullYear()
-    const pageIndex = Math.floor((currentYear - MIN_YEAR) / YEARS_PER_PAGE)
-    setYearPage(Math.max(0, Math.min(pageIndex, TOTAL_PAGES - 1)))
-  }, [month])
+    const currentYear = toZonedTime(month, timeZone).getFullYear();
+    const pageIndex = Math.floor((currentYear - MIN_YEAR) / YEARS_PER_PAGE);
+    setYearPage(Math.max(0, Math.min(pageIndex, TOTAL_PAGES - 1)));
+  }, [month]);
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -142,17 +142,17 @@ export function DateTimePicker({
         inputRef.current &&
         !inputRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false)
-        setView('day')
+        setIsOpen(false);
+        setView("day");
       }
-    }
+    };
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const parseInputDate = (inputValue: string): Date | null => {
     try {
@@ -160,39 +160,39 @@ export function DateTimePicker({
       const parsedDate = parse(
         inputValue,
         currentFormatConfig.format,
-        new Date()
-      )
+        new Date(),
+      );
 
       if (isValid(parsedDate)) {
-        return parsedDate
+        return parsedDate;
       }
 
       // For text-based months, try alternative parsing
       if (
-        selectedFormat === 'Month DD, YYYY' ||
-        selectedFormat === 'DD Month YYYY'
+        selectedFormat === "Month DD, YYYY" ||
+        selectedFormat === "DD Month YYYY"
       ) {
         // Try parsing with different month formats
         const formats = [
           currentFormatConfig.format,
-          selectedFormat === 'Month DD, YYYY' ? 'MMM dd, yyyy' : 'dd MMM yyyy',
-          selectedFormat === 'Month DD, YYYY' ? 'MMMM d, yyyy' : 'd MMMM yyyy',
-          selectedFormat === 'Month DD, YYYY' ? 'MMM d, yyyy' : 'd MMM yyyy',
-        ]
+          selectedFormat === "Month DD, YYYY" ? "MMM dd, yyyy" : "dd MMM yyyy",
+          selectedFormat === "Month DD, YYYY" ? "MMMM d, yyyy" : "d MMMM yyyy",
+          selectedFormat === "Month DD, YYYY" ? "MMM d, yyyy" : "d MMM yyyy",
+        ];
 
         for (const format of formats) {
-          const parsed = parse(inputValue, format, new Date())
+          const parsed = parse(inputValue, format, new Date());
           if (isValid(parsed)) {
-            return parsed
+            return parsed;
           }
         }
       }
 
-      return null
+      return null;
     } catch {
-      return null
+      return null;
     }
-  }
+  };
 
   const { handleDateInput } = useDateInput({
     config,
@@ -216,113 +216,113 @@ export function DateTimePicker({
     inputMonth,
     inputYear,
     monthName,
-  })
+  });
 
   const renderPart = (part: DateFormatPart, index: number) => {
-    if (part.type === 'separator') {
-      return part.value
+    if (part.type === "separator") {
+      return part.value;
     }
 
     const value =
-      part.type === 'day'
+      part.type === "day"
         ? inputDay === null
-          ? (String(part.value) ?? 'dd')
-          : String(inputDay).padStart(2, '0')
-        : part.type === 'month'
+          ? (String(part.value) ?? "dd")
+          : String(inputDay).padStart(2, "0")
+        : part.type === "month"
           ? inputMonth === null
-            ? (String(part.value) ?? 'mm')
-            : String(inputMonth).padStart(2, '0')
-          : part.type === 'year'
+            ? (String(part.value) ?? "mm")
+            : String(inputMonth).padStart(2, "0")
+          : part.type === "year"
             ? inputYear === null
-              ? (String(part.value) ?? 'yyyy')
-              : String(inputYear).padStart(4, '0')
-            : part.type === 'monthName'
-              ? monthName || 'Month'
-              : part.value || 'Month'
+              ? (String(part.value) ?? "yyyy")
+              : String(inputYear).padStart(4, "0")
+            : part.type === "monthName"
+              ? monthName || "Month"
+              : part.value || "Month";
     return (
       <div
         key={index}
         ref={(el) => {
-          refs.current[part.type] = el
+          refs.current[part.type] = el;
         }}
         role="spinbutton"
         className={cn(
-          'border-none focus-visible:outline-none',
+          "border-none focus-visible:outline-none",
           config.isDisabled == true || formConfig.viewMode == true
-            ? 'pointer-events-none '
-            : 'focus:bg-primary focus:!text-primary-foreground !pointer-events-auto  focus-visible:bg-primary focus-visible:!text-primary-foreground',
-          part.type === 'monthName' && 'mr-2',
-          part.type === 'monthName' && index > 0 && ' ml-2',
-          value.startsWith('d') ||
-            value.startsWith('mon') ||
-            value.startsWith('mm') ||
-            value.startsWith('DD') ||
-            value.startsWith('Mon') ||
-            value.startsWith('MM') ||
-            value.startsWith('y') ||
-            value.startsWith('Y')
-            ? 'text-[hsl(var(--disabled-placeholder))] font-light'
-            : 'text-[#31363f] font-medium'
+            ? "pointer-events-none "
+            : "focus:bg-primary focus:!text-primary-foreground !pointer-events-auto  focus-visible:bg-primary focus-visible:!text-primary-foreground",
+          part.type === "monthName" && "mr-2",
+          part.type === "monthName" && index > 0 && " ml-2",
+          value.startsWith("d") ||
+            value.startsWith("mon") ||
+            value.startsWith("mm") ||
+            value.startsWith("DD") ||
+            value.startsWith("Mon") ||
+            value.startsWith("MM") ||
+            value.startsWith("y") ||
+            value.startsWith("Y")
+            ? "text-[hsl(var(--disabled-placeholder))] font-light"
+            : "text-[#31363f] font-medium",
         )}
         aria-label={part.type}
         aria-disabled={config.isDisabled || formConfig.viewMode}
         aria-valuemin={
-          part.type === 'day' ? 1 : part.type === 'month' ? 1 : MIN_YEAR
+          part.type === "day" ? 1 : part.type === "month" ? 1 : MIN_YEAR
         }
         aria-valuemax={
-          part.type === 'day' ? 31 : part.type === 'month' ? 12 : MAX_YEAR
+          part.type === "day" ? 31 : part.type === "month" ? 12 : MAX_YEAR
         }
         aria-valuenow={
-          part.type === 'day'
+          part.type === "day"
             ? (inputDay ?? 1)
-            : part.type === 'month'
+            : part.type === "month"
               ? (inputMonth ?? 1)
               : (inputYear ?? MIN_YEAR)
         }
         onBlur={() => {
-          let fullDate = ''
-          typedBuffer.current = ''
+          let fullDate = "";
+          typedBuffer.current = "";
           parts.forEach((p) => {
-            if (p.type === 'separator') {
-              fullDate += p.value
-            } else if (p.type === 'day') {
-              fullDate += inputDay ? String(inputDay).padStart(2, '0') : 'dd'
-            } else if (p.type === 'month') {
+            if (p.type === "separator") {
+              fullDate += p.value;
+            } else if (p.type === "day") {
+              fullDate += inputDay ? String(inputDay).padStart(2, "0") : "dd";
+            } else if (p.type === "month") {
               fullDate += inputMonth
-                ? String(inputMonth).padStart(2, '0')
-                : 'mm'
-            } else if (p.type === 'year') {
+                ? String(inputMonth).padStart(2, "0")
+                : "mm";
+            } else if (p.type === "year") {
               fullDate += inputYear
-                ? String(inputYear).padStart(4, '0')
-                : 'yyyy'
-            } else if (p.type === 'monthName') {
-              fullDate += monthName ? String(monthName) : 'Month'
+                ? String(inputYear).padStart(4, "0")
+                : "yyyy";
+            } else if (p.type === "monthName") {
+              fullDate += monthName ? String(monthName) : "Month";
             }
-          })
+          });
 
-          setTypedDate(fullDate)
+          setTypedDate(fullDate);
 
           if (inputDay && (inputMonth || monthName) && inputYear) {
-            const parsedDate = parseInputDate(fullDate)
+            const parsedDate = parseInputDate(fullDate);
             if (parsedDate) {
-              const zonedDate = toZonedTime(parsedDate, timeZone)
-              setDate(zonedDate)
-              setMonth(zonedDate)
-              setHasBeenModified(true)
-              config.value = fullDate
+              const zonedDate = toZonedTime(parsedDate, timeZone);
+              setDate(zonedDate);
+              setMonth(zonedDate);
+              setHasBeenModified(true);
+              config.value = fullDate;
 
-              onChange?.(zonedDate)
+              onChange?.(zonedDate);
               // Clear any existing errors
               setErrors?.((prev: any) => {
-                const newErrors = { ...prev }
-                delete newErrors[fieldName]
-                return newErrors
-              })
+                const newErrors = { ...prev };
+                delete newErrors[fieldName];
+                return newErrors;
+              });
             } else {
-              setDate(undefined)
-              onChange?.(undefined)
-              config.value = undefined
-              validateDateOnBlur()
+              setDate(undefined);
+              onChange?.(undefined);
+              config.value = undefined;
+              validateDateOnBlur();
             }
           }
         }}
@@ -330,35 +330,35 @@ export function DateTimePicker({
         tabIndex={config.isDisabled || formConfig.viewMode ? -1 : 0}
         onKeyDown={(e) => {
           if (config.isDisabled || formConfig.viewMode) {
-            e.preventDefault()
-            return
+            e.preventDefault();
+            return;
           }
           switch (part.type) {
-            case 'day':
-              handleDateInput(e, 1, 31, 'day', 2)
-              break
-            case 'month':
-              handleDateInput(e, 1, 12, 'month', 2)
-              break
-            case 'year':
-              handleDateInput(e, 1, MAX_YEAR, 'year', 4, MIN_YEAR)
-              break
-            case 'monthName':
+            case "day":
+              handleDateInput(e, 1, 31, "day", 2);
+              break;
+            case "month":
+              handleDateInput(e, 1, 12, "month", 2);
+              break;
+            case "year":
+              handleDateInput(e, 1, MAX_YEAR, "year", 4, MIN_YEAR);
+              break;
+            case "monthName":
               handleDateInput(
                 e,
                 undefined as any,
                 undefined as any,
-                'monthName',
-                undefined as any
-              )
-              break
+                "monthName",
+                undefined as any,
+              );
+              break;
           }
         }}
       >
         {value}
       </div>
-    )
-  }
+    );
+  };
   const isDateDisabled = (date: Date): boolean => {
     const {
       disableStartDate,
@@ -373,20 +373,20 @@ export function DateTimePicker({
       disableTomorrow,
       disableYesterday,
       allowedDateRange,
-    } = calendarDisableConfig
+    } = calendarDisableConfig;
 
     // Check allowed date range
     if (allowedDateRange) {
-      const { from, to } = allowedDateRange
+      const { from, to } = allowedDateRange;
       if (isBefore(date, startOfDay(from)) || isAfter(date, startOfDay(to))) {
-        return true
+        return true;
       }
     }
 
-    const day = date.getDay()
-    const today = startOfDay(new Date())
-    const tomorrow = startOfDay(addDays(today, 1))
-    const yesterday = startOfDay(subDays(today, 1))
+    const day = date.getDay();
+    const today = startOfDay(new Date());
+    const tomorrow = startOfDay(addDays(today, 1));
+    const yesterday = startOfDay(subDays(today, 1));
 
     // Check today, tomorrow, yesterday
     if (
@@ -394,7 +394,7 @@ export function DateTimePicker({
       (disableTomorrow && isSameDay(date, tomorrow)) ||
       (disableYesterday && isSameDay(date, yesterday))
     ) {
-      return true
+      return true;
     }
 
     // Check disabled date range
@@ -406,27 +406,27 @@ export function DateTimePicker({
         end: startOfDay(disableEndDate),
       })
     ) {
-      return true
+      return true;
     }
 
     // Check disabled weekdays
     if (disabledWeekdays?.includes(day)) {
-      return true
+      return true;
     }
 
     // Check weekends
     if (disableWeekends && (day === 0 || day === 6)) {
-      return true
+      return true;
     }
 
     // Check disabled years
     if (disabledYearIndexes?.includes(date.getFullYear())) {
-      return true
+      return true;
     }
 
     // Check past dates
     if (disablePastDates && startOfDay(date) < startOfDay(disablePastDates)) {
-      return true
+      return true;
     }
 
     // Check future dates
@@ -434,239 +434,239 @@ export function DateTimePicker({
       disableFutureDates &&
       startOfDay(date) > startOfDay(disableFutureDates)
     ) {
-      return true
+      return true;
     }
 
     // Check disabled year-month pairs
-    const currentYear = date.getFullYear()
-    const currentMonth = date.getMonth()
+    const currentYear = date.getFullYear();
+    const currentMonth = date.getMonth();
     if (
       disabledYearMonthPairs?.some(
         ({ year, month }: { year: number; month: number }) =>
-          year === currentYear && month === currentMonth
+          year === currentYear && month === currentMonth,
       )
     ) {
-      return true
+      return true;
     }
 
-    return false
-  }
+    return false;
+  };
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     const zonedDate = selectedDate
       ? toZonedTime(selectedDate, timeZone)
-      : undefined
-    setDate(zonedDate)
+      : undefined;
+    setDate(zonedDate);
     if (zonedDate) {
-      setMonth(zonedDate)
-      setHasBeenModified(true)
-      setTypedDate(formatDate(zonedDate, currentFormatConfig.format))
-      const day = zonedDate.getDate().toString().padStart(2, '0')
-      const month = (zonedDate.getMonth() + 1).toString().padStart(2, '0') // months are 0-based
-      const monthIndex = zonedDate.getMonth()
-      const year = zonedDate.getFullYear().toString()
+      setMonth(zonedDate);
+      setHasBeenModified(true);
+      setTypedDate(formatDate(zonedDate, currentFormatConfig.format));
+      const day = zonedDate.getDate().toString().padStart(2, "0");
+      const month = (zonedDate.getMonth() + 1).toString().padStart(2, "0"); // months are 0-based
+      const monthIndex = zonedDate.getMonth();
+      const year = zonedDate.getFullYear().toString();
 
       if (
-        selectedFormat.includes('Month') ||
-        selectedFormat.includes('month')
+        selectedFormat.includes("Month") ||
+        selectedFormat.includes("month")
       ) {
-        setMonthName(monthNames[monthIndex])
+        setMonthName(monthNames[monthIndex]);
       }
-      setInputDay(Number(day))
-      setInputMonth(Number(month))
-      setInputYear(Number(year))
+      setInputDay(Number(day));
+      setInputMonth(Number(month));
+      setInputYear(Number(year));
       config.value =
-        formatDate(zonedDate!, currentFormatConfig.format) + 'date2'
+        formatDate(zonedDate!, currentFormatConfig.format) + "date2";
     } else {
-      setTypedDate('')
-      setInputDay(null)
-      setInputMonth(null)
-      setInputYear(null)
-      config.value = undefined
+      setTypedDate("");
+      setInputDay(null);
+      setInputMonth(null);
+      setInputYear(null);
+      config.value = undefined;
     }
-    onChange?.(zonedDate)
-    setIsOpen(false)
-    setView('day')
-    setIsFocused(false)
-  }
+    onChange?.(zonedDate);
+    setIsOpen(false);
+    setView("day");
+    setIsFocused(false);
+  };
 
   const handlePresetClick = (presetDate: Date) => {
-    const zonedDate = toZonedTime(presetDate, timeZone)
-    const day = zonedDate.getDate().toString().padStart(2, '0')
-    const month = (zonedDate.getMonth() + 1).toString().padStart(2, '0') // months are 0-based
-    const monthIndex = zonedDate.getMonth()
-    const year = zonedDate.getFullYear().toString()
+    const zonedDate = toZonedTime(presetDate, timeZone);
+    const day = zonedDate.getDate().toString().padStart(2, "0");
+    const month = (zonedDate.getMonth() + 1).toString().padStart(2, "0"); // months are 0-based
+    const monthIndex = zonedDate.getMonth();
+    const year = zonedDate.getFullYear().toString();
 
-    if (selectedFormat.includes('Month') || selectedFormat.includes('month')) {
-      setMonthName(monthNames[monthIndex])
+    if (selectedFormat.includes("Month") || selectedFormat.includes("month")) {
+      setMonthName(monthNames[monthIndex]);
     }
-    setInputDay(Number(day))
-    setInputMonth(Number(month))
-    setInputYear(Number(year))
-    setTypedDate(formatDate(zonedDate, currentFormatConfig.format))
-    setView('day')
-    setDate(zonedDate)
-    setMonth(zonedDate)
-    setHasBeenModified(true)
-    onChange?.(zonedDate)
-    setIsOpen(false)
-    setIsFocused(false)
-  }
+    setInputDay(Number(day));
+    setInputMonth(Number(month));
+    setInputYear(Number(year));
+    setTypedDate(formatDate(zonedDate, currentFormatConfig.format));
+    setView("day");
+    setDate(zonedDate);
+    setMonth(zonedDate);
+    setHasBeenModified(true);
+    onChange?.(zonedDate);
+    setIsOpen(false);
+    setIsFocused(false);
+  };
 
   const handleFocus = () => {
     if (!config.isDisabled && !formConfig.viewMode) {
-      setIsFocused(true)
-      setIsHovered(false)
-      onFocus?.()
+      setIsFocused(true);
+      setIsHovered(false);
+      onFocus?.();
       if (inputRef.current) {
-        inputRef.current.select()
+        inputRef.current.select();
       }
     } else {
-      setIsOpen(false)
+      setIsOpen(false);
     }
-  }
+  };
 
   const handleBlur = () => {
-    onBlur?.()
-    validateYearRange()
-    setIsFocused(false)
-    validateDateOnBlur()
-  }
+    onBlur?.();
+    validateYearRange();
+    setIsFocused(false);
+    validateDateOnBlur();
+  };
 
   const handleClear = () => {
-    setDate(undefined)
-    setTypedDate('')
-    onChange?.(undefined)
-    inputRef.current?.focus()
-    setIsFocused(false)
-    setHasBeenModified(false)
-    setErrors?.((prev: any) => ({ ...prev, [fieldName]: '' }))
-  }
+    setDate(undefined);
+    setTypedDate("");
+    onChange?.(undefined);
+    inputRef.current?.focus();
+    setIsFocused(false);
+    setHasBeenModified(false);
+    setErrors?.((prev: any) => ({ ...prev, [fieldName]: "" }));
+  };
 
   const handleFormatChange = (newFormat: DateFormatKey) => {
-    setSelectedFormat(newFormat)
+    setSelectedFormat(newFormat);
 
     // Update the typed date with the new format if we have a date
     if (date) {
-      const newFormatConfig = DATE_FORMATS[newFormat]
+      const newFormatConfig = DATE_FORMATS[newFormat];
       setTypedDate(
-        formatDate(toZonedTime(date, timeZone), newFormatConfig.format)
-      )
+        formatDate(toZonedTime(date, timeZone), newFormatConfig.format),
+      );
     }
-  }
+  };
 
-  const now = getZonedNow()
+  const now = getZonedNow();
 
   const presetOptions = [
     {
-      label: 'Today',
+      label: "Today",
       getValue: () => now,
       disabled: calendarDisableConfig?.disableToday,
     },
     {
-      label: 'Yesterday',
+      label: "Yesterday",
       getValue: () => subDays(now, 1),
       disabled: calendarDisableConfig?.disableYesterday,
     },
     {
-      label: 'Tomorrow',
+      label: "Tomorrow",
       getValue: () => addDays(now, 1),
       disabled: calendarDisableConfig?.disableTomorrow,
     },
     {
-      label: 'Start of Quarter',
+      label: "Start of Quarter",
       getValue: () => startOfQuarter(now),
     },
     {
-      label: 'End of Quarter',
+      label: "End of Quarter",
       getValue: () => endOfQuarter(now),
     },
     {
-      label: 'Start of Year',
+      label: "Start of Year",
       getValue: () => startOfYear(now),
     },
     {
-      label: 'End of Year',
+      label: "End of Year",
       getValue: () => endOfYear(now),
     },
-  ]
+  ];
 
   const isMonthFullyDisabled = (year: number, monthIndex: number): boolean => {
-    const startDate = startOfMonth(new Date(year, monthIndex, 1))
-    const endDate = endOfMonth(startDate)
-    const days = eachDayOfInterval({ start: startDate, end: endDate })
-    return days.every((day) => isDateDisabled(day))
-  }
+    const startDate = startOfMonth(new Date(year, monthIndex, 1));
+    const endDate = endOfMonth(startDate);
+    const days = eachDayOfInterval({ start: startDate, end: endDate });
+    return days.every((day) => isDateDisabled(day));
+  };
 
   const isYearFullyDisabled = (year: number): boolean => {
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
       if (!isMonthFullyDisabled(year, monthIndex)) {
-        return false
+        return false;
       }
     }
-    return true
-  }
+    return true;
+  };
 
   const validateDateOnBlur = () => {
     setErrors?.((prev: any) => {
-      const newErrors = { ...prev }
-      delete newErrors[fieldName]
-      return newErrors
-    })
+      const newErrors = { ...prev };
+      delete newErrors[fieldName];
+      return newErrors;
+    });
 
-    if (!typedDate) return
+    if (!typedDate) return;
     if (inputDay && (inputMonth || monthName) && inputYear) {
-      const parsedDate = parseInputDate(typedDate)
+      const parsedDate = parseInputDate(typedDate);
       if (!parsedDate || parsedDate == null) {
         setErrors?.((prev: any) => ({
           ...prev,
           [fieldName]: `Please enter a valid date`,
-        }))
-        return
+        }));
+        return;
       }
     } else {
       setErrors?.((prev: any) => ({
         ...prev,
         [fieldName]: `Please enter/select valid Date of Birth`,
-      }))
+      }));
     }
-  }
+  };
 
   const validateYearRange = () => {
-    if (!typedDate) return
+    if (!typedDate) return;
 
-    const parsedDate = parseInputDate(typedDate)
+    const parsedDate = parseInputDate(typedDate);
     if (parsedDate) {
-      const year = parsedDate.getFullYear()
+      const year = parsedDate.getFullYear();
       if (year < MIN_YEAR || year > MAX_YEAR) {
         setErrors?.((prev: any) => ({
           ...prev,
           [fieldName]: `Please enter a year between ${MIN_YEAR} and ${MAX_YEAR}`,
-        }))
+        }));
       } else {
         setErrors?.((prev: any) => {
-          const newErrors = { ...prev }
-          delete newErrors[fieldName]
-          return newErrors
-        })
+          const newErrors = { ...prev };
+          delete newErrors[fieldName];
+          return newErrors;
+        });
       }
     }
-  }
+  };
 
   const displayValue = date
     ? formatDate(toZonedTime(date, timeZone), currentFormatConfig.format)
-    : ''
-  const isVisible = true
-  if (!isVisible) return null
+    : "";
+  const isVisible = true;
+  if (!isVisible) return null;
 
-  if (formConfig.layout.labelPosition === 'left') {
+  if (formConfig.layout.labelPosition === "left") {
     return (
       <div className=" flex items-center flex-row gap-4">
         <div
           className={cn(
-            'w-1/3 relative my-auto',
-            error && 'pt-0',
-            formConfig.viewMode && 'pt-0'
+            "w-1/3 relative my-auto",
+            error && "pt-0",
+            formConfig.viewMode && "pt-0",
           )}
         >
           <CalendarLabelElement
@@ -761,7 +761,7 @@ export function DateTimePicker({
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   const errorElement = error && (
@@ -785,7 +785,7 @@ export function DateTimePicker({
       </svg>
       {error}
     </div>
-  )
+  );
 
   return (
     <div className="space-y-1 relative">
@@ -844,5 +844,5 @@ export function DateTimePicker({
       />
       {errorElement}
     </div>
-  )
+  );
 }

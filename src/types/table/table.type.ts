@@ -130,8 +130,10 @@ export interface CustomTableMeta extends TableMeta<TableData> {
   onMoreAction?: (action: string, rowId: string) => void;
 }
 
-export interface CustomColumnMeta<TData, TValue>
-  extends ColumnMeta<TData, TValue> {
+export interface CustomColumnMeta<TData, TValue> extends ColumnMeta<
+  TData,
+  TValue
+> {
   isActionColumn?: boolean;
   isMoreActionColumn?: boolean;
 }
@@ -222,7 +224,7 @@ export interface GlobalPreferencesContextType {
       dataWrap: boolean;
       theme: string;
       per_page: number;
-    }>
+    }>,
   ) => void;
 }
 

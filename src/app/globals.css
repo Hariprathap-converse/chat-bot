@@ -574,7 +574,6 @@ body {
   animation: fadeUp 0.6s ease forwards;
 }
 
-
 .dot-loader {
   display: flex;
   justify-content: center;
@@ -613,7 +612,6 @@ body {
 }
 
 @keyframes bounceOnce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -658,7 +656,6 @@ body {
 }
 
 @keyframes bounceColor {
-
   0%,
   50%,
   100% {
@@ -778,7 +775,6 @@ body {
 }
 
 @keyframes ping-slow {
-
   75%,
   100% {
     transform: scale(2);
@@ -788,11 +784,21 @@ body {
 
 .animate-scan {
   animation: scan-line 2s ease-in-out infinite;
-  background: linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.5), transparent);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    hsl(var(--primary) / 0.5),
+    transparent
+  );
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, 0.5) 50%, transparent 75%);
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 75%
+  );
   background-size: 200% 100%;
   animation: shimmer-skeleton 2s infinite linear;
 }
@@ -806,7 +812,6 @@ body {
 }
 
 @keyframes pulse-fast {
-
   0%,
   100% {
     opacity: 1;
@@ -816,14 +821,12 @@ body {
   50% {
     opacity: 0.4;
     transform: scale(0.85);
-    
   }
 }
 
 .animate-pulse-fast {
   animation: pulse-fast 0.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-
 
 @keyframes progress-bar {
   0% {

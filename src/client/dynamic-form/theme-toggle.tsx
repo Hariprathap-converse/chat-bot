@@ -1,34 +1,34 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { Moon, Sun, Palette, RotateCcw } from 'lucide-react'
+import { useEffect, useState } from "react";
+import { Moon, Sun, Palette, RotateCcw } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from "@/components/ui/tooltip";
 
 export const colorThemes = [
-  { hex: 'df3b3b', color: 'red' },
-  { hex: 'e4335a', color: 'rose' },
-  { hex: 'f9802d', color: 'orange' },
-  { hex: '2dac5c', color: 'green' },
-  { hex: 'ffc519', color: 'yellow' },
-  { hex: '884dee', color: 'violet' },
-]
+  { hex: "df3b3b", color: "red" },
+  { hex: "e4335a", color: "rose" },
+  { hex: "f9802d", color: "orange" },
+  { hex: "2dac5c", color: "green" },
+  { hex: "ffc519", color: "yellow" },
+  { hex: "884dee", color: "violet" },
+];
 
 const ThemeSwitcherForMobile = () => {
-  const [baseTheme, setBaseTheme] = useState<'light' | 'dark'>()
-  const [colorTheme, setColorTheme] = useState<string>('')
+  const [baseTheme, setBaseTheme] = useState<"light" | "dark">();
+  const [colorTheme, setColorTheme] = useState<string>("");
 
   // useEffect(() => {
   //   const savedTheme = localStorage.getItem('theme') as 'light' | 'dark'
@@ -39,62 +39,62 @@ const ThemeSwitcherForMobile = () => {
   // }, [])
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
-    const savedColor = localStorage.getItem('colorTheme')
+    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+    const savedColor = localStorage.getItem("colorTheme");
 
     if (savedTheme) {
-      setBaseTheme(savedTheme)
+      setBaseTheme(savedTheme);
     } else {
       // detect system preference
       const prefersDark = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      ).matches
-      setBaseTheme(prefersDark ? 'dark' : 'light')
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      setBaseTheme(prefersDark ? "dark" : "light");
     }
 
-    if (savedColor) setColorTheme(savedColor)
-  }, [])
+    if (savedColor) setColorTheme(savedColor);
+  }, []);
 
   useEffect(() => {
-    if (baseTheme) localStorage.setItem('theme', baseTheme)
-  }, [baseTheme])
+    if (baseTheme) localStorage.setItem("theme", baseTheme);
+  }, [baseTheme]);
 
   useEffect(() => {
     if (colorTheme) {
-      localStorage.setItem('colorTheme', colorTheme)
+      localStorage.setItem("colorTheme", colorTheme);
     } else {
-      localStorage.removeItem('colorTheme')
+      localStorage.removeItem("colorTheme");
     }
-  }, [colorTheme])
+  }, [colorTheme]);
 
   useEffect(() => {
-    const root = document.documentElement
+    const root = document.documentElement;
     root.classList.remove(
-      ...colorThemes.flatMap((color) => [color.color, `${color.color}-dark`])
-    )
+      ...colorThemes.flatMap((color) => [color.color, `${color.color}-dark`]),
+    );
 
-    if (baseTheme === 'dark') {
-      root.classList.add('dark')
-      root.style.colorScheme = 'dark'
+    if (baseTheme === "dark") {
+      root.classList.add("dark");
+      root.style.colorScheme = "dark";
     } else {
-      root.classList.remove('dark')
-      root.style.colorScheme = 'light'
+      root.classList.remove("dark");
+      root.style.colorScheme = "light";
     }
 
     if (colorTheme) {
       const themeClass =
-        baseTheme === 'dark' ? `${colorTheme}-dark` : colorTheme
-      root.classList.add(themeClass)
+        baseTheme === "dark" ? `${colorTheme}-dark` : colorTheme;
+      root.classList.add(themeClass);
     }
-  }, [baseTheme, colorTheme])
+  }, [baseTheme, colorTheme]);
 
   const withViewTransition = (callback: () => void) => {
-    if ('startViewTransition' in document) {
-      ;(document as any).startViewTransition(callback)
+    if ("startViewTransition" in document) {
+      (document as any).startViewTransition(callback);
     } else {
-      callback()
+      callback();
     }
-  }
+  };
 
   return (
     <TooltipProvider>
@@ -126,9 +126,9 @@ const ThemeSwitcherForMobile = () => {
                   <Button
                     aria-label="Light Mode"
                     onClick={() =>
-                      withViewTransition(() => setBaseTheme('light'))
+                      withViewTransition(() => setBaseTheme("light"))
                     }
-                    variant={baseTheme === 'light' ? 'default' : 'outline'}
+                    variant={baseTheme === "light" ? "default" : "outline"}
                     size="icon"
                     className="rounded-full h-8 w-8 transition-colors"
                   >
@@ -143,9 +143,9 @@ const ThemeSwitcherForMobile = () => {
                   <Button
                     aria-label="Dark Mode"
                     onClick={() =>
-                      withViewTransition(() => setBaseTheme('dark'))
+                      withViewTransition(() => setBaseTheme("dark"))
                     }
-                    variant={baseTheme === 'dark' ? 'default' : 'outline'}
+                    variant={baseTheme === "dark" ? "default" : "outline"}
                     size="icon"
                     className="rounded-full h-8 w-8 transition-colors"
                   >
@@ -171,11 +171,11 @@ const ThemeSwitcherForMobile = () => {
                   onClick={() =>
                     withViewTransition(() =>
                       setColorTheme((prev) =>
-                        prev === color.color ? '' : color.color
-                      )
+                        prev === color.color ? "" : color.color,
+                      ),
                     )
                   }
-                  variant={colorTheme === color.color ? 'default' : 'outline'}
+                  variant={colorTheme === color.color ? "default" : "outline"}
                   size="icon"
                   className="rounded-full h-6 w-6 p-0 border-2 transition-all hover:scale-105"
                 >
@@ -192,7 +192,7 @@ const ThemeSwitcherForMobile = () => {
                 variant="ghost"
                 size="sm"
                 className="mt-3 text-xs text-muted-foreground flex items-center gap-2 hover:text-foreground transition-colors"
-                onClick={() => withViewTransition(() => setColorTheme(''))}
+                onClick={() => withViewTransition(() => setColorTheme(""))}
               >
                 <RotateCcw className="h-3 w-3" />
                 Reset Accent Color
@@ -202,7 +202,7 @@ const ThemeSwitcherForMobile = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </TooltipProvider>
-  )
-}
+  );
+};
 
-export default ThemeSwitcherForMobile
+export default ThemeSwitcherForMobile;

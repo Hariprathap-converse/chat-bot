@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function EmployeeDetailsSkeleton() {
   return (
@@ -34,5 +34,5 @@ export default function EmployeeDetailsSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }

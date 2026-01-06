@@ -2,8 +2,6 @@ import { cn } from "@/lib/utils";
 import { CalendarYearGridProps } from "@/types/components/calender";
 import { toZonedTime } from "date-fns-tz";
 
-
-
 export const CalendarYearGrid: React.FC<CalendarYearGridProps> = ({
   month,
   date,
@@ -24,7 +22,7 @@ export const CalendarYearGrid: React.FC<CalendarYearGridProps> = ({
   const endYear = Math.min(startYear + YEARS_PER_PAGE - 1, MAX_YEAR);
   const years = Array.from(
     { length: endYear - startYear + 1 },
-    (_, i) => startYear + i
+    (_, i) => startYear + i,
   );
 
   return (
@@ -48,7 +46,7 @@ export const CalendarYearGrid: React.FC<CalendarYearGridProps> = ({
                 const zonedMonth = toZonedTime(month, timeZone);
                 const newDate = toZonedTime(
                   new Date(year, zonedMonth.getMonth(), 1),
-                  timeZone
+                  timeZone,
                 );
                 setMonth(newDate);
                 setView("month");
@@ -67,7 +65,7 @@ export const CalendarYearGrid: React.FC<CalendarYearGridProps> = ({
                     ? "text-[#979a9e] cursor-not-allowed hover:text-[#979a9e]"
                     : !isSelected &&
                         !isCurrent &&
-                        "text-calender_foreground hover:text-primary hover:font-medium duration-200"
+                        "text-calender_foreground hover:text-primary hover:font-medium duration-200",
                 )}
               >
                 <div className="pb-[1px] sm:pb-[1px] sm:text-[12px] 3xl:text-[14px] inter">

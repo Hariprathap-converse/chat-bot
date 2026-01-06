@@ -1,169 +1,169 @@
-'use client'
+"use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-import FormFooter from './form-footer'
-import FieldRender from './field-render'
+import { useEffect, useMemo, useRef, useState } from "react";
+import FormFooter from "./form-footer";
+import FieldRender from "./field-render";
 // import { FormProvider } from 'react-hook-form'
-import { CrossFieldValidator } from '@/utils/cross-field-validator'
-import { useLayout } from '@/context/layout-context'
-import Stepper from './stepper'
-import { FieldConfig } from '@/types/filed.type'
-import { showToastMessage } from '@/lib/toaster'
+import { CrossFieldValidator } from "@/utils/cross-field-validator";
+import { useLayout } from "@/context/layout-context";
+import Stepper from "./stepper";
+import { FieldConfig } from "@/types/filed.type";
+import { showToastMessage } from "@/lib/toaster";
 interface FormContainerProps {
-  showRequiredFields: boolean
-  onSubmit: (data: any) => void
-  setShowRequiredFields: (value: boolean) => void
-  setLabelAlignment: (alignment: string) => void
-  setManualGridOverride: (value: boolean) => void
-  progress?: number
-  onCancel?: () => void
-  isSubmitting?: boolean
+  showRequiredFields: boolean;
+  onSubmit: (data: any) => void;
+  setShowRequiredFields: (value: boolean) => void;
+  setLabelAlignment: (alignment: string) => void;
+  setManualGridOverride: (value: boolean) => void;
+  progress?: number;
+  onCancel?: () => void;
+  isSubmitting?: boolean;
 }
 const FormContainerProps = ({
   showRequiredFields,
   onCancel,
 }: FormContainerProps) => {
-  const { formData, setFormData, setErrors, errors } = useLayout()
-  const [formSubmitData, setFormSubmitData] = useState<Record<string, any>>({})
-  const [currentStepIndex, setCurrentStepIndex] = useState(0)
+  const { formData, setFormData, setErrors, errors } = useLayout();
+  const [formSubmitData, setFormSubmitData] = useState<Record<string, any>>({});
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const requiredFields = useMemo(() => {
     return (
       formData?.form?.fields?.filter(
-        (field) => field.isRequired?.value == true
+        (field) => field.isRequired?.value == true,
       ) ?? []
-    )
-  }, [formData?.form?.fields])
+    );
+  }, [formData?.form?.fields]);
 
   const filledCount = useMemo(() => {
     return requiredFields.filter((field) => {
-      const val = formSubmitData?.[field.name]
+      const val = formSubmitData?.[field.name];
       if (val) {
-        return Boolean(val)
+        return Boolean(val);
       } else {
-        return false
+        return false;
       }
-    }).length
-  }, [formSubmitData, requiredFields])
+    }).length;
+  }, [formSubmitData, requiredFields]);
 
-  const totalRequired = requiredFields.length
-  const progress = Math.round((filledCount / totalRequired) * 100)
+  const totalRequired = requiredFields.length;
+  const progress = Math.round((filledCount / totalRequired) * 100);
 
   const formFields =
-    formData.form.formType == 'stepper'
+    formData.form.formType == "stepper"
       ? formData.form.stepper?.steps[currentStepIndex].fields || []
-      : formData.form.fields || []
+      : formData.form.fields || [];
 
   useEffect(() => {
-    if (!formFields) return
+    if (!formFields) return;
 
-    const initialData: Record<string, any> = {}
+    const initialData: Record<string, any> = {};
 
     formFields.forEach((field: any) => {
       if (field?.autoPopulate?.defaultValue) {
-        initialData[field.name] = field.autoPopulate.defaultValue
-        field.value = field.autoPopulate.defaultValue
+        initialData[field.name] = field.autoPopulate.defaultValue;
+        field.value = field.autoPopulate.defaultValue;
       }
-    })
-    setFormSubmitData(initialData)
-  }, [formFields])
+    });
+    setFormSubmitData(initialData);
+  }, [formFields]);
 
   useEffect(() => {
-    if (formData.form.mode === 'view' && formData.form.viewMode !== true) {
+    if (formData.form.mode === "view" && formData.form.viewMode !== true) {
       setFormData((prev) => ({
         ...prev,
         form: {
           ...prev.form,
           viewMode: true,
         },
-      }))
+      }));
     }
-  }, [formData.form.mode, formData.form.viewMode])
+  }, [formData.form.mode, formData.form.viewMode]);
 
   const validateField = (field: FieldConfig, value: string): string | null => {
     if (
-      field.type !== 'select' &&
-      field.type !== 'calendar' &&
+      field.type !== "select" &&
+      field.type !== "calendar" &&
       !field.isRequired.value &&
       !value.trim()
     ) {
-      return null
+      return null;
     }
 
-    if (field.type == 'select' && !field.isRequired.value && !value) {
-      return null
+    if (field.type == "select" && !field.isRequired.value && !value) {
+      return null;
     }
     // Required validation
     if (
-      field.type !== 'select' &&
-      field.type !== 'calendar' &&
+      field.type !== "select" &&
+      field.type !== "calendar" &&
       field.isRequired.value &&
       !value.trim()
     ) {
       return field.isRequired.message
         ? field.isRequired.message
-        : `${field.label} is required`
+        : `${field.label} is required`;
     }
 
     if (
-      field.type == 'select' &&
+      field.type == "select" &&
       field.isRequired.value &&
-      (!field.value || field.value == null || field.value == '')
+      (!field.value || field.value == null || field.value == "")
     ) {
       return field.isRequired.message
         ? field.isRequired.message
-        : `${field.label} is required`
+        : `${field.label} is required`;
     }
 
     // Length validation
     if (
-      field.type !== 'select' &&
-      field.type !== 'calendar' &&
+      field.type !== "select" &&
+      field.type !== "calendar" &&
       field?.validation?.minLength &&
       value.length < field.validation.minLength.value
     ) {
       return field.validation.minLength.message
         ? field.validation.minLength.message
-        : `${field.label} must be at least ${field.validation.minLength.value} characters`
+        : `${field.label} must be at least ${field.validation.minLength.value} characters`;
     }
     if (
-      field.type == 'select' &&
+      field.type == "select" &&
       field?.validation?.minLength &&
       field.value &&
       field?.value.length < field.validation.minLength.value
     ) {
       return field.validation.minLength.message
         ? field.validation.minLength.message
-        : `${field.label} must be at least ${field.validation.minLength.value} characters`
+        : `${field.label} must be at least ${field.validation.minLength.value} characters`;
     }
 
     if (
       field &&
-      field.type !== 'select' &&
-      field.type !== 'calendar' &&
+      field.type !== "select" &&
+      field.type !== "calendar" &&
       field?.validation?.maxLength &&
       value.length > field.validation.maxLength.value
     ) {
       return field.validation.maxLength.message
         ? field.validation.maxLength.message
-        : `${field.label} must not exceed ${field.validation.maxLength.value} characters`
+        : `${field.label} must not exceed ${field.validation.maxLength.value} characters`;
     }
 
     // Enhanced cross-field validation
     if (
-      field.type !== 'calendar' &&
+      field.type !== "calendar" &&
       field?.validation?.crossFieldValidation &&
       field.validation.crossFieldValidation.length > 0
     ) {
       return CrossFieldValidator.validateMultiple(
         value,
         field.validation.crossFieldValidation,
-        formSubmitData
-      )
+        formSubmitData,
+      );
     }
 
-    return null
-  }
+    return null;
+  };
 
   // const handleSubmit = async (e: React.FormEvent) => {
   //   const fullDate = { ...formData }
@@ -204,38 +204,38 @@ const FormContainerProps = ({
   // }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const newErrors: Record<string, string> = {}
+    const newErrors: Record<string, string> = {};
 
     formFields?.forEach((field: any) => {
-      const value = formSubmitData?.[field.name] ?? ''
-      const error = validateField(field, value)
+      const value = formSubmitData?.[field.name] ?? "";
+      const error = validateField(field, value);
       if (error) {
-        newErrors[field.name] = error
-        console.log('newErrors: ', newErrors)
+        newErrors[field.name] = error;
+        console.log("newErrors: ", newErrors);
       }
-    })
+    });
 
-    setErrors(newErrors)
+    setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      console.log('Validation failed:', newErrors)
-      return
+      console.log("Validation failed:", newErrors);
+      return;
     }
 
     try {
-      const fullData = { ...formData }
+      const fullData = { ...formData };
 
-      console.log('fullData: ', fullData)
+      console.log("fullData: ", fullData);
 
-      let api = { url: '', methods: '' }
-      if (fullData.form.mode == 'create') {
-        api.url = 'http://localhost:5000/api/v1/form/add'
-        api.methods = 'POST'
-      } else if (fullData.form.mode == 'edit') {
-        api.url = 'http://localhost:8000/api/v1/form'
-        api.methods = 'PUT'
+      let api = { url: "", methods: "" };
+      if (fullData.form.mode == "create") {
+        api.url = "http://localhost:5000/api/v1/form/add";
+        api.methods = "POST";
+      } else if (fullData.form.mode == "edit") {
+        api.url = "http://localhost:8000/api/v1/form";
+        api.methods = "PUT";
       }
 
       // const response = await fetch(api.url, {
@@ -245,32 +245,30 @@ const FormContainerProps = ({
       // })
 
       // const result = await response.json()
-      const result = {success: true, error: {fieldName: '', message: ''}}
-      const response = {ok: true}
-      console.log('✅ Success:', result)
+      const result = { success: true, error: { fieldName: "", message: "" } };
+      const response = { ok: true };
+      console.log("✅ Success:", result);
 
       if (!response.ok || result.success === false) {
-        const newErrors = { ...errors }
-        newErrors[result.error.fieldName] = result.error.message
+        const newErrors = { ...errors };
+        newErrors[result.error.fieldName] = result.error.message;
 
-        setErrors(newErrors)
+        setErrors(newErrors);
 
-        console.log('newErrors:', newErrors)
+        console.log("newErrors:", newErrors);
 
-        showToastMessage('error', result.error.message as string)
+        showToastMessage("error", result.error.message as string);
       }
     } catch (error) {
-      console.error('Error submitting form:', error)
+      console.error("Error submitting form:", error);
     }
-  }
+  };
 
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
       <form noValidate onSubmit={handleSubmit} className="h-full overflow-auto">
-
-
         <div className="h-full rounded-lg relative p-[2px]  bg-background">
           <div className="flex ">
             <div className="h-[72px] rounded-tr-md flex-1 items-center flex bg-background">
@@ -279,13 +277,13 @@ const FormContainerProps = ({
                   {/* Employee Details */}
                   {formData.form.formHeader.header}
                 </div>
-                {(formData.form.formType == 'basic' ||
-                  formData.form.formType == 'wizard') && (
-                    <div className="text-[0.9375rem] text-foreground font-medium">
-                      {/* {formData.form.formHeader.title} */}
-                    </div>
-                  )}
-                {formData.form.formType == 'stepper' && (
+                {(formData.form.formType == "basic" ||
+                  formData.form.formType == "wizard") && (
+                  <div className="text-[0.9375rem] text-foreground font-medium">
+                    {/* {formData.form.formHeader.title} */}
+                  </div>
+                )}
+                {formData.form.formType == "stepper" && (
                   <Stepper
                     currentStep={currentStepIndex}
                     onStepChange={setCurrentStepIndex}
@@ -313,11 +311,10 @@ const FormContainerProps = ({
             />
             <FormFooter progress={progress} onCancel={onCancel} />
           </div>
-
         </div>
-      </form >
+      </form>
     </>
-  )
-}
+  );
+};
 
-export default FormContainerProps
+export default FormContainerProps;

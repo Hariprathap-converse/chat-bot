@@ -1,47 +1,47 @@
-'use client'
-import type React from 'react'
-import { useState, useRef, forwardRef, useEffect } from 'react'
-import { cn } from '@/lib/utils'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
+"use client";
+import type React from "react";
+import { useState, useRef, forwardRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   TooltipContent,
   TooltipProvider,
   Tooltip,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { Eye, EyeOff } from 'lucide-react'
-import { DataMasking } from '@/utils/data-masking'
-import Icon from './icons/Icon'
+} from "@/components/ui/tooltip";
+import { Eye, EyeOff } from "lucide-react";
+import { DataMasking } from "@/utils/data-masking";
+import Icon from "./icons/Icon";
 import {
   FormConfig,
   InputFieldConfig,
-} from '@/types/components/form-config.type'
+} from "@/types/components/form-config.type";
 
 interface AdvancedInputProps {
-  config: InputFieldConfig
-  formConfig: FormConfig
-  value: string
-  onChange: (value: string) => void
-  onBlur?: () => void
-  onFocus?: () => void
-  error?: string
-  className?: string
-  formValues?: Record<string, any>
+  config: InputFieldConfig;
+  formConfig: FormConfig;
+  value: string;
+  onChange: (value: string) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  error?: string;
+  className?: string;
+  formValues?: Record<string, any>;
 }
 
 interface PasswordStrength {
-  score: number
-  label: string
-  color: string
+  score: number;
+  label: string;
+  color: string;
 }
 
 const fontSizeClasses = {
-  small: 'text-sm',
-  medium: 'text-base',
-  large: 'text-lg',
-}
+  small: "text-sm",
+  medium: "text-base",
+  large: "text-lg",
+};
 
 export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
   (
@@ -56,230 +56,233 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       className,
       formValues,
     },
-    ref
+    ref,
   ) => {
-    const [isFocused, setIsFocused] = useState(false)
-    const [isHovered, setIsHovered] = useState(false)
-    const [showPassword, setShowPassword] = useState(false)
-    const [hasBeenModified, setHasBeenModified] = useState(false)
-    const [unmaskedValue, setUnmaskedValue] = useState(value)
-    const [displayValue, setDisplayValue] = useState(value)
-    const [showadditionalInfo, setShowadditionalInfo] = useState(false)
-    const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>()
-    const inputRef = useRef<HTMLInputElement>(null)
-    const [isTruncated, setIsTruncated] = useState(false)
+    const [isFocused, setIsFocused] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [hasBeenModified, setHasBeenModified] = useState(false);
+    const [unmaskedValue, setUnmaskedValue] = useState(value);
+    const [displayValue, setDisplayValue] = useState(value);
+    const [showadditionalInfo, setShowadditionalInfo] = useState(false);
+    const [passwordStrength, setPasswordStrength] =
+      useState<PasswordStrength>();
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [isTruncated, setIsTruncated] = useState(false);
 
     // Character count
-    const charCount = value.length
-    const maxLength = config?.validation?.maxLength?.value
+    const charCount = value.length;
+    const maxLength = config?.validation?.maxLength?.value;
     const showCharCounter =
-      config.behavior.showCharCounter && (isFocused || charCount > 0)
+      config.behavior.showCharCounter && (isFocused || charCount > 0);
 
     // Update display value when value changes
     useEffect(() => {
       if (config.behavior.dataMasking?.enabled) {
         if (isFocused && config.behavior.dataMasking.unmaskOnFocus) {
-          setDisplayValue(unmaskedValue)
+          setDisplayValue(unmaskedValue);
         } else if (!isFocused && config.behavior.dataMasking.maskOnBlur) {
           setDisplayValue(
-            DataMasking.maskValue(unmaskedValue, config.behavior.dataMasking)
-          )
+            DataMasking.maskValue(unmaskedValue, config.behavior.dataMasking),
+          );
         } else if (config.behavior.dataMasking.realTimeMasking && !isFocused) {
           setDisplayValue(
-            DataMasking.maskValue(value, config.behavior.dataMasking)
-          )
+            DataMasking.maskValue(value, config.behavior.dataMasking),
+          );
         } else {
-          setDisplayValue(value)
+          setDisplayValue(value);
         }
       } else {
-        setDisplayValue(value)
+        setDisplayValue(value);
       }
 
-      if (config.type == 'password') {
-        const strength = calculatePasswordStrength(value)
-        setPasswordStrength(strength)
+      if (config.type == "password") {
+        const strength = calculatePasswordStrength(value);
+        setPasswordStrength(strength);
       }
-      const inputEl = inputRef.current
+      const inputEl = inputRef.current;
       if (inputEl) {
-        setIsTruncated(charCount * 10 > inputEl.clientWidth)
+        setIsTruncated(charCount * 10 > inputEl.clientWidth);
       }
-    }, [value, isFocused, config.behavior.dataMasking, unmaskedValue])
+    }, [value, isFocused, config.behavior.dataMasking, unmaskedValue]);
 
     // Validation state
-    const isValid = !error
+    const isValid = !error;
     const showClearIcon =
-      config.behavior.showClearIcon && !config.isReadOnly && charCount > 0
+      config.behavior.showClearIcon && !config.isReadOnly && charCount > 0;
 
     // Handle input change with masking
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      let newValue = e.target.value
+      let newValue = e.target.value;
 
       // Handle data masking
       if (config.behavior.dataMasking?.enabled) {
         if (config.behavior.dataMasking.realTimeMasking) {
           newValue = DataMasking.formatAsUserTypes(
             newValue,
-            config.behavior.dataMasking.pattern
-          )
+            config.behavior.dataMasking.pattern,
+          );
         }
-        setUnmaskedValue(DataMasking.unmaskValue(newValue))
+        setUnmaskedValue(DataMasking.unmaskValue(newValue));
       }
 
       onChange(
         config.behavior.dataMasking?.enabled
           ? DataMasking.unmaskValue(newValue)
-          : newValue
-      )
+          : newValue,
+      );
       if (!hasBeenModified && newValue !== config.autoPopulate.defaultValue) {
-        setHasBeenModified(true)
+        setHasBeenModified(true);
       }
-    }
+    };
 
     // Handle focus with unmasking
     const handleFocus = () => {
-      setIsHovered(false)
-      setIsFocused(true)
+      setIsHovered(false);
+      setIsFocused(true);
 
       // Unmask on focus if configured
       if (
         config.behavior.dataMasking?.enabled &&
         config.behavior.dataMasking.unmaskOnFocus
       ) {
-        setDisplayValue(unmaskedValue)
+        setDisplayValue(unmaskedValue);
       }
 
-      onFocus?.()
-    }
+      onFocus?.();
+    };
 
     // Handle blur with masking
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      let newValue = e.target.value
-      setIsFocused(false)
-      setShowadditionalInfo(false)
-      config.value = newValue
+      let newValue = e.target.value;
+      setIsFocused(false);
+      setShowadditionalInfo(false);
+      config.value = newValue;
       // Apply masking on blur if configured
       if (
         config.behavior.dataMasking?.enabled &&
         config.behavior.dataMasking.maskOnBlur
       ) {
         setDisplayValue(
-          DataMasking.maskValue(unmaskedValue, config.behavior.dataMasking)
-        )
+          DataMasking.maskValue(unmaskedValue, config.behavior.dataMasking),
+        );
       }
       // Auto-trim whitespace if configured
       if (config.behavior.autoTrim) {
-        newValue = newValue.trim()
-        onChange(newValue)
+        newValue = newValue.trim();
+        onChange(newValue);
       }
 
-      onBlur?.()
-    }
+      onBlur?.();
+    };
 
     // Handle keyboard events
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       // Handle Enter key
-      if (e.key === 'Enter') {
-        if (config.type === 'text' || config.type === 'email') {
-          inputRef.current?.blur()
+      if (e.key === "Enter") {
+        if (config.type === "text" || config.type === "email") {
+          inputRef.current?.blur();
         }
       }
 
       // Handle Ctrl+A, Ctrl+C, Ctrl+V
       if (e.ctrlKey || e.metaKey) {
-        if (e.key === 'a' || e.key === 'c' || e.key === 'v') {
+        if (e.key === "a" || e.key === "c" || e.key === "v") {
           // Allow default browser behavior
-          return
+          return;
         }
       }
-    }
+    };
 
     // Password Strength
     const calculatePasswordStrength = (password: string) => {
-      let score = 0
+      let score = 0;
 
-      if (password.length >= 1) score += 1
-      if (password.length >= 6) score += 1
-      if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 1
-      if (/[0-9]/.test(password)) score += 1
-      if (/[^A-Za-z0-9]/.test(password)) score += 1
+      if (password.length >= 1) score += 1;
+      if (password.length >= 6) score += 1;
+      if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 1;
+      if (/[0-9]/.test(password)) score += 1;
+      if (/[^A-Za-z0-9]/.test(password)) score += 1;
 
       if (score === 0)
-        return { score: 0, label: 'Very Weak', color: 'bg-gray-300' }
-      if (score === 1) return { score: 1, label: 'Weak', color: 'bg-red-500' }
+        return { score: 0, label: "Very Weak", color: "bg-gray-300" };
+      if (score === 1) return { score: 1, label: "Weak", color: "bg-red-500" };
       if (score === 2)
-        return { score: 2, label: 'Fair', color: 'bg-orange-500' }
-      if (score === 3) return { score: 3, label: 'Good', color: 'bg-green-400' }
-      return { score: 4, label: 'Strong', color: 'bg-green-500' }
-    }
+        return { score: 2, label: "Fair", color: "bg-orange-500" };
+      if (score === 3)
+        return { score: 3, label: "Good", color: "bg-green-400" };
+      return { score: 4, label: "Strong", color: "bg-green-500" };
+    };
 
     // Clear input
     const handleClear = () => {
-      onChange('')
-      inputRef.current?.focus()
-      setIsFocused(true)
-      setDisplayValue('')
-      setUnmaskedValue('')
-    }
+      onChange("");
+      inputRef.current?.focus();
+      setIsFocused(true);
+      setDisplayValue("");
+      setUnmaskedValue("");
+    };
 
     // Toggle password visibility
     const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword)
-    }
+      setShowPassword(!showPassword);
+    };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
       // Alternative approach: prevent keypress for invalid characters
-      const char = e.key
+      const char = e.key;
 
       // Allow control keys (backspace, delete, arrow keys, etc.)
-      if (char.length > 1) return
+      if (char.length > 1) return;
       if (config?.validation?.pattern) {
-        const allowRegex = new RegExp(`[${config?.validation?.pattern}]`)
+        const allowRegex = new RegExp(`[${config?.validation?.pattern}]`);
 
         if (!allowRegex.test(char)) {
-          setShowadditionalInfo(true)
-          e.preventDefault()
+          setShowadditionalInfo(true);
+          e.preventDefault();
         }
       }
-    }
+    };
 
     // Determine if field should be visible
     const isVisible =
       config.isVisible !== false &&
       (!config.conditionalLogic?.showWhen ||
         config.conditionalLogic.showWhen.every((condition) => {
-          const fieldValue = formValues?.[condition.field]
+          const fieldValue = formValues?.[condition.field];
           switch (condition.operator) {
-            case 'equals':
-              return fieldValue === condition.value
-            case 'not_equals':
-              return fieldValue !== condition.value
-            case 'contains':
-              return String(fieldValue).includes(condition.value)
-            case 'greater_than':
-              return Number(fieldValue) > Number(condition.value)
-            case 'less_than':
-              return Number(fieldValue) < Number(condition.value)
+            case "equals":
+              return fieldValue === condition.value;
+            case "not_equals":
+              return fieldValue !== condition.value;
+            case "contains":
+              return String(fieldValue).includes(condition.value);
+            case "greater_than":
+              return Number(fieldValue) > Number(condition.value);
+            case "less_than":
+              return Number(fieldValue) < Number(condition.value);
             default:
-              return true
+              return true;
           }
-        }))
+        }));
 
-    if (!isVisible) return null
+    if (!isVisible) return null;
 
     const shouldShowTooltip =
       isTruncated &&
-      ((formConfig.viewMode && config.type !== 'password') ||
-        (!formConfig.viewMode && !isFocused))
+      ((formConfig.viewMode && config.type !== "password") ||
+        (!formConfig.viewMode && !isFocused));
 
     const inputType =
-      config.type === 'password' && showPassword ? 'text' : config.type
+      config.type === "password" && showPassword ? "text" : config.type;
 
     const labelRightElement = (
-      <div className={cn('print:!hidden')}>
+      <div className={cn("print:!hidden")}>
         {!config.isDisabled && !formConfig.viewMode && (
           <div
-            className={`flex flex-row items-center ${formConfig.layout.labelPosition === 'left' && 'justify-end mb-1'
-              }`}
+            className={`flex flex-row items-center ${
+              formConfig.layout.labelPosition === "left" && "justify-end mb-1"
+            }`}
           >
             {showadditionalInfo &&
               isFocused &&
@@ -366,42 +369,46 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
               </a>
             )}
             {/* //password  */}
-            {config.type == 'password' && passwordStrength && (
+            {config.type == "password" && passwordStrength && (
               <div className="flex gap-1">
                 <div
-                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${passwordStrength.score >= 1 || error
+                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${
+                    passwordStrength.score >= 1 || error
                       ? passwordStrength.color
-                      : 'bg-gray-300'
-                    }`}
+                      : "bg-gray-300"
+                  }`}
                   style={{
-                    width: '20px',
+                    width: "20px",
                   }}
                 />
                 <div
-                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${passwordStrength.score >= 2
+                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${
+                    passwordStrength.score >= 2
                       ? passwordStrength.color
-                      : 'bg-gray-300'
-                    }`}
+                      : "bg-gray-300"
+                  }`}
                   style={{
-                    width: passwordStrength.score >= 2 ? '12px' : '10px',
+                    width: passwordStrength.score >= 2 ? "12px" : "10px",
                   }}
                 />
                 <div
-                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${passwordStrength.score >= 3
+                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${
+                    passwordStrength.score >= 3
                       ? passwordStrength.color
-                      : 'bg-gray-300'
-                    }`}
+                      : "bg-gray-300"
+                  }`}
                   style={{
-                    width: passwordStrength.score >= 3 ? '12px' : '10px',
+                    width: passwordStrength.score >= 3 ? "12px" : "10px",
                   }}
                 />
                 <div
-                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${passwordStrength.score >= 4
+                  className={`rounded-sm transition-all duration-500 ease-out h-[3px] ${
+                    passwordStrength.score >= 4
                       ? passwordStrength.color
-                      : 'bg-gray-300'
-                    }`}
+                      : "bg-gray-300"
+                  }`}
                   style={{
-                    width: passwordStrength.score >= 4 ? '12px' : '10px',
+                    width: passwordStrength.score >= 4 ? "12px" : "10px",
                   }}
                 />
               </div>
@@ -409,7 +416,7 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
           </div>
         )}
       </div>
-    )
+    );
 
     const inputElement = (
       <div className="">
@@ -445,7 +452,7 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
             required={config.isRequired.value}
             maxLength={maxLength}
             spellCheck={config.behavior.spellCheck}
-            autoComplete={config.autoPopulate.autoFill ? 'on' : 'off'}
+            autoComplete={config.autoPopulate.autoFill ? "on" : "off"}
             aria-describedby={`${config.id}-helper ${config.id}-error`}
             aria-invalid={!isValid}
             aria-required={config.isRequired.value}
@@ -462,18 +469,18 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
             }
             className={cn(
               fontSizeClasses[formConfig.fontSize],
-              config.icon?.prefix && 'pl-10',
-              (config.type === 'password' || config.icon?.suffix) && 'pr-10',
-              isHovered && '!border-b-primary !border-b dark:!border-b',
+              config.icon?.prefix && "pl-10",
+              (config.type === "password" || config.icon?.suffix) && "pr-10",
+              isHovered && "!border-b-primary !border-b dark:!border-b",
               isFocused &&
-              '!border-borderFocused !border-b-primary  !border-b-2 transition-all ease-out duration-200 focus:border-b-transparent',
-              error && 'dark:!border-b-destructive !border-b-destructive ',
+                "!border-borderFocused !border-b-primary  !border-b-2 transition-all ease-out duration-200 focus:border-b-transparent",
+              error && "dark:!border-b-destructive !border-b-destructive ",
               config.isDisabled &&
-              'border-borderFocused  bg-disabledBg  disabled:text-disabledText disabled:opacity-100 border-[1px] ',
+                "border-borderFocused  bg-disabledBg  disabled:text-disabledText disabled:opacity-100 border-[1px] ",
               formConfig.viewMode &&
-              'bg-disabledBg  border-[0.5px] disabled:text-disabledText disabled:opacity-100',
-              'placeholder:text-disabledPlaceholder min-w-0 placeholder:!text-[14px]  truncate  placeholder:font-light font-medium h-[35px] rounded-t-[4px] rounded-b-[3px] border-[1px]',
-              className
+                "bg-disabledBg  border-[0.5px] disabled:text-disabledText disabled:opacity-100",
+              "placeholder:text-disabledPlaceholder min-w-0 placeholder:!text-[14px]  truncate  placeholder:font-light font-medium h-[35px] rounded-t-[4px] rounded-b-[3px] border-[1px]",
+              className,
             )}
             style={
               {
@@ -483,21 +490,21 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
           />
           <div
             className={cn(
-              'absolute bottom-0 left-0  w-full  h-0.5 bg-primary transition-all duration-00 ease-out',
-              isFocused ? 'w-full' : 'w-0'
+              "absolute bottom-0 left-0  w-full  h-0.5 bg-primary transition-all duration-00 ease-out",
+              isFocused ? "w-full" : "w-0",
             )}
           />
 
           {/* Action icons */}
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-            {config.type === 'password' && (
+            {config.type === "password" && (
               <Button
                 type="button"
                 variant="ghost"
                 size="lg"
                 className="h-6 w-6 p-0 hover:bg-muted"
                 onClick={togglePasswordVisibility}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
                   <EyeOff className="text-lg w-10 dark:text-[#414650]" />
@@ -521,7 +528,7 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
                 />
               </svg>
             )}
-            {config.type !== 'password' && config.icon?.suffix && (
+            {config.type !== "password" && config.icon?.suffix && (
               <Icon
                 className="dark:text-[#414650] text-[#C5C5C5]"
                 icon={config.icon.suffix}
@@ -543,13 +550,13 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
           </TooltipProvider>
         )}
       </div>
-    )
+    );
 
     const labelElement = config.label && (
       <div
         className={cn(
-          formConfig.layout.labelPosition == 'left' ? 'min-h-[6.25rem]' : ' ',
-          'flex flex-row justify-between items-center '
+          formConfig.layout.labelPosition == "left" ? "min-h-[6.25rem]" : " ",
+          "flex flex-row justify-between items-center ",
         )}
       >
         <div className="flex items-center gap-1 w-full">
@@ -583,8 +590,9 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
             htmlFor={config.id}
             className={cn(
               fontSizeClasses[formConfig.fontSize],
-              'font-normal text-disabledText',
-              config.isRequired.value && "after:content-['*'] after:text-red-500  after:ml-0"
+              "font-normal text-disabledText",
+              config.isRequired.value &&
+                "after:content-['*'] after:text-red-500  after:ml-0",
             )}
           >
             {config.label}
@@ -594,7 +602,7 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className={cn('print:hidden')}>
+                  <div className={cn("print:hidden")}>
                     <svg
                       width="17"
                       height="16"
@@ -616,22 +624,22 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
           )}
         </div>
         <div>
-          {formConfig.layout.labelPosition !== 'left' && labelRightElement}
+          {formConfig.layout.labelPosition !== "left" && labelRightElement}
         </div>
       </div>
-    )
+    );
 
-    if (formConfig.layout.labelPosition === 'left') {
+    if (formConfig.layout.labelPosition === "left") {
       return (
         <div className=" flex items-center flex-row gap-4">
           <div
             className={cn(
-              'w-1/3 relative my-auto',
-              (showClearIcon || showCharCounter) && 'pt-4',
-              !showClearIcon && !showCharCounter && error && '!pt-3 -top-3',
-              error && 'pt-0',
+              "w-1/3 relative my-auto",
+              (showClearIcon || showCharCounter) && "pt-4",
+              !showClearIcon && !showCharCounter && error && "!pt-3 -top-3",
+              error && "pt-0",
               formConfig.viewMode ||
-              (formConfig.layout.labelPosition == 'left' && 'pt-0')
+                (formConfig.layout.labelPosition == "left" && "pt-0"),
             )}
           >
             {labelElement}
@@ -667,7 +675,7 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
             </div>
           </div>
         </div>
-      )
+      );
     }
 
     return (
@@ -708,8 +716,8 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
           </div>
         )}
       </div>
-    )
-  }
-)
+    );
+  },
+);
 
-AdvancedInput.displayName = 'AdvancedInput'
+AdvancedInput.displayName = "AdvancedInput";

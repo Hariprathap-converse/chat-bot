@@ -65,7 +65,6 @@ export const dynamicIconSources: Record<string, any> = {
   SendIcon,
 };
 
-
 export const getIcon = (name?: string, className?: string) => {
   if (!name) return null;
 
@@ -156,7 +155,7 @@ export default function DynamicHome() {
                     onClick={() => setSelectedSection(item.key)}
                     className={cn(
                       selectedSection == item.key ? "border-hover-border" : "",
-                      "group bg-white cursor-pointer w-[150px] md:w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]"
+                      "group bg-white cursor-pointer w-[150px] md:w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]",
                     )}
                   >
                     <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[39%] left-[46%] bg-circle rounded-full"></div>
@@ -165,7 +164,7 @@ export default function DynamicHome() {
                         selectedSection == item.key
                           ? "opacity-100"
                           : " opacity-0 group-hover:opacity-100",
-                        "absolute top-3 right-4 translate-y-1 group-hover:translate-y-0 transition-all duration-500 ease-out "
+                        "absolute top-3 right-4 translate-y-1 group-hover:translate-y-0 transition-all duration-500 ease-out ",
                       )}
                     >
                       <Sparkles className="text-[hsla(245,96%,70%,1)] h-5 w-5" />
@@ -174,13 +173,13 @@ export default function DynamicHome() {
                     <span
                       className={cn(
                         selectedSection == item.key &&
-                        "scale-[130%] origin-bottom ",
-                        "relative bottom-2 group-hover:scale-[130%] origin-bottom transition-all duration-[800ms] h-[50px] z-50"
+                          "scale-[130%] origin-bottom ",
+                        "relative bottom-2 group-hover:scale-[130%] origin-bottom transition-all duration-[800ms] h-[50px] z-50",
                       )}
                     >
                       {getIcon(
                         item.icon,
-                        "h-[55px] w-[55px] text-heading group-hover:text-foreground stroke-[0.7px] group-hover:stroke-[1px]"
+                        "h-[55px] w-[55px] text-heading group-hover:text-foreground stroke-[0.7px] group-hover:stroke-[1px]",
                       )}
                     </span>
                     <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300 z-50 !text-[12px] font-medium text-start">
@@ -206,7 +205,6 @@ export default function DynamicHome() {
                     key={index}
                     className="border group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
                     onClick={() => router.push(`/chat`)}
-
                   >
                     <span>{getIcon(item.icon)}</span>
                     <span className="text-xs font-medium">{item.label}</span>
@@ -238,7 +236,7 @@ export default function DynamicHome() {
                         <span>
                           {getIcon(
                             item.icon,
-                            "h-4 w-4 group-hover:text-[hsla(245,96%,70%,1)]"
+                            "h-4 w-4 group-hover:text-[hsla(245,96%,70%,1)]",
                           )}
                         </span>
                         <span className="text-xs font-medium">
@@ -251,7 +249,7 @@ export default function DynamicHome() {
               ))
           )}
         </div>
-      </main >
-    </div >
+      </main>
+    </div>
   );
 }

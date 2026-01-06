@@ -10,7 +10,7 @@ export const fetchDropDownData = async (queryString: string) => {
 
     // Build API URL
     const url = `http://localhost:4000/options?q=${encodeURIComponent(
-      search
+      search,
     )}&_page=${page}&_limit=${recordLimit}`;
 
     const res = await fetch(url);

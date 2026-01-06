@@ -17,8 +17,12 @@ import { toast } from "sonner";
 const resetPasswordSchema = z
   .object({
     otp: z.string().min(1, { message: "OTP is required" }),
-    newPassword: z.string().min(6, { message: "Password must be at least 6 characters" }),
-    confirmPassword: z.string().min(1, { message: "Confirm Password is required" }),
+    newPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z
+      .string()
+      .min(1, { message: "Confirm Password is required" }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords do not match",
@@ -34,7 +38,11 @@ export default function ResetPasswordForm() {
   const [loading, setLoading] = React.useState(false);
   const [email, setEmail] = React.useState("");
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ResetPasswordFormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
   });
 
@@ -49,7 +57,9 @@ export default function ResetPasswordForm() {
     try {
       const { authService } = await import("@/services/auth");
       await authService.resetPassword(email, data.otp, data.newPassword);
-      toast.success("Password reset successfully. Please login with your new password.");
+      toast.success(
+        "Password reset successfully. Please login with your new password.",
+      );
       router.push("/login");
     } catch (err: any) {
       toast.error(err.message || "Failed to reset password");
@@ -93,20 +103,44 @@ export default function ResetPasswordForm() {
             <div className="flex flex-col items-center space-y-4 gap-2 w-full max-w-[450px]">
               {/* OTP */}
               <div className="w-full space-y-1">
-                <Input {...register("otp")} placeholder="Enter OTP" className="p-2" />
-                {errors.otp && <p className="text-red-500 text-xs">{errors.otp.message}</p>}
+                <Input
+                  {...register("otp")}
+                  placeholder="Enter OTP"
+                  className="p-2"
+                />
+                {errors.otp && (
+                  <p className="text-red-500 text-xs">{errors.otp.message}</p>
+                )}
               </div>
 
               {/* New Password */}
               <div className="w-full space-y-1">
-                <Input {...register("newPassword")} type="password" placeholder="New Password" className="p-2" />
-                {errors.newPassword && <p className="text-red-500 text-xs">{errors.newPassword.message}</p>}
+                <Input
+                  {...register("newPassword")}
+                  type="password"
+                  placeholder="New Password"
+                  className="p-2"
+                />
+                {errors.newPassword && (
+                  <p className="text-red-500 text-xs">
+                    {errors.newPassword.message}
+                  </p>
+                )}
               </div>
 
               {/* Confirm Password */}
               <div className="w-full space-y-1">
-                <Input {...register("confirmPassword")} type="password" placeholder="Confirm Password" className="p-2" />
-                {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword.message}</p>}
+                <Input
+                  {...register("confirmPassword")}
+                  type="password"
+                  placeholder="Confirm Password"
+                  className="p-2"
+                />
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-xs">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
               <Button onClick={handleSubmit(onSubmit)} disabled={loading}>
@@ -114,8 +148,10 @@ export default function ResetPasswordForm() {
               </Button>
 
               <div className="text-sm text-sub-heading font-medium mt-4 flex gap-1">
-                Remember your password? 
-                <Link href="/login" className="text-dark-circle font-medium">Log In</Link>
+                Remember your password?
+                <Link href="/login" className="text-dark-circle font-medium">
+                  Log In
+                </Link>
               </div>
             </div>
           </CardContent>

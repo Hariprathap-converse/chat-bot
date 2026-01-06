@@ -22,8 +22,8 @@ export interface CustomSelectProps {
 // time input field
 
 export interface TimeInputProps {
-  value: string
-  onChange: (value: string) => void
-  placeholder?: string
-  className?: string
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
 }

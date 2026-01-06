@@ -62,8 +62,10 @@ export function NavProjects({
                   >
                     <div className="flex w-full gap-2 items-center min-w-0">
                       <item.icon className="w-5 h-5 shrink-0" />
-                      <span className="whitespace-nowrap overflow-hidden text-ellipsis transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:translate-x-2 group-data-[collapsible=icon]:transition-none
-    group-data-[collapsible=icon]:w-0">
+                      <span
+                        className="whitespace-nowrap overflow-hidden text-ellipsis transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:translate-x-2 group-data-[collapsible=icon]:transition-none
+    group-data-[collapsible=icon]:w-0"
+                      >
                         {item.name}
                       </span>
                     </div>

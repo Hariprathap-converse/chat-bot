@@ -71,7 +71,7 @@ export function ToolsLoader({
         "transition-all duration-300 ease-in-out",
         isPopupOpen
           ? "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in"
-          : "contents" // Inline mode
+          : "contents", // Inline mode
       )}
     >
       <div
@@ -79,7 +79,7 @@ export function ToolsLoader({
           "relative overflow-hidden bg-white shadow-xl border border-slate-100 transition-all duration-300",
           isPopupOpen
             ? "w-full max-w-sm rounded-2xl"
-            : "w-full rounded-2xl my-2"
+            : "w-full rounded-2xl my-2",
         )}
       >
         {/* Refactored Header: White bg, Gradient Text */}
@@ -102,7 +102,7 @@ export function ToolsLoader({
                 "w-[7px] h-[7px] rounded-full transition-colors duration-300",
                 status === "processing"
                   ? "bg-indigo-500 animate-[pulse_1s_infinite]"
-                  : "bg-slate-200"
+                  : "bg-slate-200",
               )}
             />
             <div
@@ -110,7 +110,7 @@ export function ToolsLoader({
                 "w-[7px] h-[7px] rounded-full transition-colors duration-300",
                 status === "sending"
                   ? "bg-indigo-500 animate-[pulse_1s_infinite]"
-                  : "bg-slate-200"
+                  : "bg-slate-200",
               )}
             />
             <div
@@ -120,7 +120,7 @@ export function ToolsLoader({
                   ? "bg-green-500"
                   : status === "error"
                     ? "bg-red-500"
-                    : "bg-slate-200"
+                    : "bg-slate-200",
               )}
             />
           </div>
@@ -133,7 +133,7 @@ export function ToolsLoader({
               ? "p-0 min-h-[50px]"
               : "min-h-[200px] p-5 flex flex-col justify-center relative",
             "bg-slate-50/30",
-            isPopupOpen && "!min-h-[200px]"
+            isPopupOpen && "!min-h-[200px]",
           )}
         >
           {/* STAGE 1: SCANNING */}
@@ -164,7 +164,7 @@ export function ToolsLoader({
                 "relative w-full bg-white rounded-xl border border-slate-100 shadow-sm p-4 mx-auto transition-all duration-300",
                 internalStage === "fly"
                   ? "animate-paper-plane"
-                  : "animate-scale-in"
+                  : "animate-scale-in",
               )}
             >
               <div className="flex items-center gap-3 mb-3 border-b border-slate-50 pb-3">
@@ -219,7 +219,7 @@ export function ToolsLoader({
               <div
                 className={cn(
                   isPopupOpen ? "min-h-[200px]" : "min-h-[100px]",
-                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 "
+                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 ",
                 )}
               >
                 <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export function ToolsLoader({
               <div
                 className={cn(
                   isPopupOpen ? "min-h-[200px]" : "min-h-[50px]",
-                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 "
+                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 ",
                 )}
               >
                 <div className="flex items-center gap-4">
@@ -277,7 +277,7 @@ export function ToolsLoader({
                     ? "bg-green-500"
                     : status === "error"
                       ? "bg-red-500"
-                      : "bg-indigo-500 animate-pulse"
+                      : "bg-indigo-500 animate-pulse",
                 )}
               />
               {status === "error" ? "System Error" : "System Active"}
@@ -301,7 +301,7 @@ export function ToolsLoader({
                     ? "bg-green-500"
                     : status === "error"
                       ? "bg-red-500"
-                      : "bg-indigo-500 animate-pulse"
+                      : "bg-indigo-500 animate-pulse",
                 )}
               />
               {status === "error" ? "System Error" : "System Active"}

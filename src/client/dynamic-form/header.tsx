@@ -1,25 +1,25 @@
-import { SidebarTrigger } from '@/components/ui/sidebar'
-import React from 'react'
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import React from "react";
 import {
   NavTrigger,
   NotificationIcon,
-} from './icons/dynamic-form/all-dynamic-form-icons'
-import { ChevronRight } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+} from "./icons/dynamic-form/all-dynamic-form-icons";
+import { ChevronRight } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-} from '@/components/ui/breadcrumb'
-import { useLayout } from '@/context/layout-context'
+} from "@/components/ui/breadcrumb";
+import { useLayout } from "@/context/layout-context";
 
 interface HeaderProps {
-  toggleMobileNav: () => void
+  toggleMobileNav: () => void;
 }
 const Header = ({ toggleMobileNav }: HeaderProps) => {
-  const { formData } = useLayout()
+  const { formData } = useLayout();
   return (
     <>
       <div className="flex justify-between items-center pr-[10px]">
@@ -38,7 +38,7 @@ const Header = ({ toggleMobileNav }: HeaderProps) => {
                 {Array.isArray(formData.form.breadcrumbs) &&
                   formData.form.breadcrumbs.map((item, index) => {
                     const isLast =
-                      index === formData.form.breadcrumbs.length - 1
+                      index === formData.form.breadcrumbs.length - 1;
                     return (
                       <React.Fragment key={item.label + index}>
                         <BreadcrumbItem>
@@ -61,7 +61,7 @@ const Header = ({ toggleMobileNav }: HeaderProps) => {
                           </div>
                         )}
                       </React.Fragment>
-                    )
+                    );
                   })}
               </BreadcrumbList>
             </Breadcrumb>
@@ -85,7 +85,7 @@ const Header = ({ toggleMobileNav }: HeaderProps) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

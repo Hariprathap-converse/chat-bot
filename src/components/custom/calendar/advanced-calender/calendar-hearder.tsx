@@ -1,12 +1,19 @@
-
-import { CalenderDoubleIconNext, CalenderDoubleIconPrevious, NextCalenderIcon, PreviousCalenderIcon } from "@/client/dynamic-form/icons/calendar/date-picker";
-import { Tooltip, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  CalenderDoubleIconNext,
+  CalenderDoubleIconPrevious,
+  NextCalenderIcon,
+  PreviousCalenderIcon,
+} from "@/client/dynamic-form/icons/calendar/date-picker";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { TooltipContent } from "@/components/ui/tootip-wrapper";
 import { CalendarHeaderProps } from "@/types/components/calender";
 
 import { formatDate } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
-
 
 export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   view,
@@ -58,9 +65,9 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
                       const newMonth = toZonedTime(
                         new Date(
                           zonedMonth.getFullYear() - 1,
-                          zonedMonth.getMonth()
+                          zonedMonth.getMonth(),
                         ),
-                        timeZone
+                        timeZone,
                       );
                       setMonth(newMonth);
                     }}
@@ -80,8 +87,9 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <div
-                className={`${view === "year" || view === "month" ? "xs:pl-[25px]" : ""
-                  } user-select-none flex items-center justify-center cursor-pointer`}
+                className={`${
+                  view === "year" || view === "month" ? "xs:pl-[25px]" : ""
+                } user-select-none flex items-center justify-center cursor-pointer`}
               >
                 <div
                   onClick={() => {
@@ -93,20 +101,20 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
                         toZonedTime(
                           new Date(
                             zonedMonth.getFullYear() - 1,
-                            zonedMonth.getMonth()
+                            zonedMonth.getMonth(),
                           ),
-                          timeZone
-                        )
+                          timeZone,
+                        ),
                       );
                     } else {
                       setMonth(
                         toZonedTime(
                           new Date(
                             zonedMonth.getFullYear(),
-                            zonedMonth.getMonth() - 1
+                            zonedMonth.getMonth() - 1,
                           ),
-                          timeZone
-                        )
+                          timeZone,
+                        ),
                       );
                     }
                   }}
@@ -120,13 +128,15 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
             </TooltipTrigger>
             {!isPreviousDisabled() && (
               <TooltipContent
-                className={`${!isPreviousDisabled() ? "hidden" : "block"
-                  } xs:hidden inter xss:hidden z-[9999] sm:hidden xl:block 3xl:block pt-1 top-[-17px] left-[-34px] xl:left-[-39px] text-nowrap text-[13px] absolute 3xl:top-[-17px] 3xl:left-[-39px] font-medium rounded w-fit px-[7px] h-[27px] flex text-center ${view === "year"
+                className={`${
+                  !isPreviousDisabled() ? "hidden" : "block"
+                } xs:hidden inter xss:hidden z-[9999] sm:hidden xl:block 3xl:block pt-1 top-[-17px] left-[-34px] xl:left-[-39px] text-nowrap text-[13px] absolute 3xl:top-[-17px] 3xl:left-[-39px] font-medium rounded w-fit px-[7px] h-[27px] flex text-center ${
+                  view === "year"
                     ? "3xl:left-[-39px]"
                     : view == "month"
                       ? "3xl:left-[-29px]"
                       : "3xl:top-[-17px] 3xl:left-[-42px]"
-                  }`}
+                }`}
               >
                 {view === "year" ? "Previous Years" : "Last Month"}
               </TooltipContent>
@@ -140,7 +150,7 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
           className="text-primary sm:text-[10px] font-semibold 3xl:text-[14px] user-select-none inter duration-1000 cursor-pointer xs:text-[11px] xss:text-[12px] text-[14px]"
           onClick={() =>
             setView(
-              view === "day" ? "month" : view === "month" ? "year" : "day"
+              view === "day" ? "month" : view === "month" ? "year" : "day",
             )
           }
         >
@@ -152,16 +162,18 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         </div>
       </div>
       <div
-        className={`${view == "year" || view == "month" ? "xs:pr-[33px]" : ""
-          } flex pt-[4px] w-[33.33%] justify-end xs:pr-2 3xl:pr-[12px]`}
+        className={`${
+          view == "year" || view == "month" ? "xs:pr-[33px]" : ""
+        } flex pt-[4px] w-[33.33%] justify-end xs:pr-2 3xl:pr-[12px]`}
       >
         {/* Next Month or Next 16 */}
         <TooltipProvider delayDuration={0}>
           <Tooltip>
             <TooltipTrigger asChild>
               <div
-                className={`flex items-center justify-center cursor-pointer ${view === "year" || view === "month" ? "3xl:pr-[25px]" : ""
-                  }`}
+                className={`flex items-center justify-center cursor-pointer ${
+                  view === "year" || view === "month" ? "3xl:pr-[25px]" : ""
+                }`}
               >
                 <div
                   onClick={() => {
@@ -173,20 +185,20 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
                         toZonedTime(
                           new Date(
                             zonedMonth.getFullYear() + 1,
-                            zonedMonth.getMonth()
+                            zonedMonth.getMonth(),
                           ),
-                          timeZone
-                        )
+                          timeZone,
+                        ),
                       );
                     } else {
                       setMonth(
                         toZonedTime(
                           new Date(
                             zonedMonth.getFullYear(),
-                            zonedMonth.getMonth() + 1
+                            zonedMonth.getMonth() + 1,
                           ),
-                          timeZone
-                        )
+                          timeZone,
+                        ),
                       );
                     }
                   }}
@@ -197,12 +209,13 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
             </TooltipTrigger>
             {!isNextDisabled() && (
               <TooltipContent
-                className={`z-[9999] inter xs:hidden xss:hidden sm:hidden xl:block 3xl:block pt-1 top-[-17px] left-[-34px] text-nowrap text-[13px] absolute 3xl:top-[-19px] 3xl:left-[-39px] font-medium rounded w-fit px-[7px] h-[27px] xl:left-[-40px] flex text-center ${view === "year"
+                className={`z-[9999] inter xs:hidden xss:hidden sm:hidden xl:block 3xl:block pt-1 top-[-17px] left-[-34px] text-nowrap text-[13px] absolute 3xl:top-[-19px] 3xl:left-[-39px] font-medium rounded w-fit px-[7px] h-[27px] xl:left-[-40px] flex text-center ${
+                  view === "year"
                     ? "3xl:left-[-54px]"
                     : view == "month"
                       ? "3xl:left-[-55px]"
                       : "3xl:top-[-19px] 3xl:left-[-42px]"
-                  }`}
+                }`}
               >
                 {view === "year" ? "Next Years" : "Next Month"}
               </TooltipContent>
@@ -220,9 +233,9 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
                       const newMonth = toZonedTime(
                         new Date(
                           zonedMonth.getFullYear() + 1,
-                          zonedMonth.getMonth()
+                          zonedMonth.getMonth(),
                         ),
-                        timeZone
+                        timeZone,
                       );
                       setMonth(newMonth);
                     }}

@@ -26,7 +26,7 @@ const DownArrow = () => {
         />
       </svg>
     </>
-  )
-}
+  );
+};
 
-export default DownArrow
+export default DownArrow;
