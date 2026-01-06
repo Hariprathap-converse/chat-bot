@@ -15,7 +15,6 @@ export function ToolsLoader({
   status = "processing",
   onPopupClose,
 }: ToolsLoaderProps) {
-  // const [status, setStatus] = useState(initialStatus);
   const [internalStage, setInternalStage] = useState<
     "scan" | "draft" | "fly" | "done" | "error"
   >("scan");

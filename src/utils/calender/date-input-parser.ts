@@ -1,4 +1,4 @@
-import { DateFormatPart } from "@/types/calender";
+import { DateFormatPart } from "@/types/components/calender";
 
 export function parseFormat(format: string): DateFormatPart[] {
   const parts: DateFormatPart[] = [];
