@@ -2,7 +2,7 @@
  * Chat Message Component
  * Displays individual chat messages with actions
  */
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Copy,
   CopyCheck,
@@ -145,7 +145,7 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
   // Handle Special Components inline
   if (message.type === "website-loader") {
     return (
-      <div className="flex w-full justify-start mt-2 mb-2">
+      <div className="flex w-full  justify-start mt-2 mb-2">
         <div className="flex items-start w-full gap-2">
           <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center shrink-0">
             <NavChatBot />
@@ -160,20 +160,22 @@ export function ChatMessage({ message, index, isUser }: ChatMessageProps) {
 
   if (message.type === "email-tool" || message.type === "sms-tool") {
     return (
-      <div className="flex w-full justify-start mt-2 mb-2">
-        <div className="flex items-start w-full gap-2">
-          <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center shrink-0">
-            <NavChatBot />
-          </div>
-          <div className="w-full max-w-[400px]">
-            <ToolsLoader
-              type={message.type === "email-tool" ? "email" : "sms"}
-              target={message.toolData?.target}
-              status={message.toolData?.status ?? "processing"}
-            />
+      <>
+        <div className="flex w-full h-full justify-start mt-2 mb-2">
+          <div className="flex items-start w-full gap-2">
+            <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center shrink-0">
+              <NavChatBot />
+            </div>
+            <div className="w-full max-w-[400px] relative">
+              <ToolsLoader
+                type={message.type === "email-tool" ? "email" : "sms"}
+                target={message.toolData?.target}
+                status={message.toolData?.status ?? "processing"}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
