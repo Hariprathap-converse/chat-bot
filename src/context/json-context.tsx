@@ -8,7 +8,6 @@ import {
   ReactNode,
 } from "react";
 
-
 interface Header {
   title: string;
   subtitle: string;
@@ -17,7 +16,7 @@ interface Header {
 }
 
 interface SectionItem {
-  key: string; 
+  key: string;
   label: string;
   icon: string;
   hoverIcon?: string;
@@ -35,7 +34,7 @@ interface FooterItem {
 }
 
 interface FooterSection {
-  sectionKey: string; 
+  sectionKey: string;
   title: string;
   icon: string | null;
   items: FooterItem[];
@@ -48,7 +47,7 @@ interface OpsBotData {
     buttonIcon: string;
   };
   sections: Section[];
-  footerSection: FooterSection[]; 
+  footerSection: FooterSection[];
   chat: {
     introTitle: string;
     subtitle: string;
@@ -162,7 +161,6 @@ const defaultData: OpsBotData = {
       ],
     },
 
-    
     {
       sectionKey: "payroll",
       title: "Payroll Operations",
@@ -183,12 +181,10 @@ const defaultData: OpsBotData = {
   },
 };
 
-
 const OpsBotContext = createContext<OpsBotContextType>({
   data: defaultData,
   setData: () => {},
 });
-
 
 export const OpsBotProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<OpsBotData>(defaultData);
@@ -204,12 +200,11 @@ export const OpsBotProvider = ({ children }: { children: ReactNode }) => {
         setData(parsed);
       } catch (e) {
         console.error("Failed to parse opsBotData from localStorage", e);
-        
+
         localStorage.setItem("opsBotData", JSON.stringify(defaultData));
         setData(defaultData);
       }
     } else {
-      
       localStorage.setItem("opsBotData", JSON.stringify(defaultData));
     }
   }, []);
@@ -227,6 +222,5 @@ export const OpsBotProvider = ({ children }: { children: ReactNode }) => {
     </OpsBotContext.Provider>
   );
 };
-
 
 export const useOpsBot = () => useContext(OpsBotContext);

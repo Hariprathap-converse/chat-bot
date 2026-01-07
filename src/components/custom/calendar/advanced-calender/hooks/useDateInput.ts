@@ -36,7 +36,7 @@ export interface useDateInputProps {
     num: number,
     min: number,
     max: number,
-    state?: "year" | undefined
+    state?: "year" | undefined,
   ) => number;
   parseInputDate: (inputValue: string) => Date | null;
 }
@@ -70,12 +70,12 @@ export const useDateInput = ({
     max: number,
     state: "day" | "month" | "year" | "monthName",
     digits: number,
-    MIN_YEAR?: number | undefined
+    MIN_YEAR?: number | undefined,
   ) => {
     const key = e.key;
     const buffer = buffers.current[state];
     const currentIndex = parts.findIndex(
-      (p: { type: string }) => p.type === state
+      (p: { type: string }) => p.type === state,
     );
     const timeZone = "Asia/Kolkata";
 
@@ -95,7 +95,6 @@ export const useDateInput = ({
     });
 
     const parsedDate = parseInputDate(fullDate);
-    console.log("parsedDate: ", parsedDate);
 
     const zonedDate = parsedDate
       ? toZonedTime(parsedDate, timeZone)
@@ -166,7 +165,7 @@ export const useDateInput = ({
         typedBuffer.current += key;
 
         const matchIndex = monthNames.findIndex((m: string) =>
-          m.toLowerCase().startsWith(typedBuffer.current.toLowerCase())
+          m.toLowerCase().startsWith(typedBuffer.current.toLowerCase()),
         );
 
         if (matchIndex !== -1) {
@@ -213,7 +212,6 @@ export const useDateInput = ({
       if (state === "monthName") {
         setCount((c: number) => {
           const newIndex = (c + 1) % 12;
-          console.log("newIndex: ", newIndex);
           setMonthName(monthNames[newIndex]);
           return newIndex;
         });

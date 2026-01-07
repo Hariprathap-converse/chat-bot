@@ -20,7 +20,6 @@ export function middleware(request: NextRequest) {
   }
 
   if (!token && !isPublicRoute) {
-
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

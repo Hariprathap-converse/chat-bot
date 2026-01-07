@@ -50,7 +50,7 @@ export const useMultiSelectLogic = ({
       searchQuery: string,
       pageNum: number,
       append?: boolean,
-      value?: any
+      value?: any,
     ) => {
       if (config?.dataSource !== "api") return;
 
@@ -71,7 +71,7 @@ export const useMultiSelectLogic = ({
           setOptions((prev) => {
             const existing = new Set(prev.map((o: any) => o.value));
             const unique = newOptions.filter(
-              (opt: any) => !existing.has(opt.value)
+              (opt: any) => !existing.has(opt.value),
             );
             return [...prev, ...unique];
           });
@@ -94,8 +94,8 @@ export const useMultiSelectLogic = ({
                 (item) =>
                   !normalized.some(
                     (sel) =>
-                      sel.value.toLowerCase() === item.value.toLowerCase()
-                  )
+                      sel.value.toLowerCase() === item.value.toLowerCase(),
+                  ),
               ),
             ];
             return ordered;
@@ -115,7 +115,7 @@ export const useMultiSelectLogic = ({
         }
       }
     },
-    []
+    [],
   );
 
   useEffect(() => {

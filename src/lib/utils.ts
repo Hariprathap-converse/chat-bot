@@ -14,7 +14,7 @@ export const scrollToElement = (
   container: HTMLElement,
   element: HTMLElement,
   duration: number = 500,
-  offset: number = 0
+  offset: number = 0,
 ) => {
   const containerTop = container.scrollTop;
   const elementTop = element.offsetTop - offset;
@@ -57,7 +57,7 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
   return options
     .filter(
       (option): option is OptionOrGroup =>
-        !!option && typeof option === "object"
+        !!option && typeof option === "object",
     )
     .map((option) => {
       if (isGroupedOption(option)) {
@@ -68,7 +68,7 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
             ? option.items
                 .filter(
                   (item): item is Option =>
-                    !!item && typeof item === "object" && "value" in item
+                    !!item && typeof item === "object" && "value" in item,
                 )
                 .map((item) => ({
                   ...item,
@@ -89,12 +89,12 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
 }
 
 export function normalizeMultiSelectValues(
-  values: Option[] | Option
+  values: Option[] | Option,
 ): Option[] {
   return (Array.isArray(values) ? values : [])
     .filter(
       (item): item is Option =>
-        !!item && typeof item === "object" && "id" in item && "value" in item
+        !!item && typeof item === "object" && "id" in item && "value" in item,
     )
     .map((item) => ({
       ...item,

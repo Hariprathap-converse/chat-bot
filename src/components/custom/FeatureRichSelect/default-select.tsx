@@ -244,7 +244,6 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
     } else {
       setIsPopoveropen(open);
     }
-    
   };
 
   const handleSelect = (option: Option) => {
@@ -476,7 +475,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
         if (aStarts && !bStarts) return -1;
         if (!aStarts && bStarts) return 1;
 
-        return 0; 
+        return 0;
       });
 
     if (
@@ -781,10 +780,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                   dataSide === "left" &&
                     config.variant == "group" &&
                     "relative right-[0px]",
-                  
 
-                  
-                  
                   "p-0  min-w-[var(--radix-popover-trigger-width)] border-none rounded-sm",
                   "!animate-none !opacity-100 !transform-none transition-none shadow-select-shadow  ",
                 )}

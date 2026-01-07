@@ -81,7 +81,7 @@ const FieldRender = ({
 
   const handleFieldChange = (fieldName: string, value: string) => {
     const field = formData.form?.fields?.find(
-      (f: FieldConfig) => f.name === fieldName
+      (f: FieldConfig) => f.name === fieldName,
     );
     onFieldChange(fieldName, value);
     setFormSubmitData((prev) => ({ ...prev, [fieldName]: value }));
@@ -102,7 +102,7 @@ const FieldRender = ({
     setTouched((prev) => ({ ...prev, [fieldName]: true }));
 
     const field = formData.form?.fields?.find(
-      (f: FieldConfig) => f.name === fieldName
+      (f: FieldConfig) => f.name === fieldName,
     );
     const value = formSubmitData?.[fieldName] || "";
     if (field) {

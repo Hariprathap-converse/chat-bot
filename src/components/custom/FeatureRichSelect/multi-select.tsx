@@ -178,7 +178,6 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
       : [...selectedOptions, value];
     setSelectedOptions(updated);
     onChange?.(value.value);
-    
   };
 
   const sortBySelectedOrder = (a: Option, b: Option) => {
@@ -332,7 +331,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
         if (aStarts && !bStarts) return -1;
         if (!aStarts && bStarts) return 1;
 
-        return 0; 
+        return 0;
       });
 
     if (
@@ -386,7 +385,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                     "w-full relative  h-[35px] font-medium text-select-text border  text-sm border-select-border",
                     "!hover:border hover:!border-b-primary hover:rounded-b-[2px]  rounded-[4px] ",
                     "focus:border focus:border-select-border-focused focus-visible:ring-offset-0 focus-visible:ring-0",
-                    
+
                     "relative  focus-visible:hover:!border-b-select-border-focused focus-visible:outline-none focus-visible:after:content-[''] focus-visible:after:absolute focus-visible:after:left-[1px] focus-visible:after:right-[1px] focus-visible:after:bottom-0 focus-visible:after:h-[2px] focus-visible:after:bg-primary focus:ring-0 focus:ring-offset-0",
                     error &&
                       "!border-b-error-message hover:!border-b-error-message  focus-visible:after:!border-b-select-border-focused   focus-visible:!border-b-select-border-focused  ",
@@ -652,12 +651,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                 className={cn(
                   dataSide === "right" && "relative left-[0px]  rounded-sm ",
                   dataSide === "left" && "relative right-[2px]  rounded-sm",
-                  
-                  
-                  
-                  
-                  
-                  
+
                   config.variant == "multiSelect" ||
                     config.variant == "multiSelectWithSearch"
                     ? ""
@@ -665,8 +659,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                   (config.isReadOnly == true || formConfig.viewMode == true) &&
                     selectedOptions.length <= 0 &&
                     "hidden",
-                  
-                  
+
                   "p-0  min-w-[var(--radix-popover-trigger-width)] border-none rounded-sm",
                   "!animate-none !opacity-100 !transform-none transition-none shadow-select-shadow  ",
                 )}

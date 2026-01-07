@@ -75,7 +75,7 @@ export function DateTimePicker({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const calendarRef = React.useRef<HTMLDivElement>(null);
   const [selectedFormat, setSelectedFormat] = React.useState<DateFormatKey>(
-    config.dateFormat || "DD/MM/YYYY"
+    config.dateFormat || "DD/MM/YYYY",
   );
   const [typedDate, setTypedDate] = useState<string>("");
   const [inputDay, setInputDay] = useState<number | null>(null);
@@ -159,7 +159,7 @@ export function DateTimePicker({
       const parsedDate = parse(
         inputValue,
         currentFormatConfig.format,
-        new Date()
+        new Date(),
       );
 
       if (isValid(parsedDate)) {
@@ -223,19 +223,19 @@ export function DateTimePicker({
     const value =
       part.type === "day"
         ? inputDay === null
-          ? String(part.value) ?? "dd"
+          ? (String(part.value) ?? "dd")
           : String(inputDay).padStart(2, "0")
         : part.type === "month"
-        ? inputMonth === null
-          ? String(part.value) ?? "mm"
-          : String(inputMonth).padStart(2, "0")
-        : part.type === "year"
-        ? inputYear === null
-          ? String(part.value) ?? "yyyy"
-          : String(inputYear).padStart(4, "0")
-        : part.type === "monthName"
-        ? monthName || "Month"
-        : part.value || "Month";
+          ? inputMonth === null
+            ? (String(part.value) ?? "mm")
+            : String(inputMonth).padStart(2, "0")
+          : part.type === "year"
+            ? inputYear === null
+              ? (String(part.value) ?? "yyyy")
+              : String(inputYear).padStart(4, "0")
+            : part.type === "monthName"
+              ? monthName || "Month"
+              : part.value || "Month";
     return (
       <div
         key={index}
@@ -259,7 +259,7 @@ export function DateTimePicker({
             value.startsWith("y") ||
             value.startsWith("Y")
             ? "text-[hsl(var(--disabled-placeholder))] font-light"
-            : "text-[#31363f] font-medium"
+            : "text-[#31363f] font-medium",
         )}
         aria-label={part.type}
         aria-disabled={config.isDisabled || formConfig.viewMode}
@@ -271,10 +271,10 @@ export function DateTimePicker({
         }
         aria-valuenow={
           part.type === "day"
-            ? inputDay ?? 1
+            ? (inputDay ?? 1)
             : part.type === "month"
-            ? inputMonth ?? 1
-            : inputYear ?? MIN_YEAR
+              ? (inputMonth ?? 1)
+              : (inputYear ?? MIN_YEAR)
         }
         onBlur={() => {
           let fullDate = "";
@@ -346,7 +346,7 @@ export function DateTimePicker({
                 undefined as any,
                 undefined as any,
                 "monthName",
-                undefined as any
+                undefined as any,
               );
               break;
           }
@@ -431,7 +431,7 @@ export function DateTimePicker({
     if (
       disabledYearMonthPairs?.some(
         ({ year, month }: { year: number; month: number }) =>
-          year === currentYear && month === currentMonth
+          year === currentYear && month === currentMonth,
       )
     ) {
       return true;
@@ -537,7 +537,7 @@ export function DateTimePicker({
     if (date) {
       const newFormatConfig = DATE_FORMATS[newFormat];
       setTypedDate(
-        formatDate(toZonedTime(date, timeZone), newFormatConfig.format)
+        formatDate(toZonedTime(date, timeZone), newFormatConfig.format),
       );
     }
   };
@@ -653,7 +653,7 @@ export function DateTimePicker({
           className={cn(
             "w-1/3 relative my-auto",
             error && "pt-0",
-            formConfig.viewMode && "pt-0"
+            formConfig.viewMode && "pt-0",
           )}
         >
           <CalendarLabelElement

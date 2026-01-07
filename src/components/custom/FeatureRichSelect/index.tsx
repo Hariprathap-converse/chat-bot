@@ -1,4 +1,3 @@
-
 import dynamic from "next/dynamic";
 import { FeatureRichSelectProps } from "@/types/components/select-config.types";
 

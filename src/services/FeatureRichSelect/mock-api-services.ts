@@ -8,7 +8,7 @@ export const fetchDropDownData = async (queryString: string) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const url = `http://localhost:4000/options?q=${encodeURIComponent(
-      search
+      search,
     )}&_page=${page}&_limit=${recordLimit}`;
 
     const res = await fetch(url);

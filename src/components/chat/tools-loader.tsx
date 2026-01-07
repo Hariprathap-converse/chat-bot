@@ -21,7 +21,6 @@ export function ToolsLoader({
   const [elapsed, setElapsed] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(true);
 
-  
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (status === "processing" || status === "sending") {
@@ -33,19 +32,18 @@ export function ToolsLoader({
     return () => clearInterval(interval);
   }, [status]);
 
-  
   useEffect(() => {
     if (status === "success" || status === "error") {
       setInternalStage(status === "success" ? "done" : "error");
       const timeout = setTimeout(() => {
         setIsPopupOpen(false);
-        
+
         setTimeout(() => {
           if (onPopupClose) {
             onPopupClose();
           }
         }, 100);
-      }, 3500); 
+      }, 3500);
       return () => clearTimeout(timeout);
     }
   }, [status, onPopupClose]);
@@ -57,7 +55,6 @@ export function ToolsLoader({
     if (status === "sending") {
       setInternalStage("draft");
     }
-    
   }, [status]);
 
   if (!type) return null;
@@ -71,14 +68,14 @@ export function ToolsLoader({
         "transition-all duration-300 ease-in-out",
         isPopupOpen
           ? "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in"
-          : "contents", 
+          : "contents",
       )}
     >
       <div
         className={cn(
           "relative overflow-hidden bg-white  border border-slate-100 transition-all duration-300",
           isPopupOpen
-            ? "w-full max-w-sm rounded-2xl shadow-xl" 
+            ? "w-full max-w-sm rounded-2xl shadow-xl"
             : "w-full rounded-2xl my-2 shadow-md",
         )}
       >

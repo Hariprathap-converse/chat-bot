@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { BsStars } from "react-icons/bs";
 import { Loader2 } from "lucide-react";

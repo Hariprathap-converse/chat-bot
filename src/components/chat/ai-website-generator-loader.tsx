@@ -8,7 +8,6 @@ interface GenerationStage {
   messages: string[];
 }
 
-
 const generationStages: GenerationStage[] = [
   {
     stage: "Analyzing Requirements",
@@ -102,7 +101,6 @@ export default function AIWebsiteGeneratorLoader({
         (generationStages.length * 3)) *
       100;
 
-
   const handlePreview = () => {
     window.open("http://localhost:3001", "_blank");
   };
@@ -133,7 +131,7 @@ export default function AIWebsiteGeneratorLoader({
           "transition-all duration-300 ease-in-out",
           isPopupOpen
             ? "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in"
-            : "contents"
+            : "contents",
         )}
       >
         {/* Popup/Modal Container */}
@@ -143,39 +141,39 @@ export default function AIWebsiteGeneratorLoader({
 
             isPopupOpen
               ? "max-w-4xl w-full rounded-2xl shadow-xl border border-border/50"
-              : "w-full max-w-[450px] my-2 rounded-xl shadow-md border border-border/60"
+              : "w-full max-w-[450px] my-2 rounded-xl shadow-md border border-border/60",
           )}
         >
           {/* Header */}
           <div
             className={cn(
               "bg-linear-to-r from-accent/10 via-accent/5 to-transparent border-b border-border/50 shrink-0",
-              isPopupOpen ? "p-6" : "p-3"
+              isPopupOpen ? "p-6" : "p-3",
             )}
           >
             <div
               className={cn(
                 "space-y-3 transition-all duration-300",
-                isPopupOpen ? "text-left" : "flex items-center gap-3 space-y-0"
+                isPopupOpen ? "text-left" : "flex items-center gap-3 space-y-0",
               )}
             >
               <div
                 className={cn(
                   "flex items-center transition-all duration-300",
-                  isPopupOpen ? "justify-start gap-4" : "justify-start gap-2"
+                  isPopupOpen ? "justify-start gap-4" : "justify-start gap-2",
                 )}
               >
                 <div className="relative shrink-0 transition-all duration-300">
                   <div
                     className={cn(
                       "rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-md transition-all duration-300",
-                      isPopupOpen ? "w-10 h-10" : "w-8 h-8"
+                      isPopupOpen ? "w-10 h-10" : "w-8 h-8",
                     )}
                   >
                     <svg
                       className={cn(
                         "text-white transition-all duration-300",
-                        isPopupOpen ? "w-5 h-5" : "w-4 h-4"
+                        isPopupOpen ? "w-5 h-5" : "w-4 h-4",
                       )}
                       fill="none"
                       stroke="currentColor"
@@ -194,7 +192,7 @@ export default function AIWebsiteGeneratorLoader({
                 <h1
                   className={cn(
                     "bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold leading-tight transition-all duration-300",
-                    isPopupOpen ? "text-2xl" : "text-base"
+                    isPopupOpen ? "text-2xl" : "text-base",
                   )}
                 >
                   AI Website Generator
@@ -206,7 +204,7 @@ export default function AIWebsiteGeneratorLoader({
                 <div
                   className={cn(
                     "w-full bg-muted rounded-full overflow-hidden transition-all duration-300",
-                    isPopupOpen ? "h-1.5 mt-3" : "h-1 w-24 ml-auto"
+                    isPopupOpen ? "h-1.5 mt-3" : "h-1 w-24 ml-auto",
                   )}
                 >
                   <div
@@ -220,7 +218,7 @@ export default function AIWebsiteGeneratorLoader({
               <p
                 className={cn(
                   "text-muted-foreground font-medium transition-all duration-300",
-                  isPopupOpen ? "text-sm block" : "hidden"
+                  isPopupOpen ? "text-sm block" : "hidden",
                 )}
               >
                 {isCompleted ? "Generation Complete" : stage.stage}
@@ -235,14 +233,14 @@ export default function AIWebsiteGeneratorLoader({
 
               isPopupOpen
                 ? "p-6 min-h-[470px] max-h-[550px]"
-                : "p-2 h-auto w-full"
+                : "p-2 h-auto w-full",
             )}
           >
             {isCompleted ? (
               <div
                 className={cn(
                   "space-y-4",
-                  !isPopupOpen && "flex flex-col h-full"
+                  !isPopupOpen && "flex flex-col h-full",
                 )}
               >
                 {/* Website Preview Mockup */}
@@ -252,7 +250,7 @@ export default function AIWebsiteGeneratorLoader({
 
                     isPopupOpen
                       ? "p-4 h-[400px]"
-                      : "p-0 border-0 max-h-[300px]  rounded-lg mb-0"
+                      : "p-0 border-0 max-h-[300px]  rounded-lg mb-0",
                   )}
                   style={{ animationDelay: "150ms" }}
                 >
@@ -274,7 +272,7 @@ export default function AIWebsiteGeneratorLoader({
                   <div
                     className={cn(
                       isPopupOpen ? "h-[90%]" : "h-[85%]",
-                      "bg-background rounded-lg p-3 space-y-3 border border-border/30  overflow-hidden shadow-xs"
+                      "bg-background rounded-lg p-3 space-y-3 border border-border/30  overflow-hidden shadow-xs",
                     )}
                   >
                     {/* Header */}
@@ -287,7 +285,7 @@ export default function AIWebsiteGeneratorLoader({
                             key={i}
                             className={cn(
                               "bg-accent/20 rounded animate-pulse",
-                              isPopupOpen ? "h-3 w-10" : "h-2 w-8"
+                              isPopupOpen ? "h-3 w-10" : "h-2 w-8",
                             )}
                             style={{ animationDelay: `${i * 100}ms` }}
                           />
@@ -299,19 +297,19 @@ export default function AIWebsiteGeneratorLoader({
                     <div
                       className={cn(
                         "bg-linear-to-br from-accent/20 to-accent/5 rounded flex flex-col items-center justify-center gap-2 p-3 transition-all",
-                        isPopupOpen ? "h-40" : "h-20"
+                        isPopupOpen ? "h-40" : "h-20",
                       )}
                     >
                       <div
                         className={cn(
                           "bg-accent/30 rounded animate-pulse",
-                          isPopupOpen ? "h-10 w-2/3" : "h-5 w-2/3"
+                          isPopupOpen ? "h-10 w-2/3" : "h-5 w-2/3",
                         )}
                       />
                       <div
                         className={cn(
                           "bg-accent/20 rounded animate-pulse delay-100",
-                          isPopupOpen ? "h-4 w-1/2" : "h-2 w-1/2"
+                          isPopupOpen ? "h-4 w-1/2" : "h-2 w-1/2",
                         )}
                         style={{ animationDelay: "200ms" }}
                       />
@@ -320,7 +318,7 @@ export default function AIWebsiteGeneratorLoader({
                       <div
                         className={cn(
                           "flex gap-2 mt-1",
-                          !isPopupOpen && "hidden"
+                          !isPopupOpen && "hidden",
                         )}
                       >
                         <div
@@ -338,7 +336,7 @@ export default function AIWebsiteGeneratorLoader({
                     <div
                       className={cn(
                         "grid grid-cols-3",
-                        isPopupOpen ? "gap-4" : "gap-2"
+                        isPopupOpen ? "gap-4" : "gap-2",
                       )}
                     >
                       {[1, 2, 3].map((i) => (
@@ -346,13 +344,13 @@ export default function AIWebsiteGeneratorLoader({
                           key={i}
                           className={cn(
                             "bg-accent/10 rounded p-2 space-y-1.5",
-                            isPopupOpen ? "h-32" : "h-20"
+                            isPopupOpen ? "h-32" : "h-20",
                           )}
                         >
                           <div
                             className={cn(
                               "bg-accent/20 rounded animate-pulse",
-                              isPopupOpen ? "h-12" : "h-8"
+                              isPopupOpen ? "h-12" : "h-8",
                             )}
                             style={{ animationDelay: `${i * 100}ms` }}
                           />
@@ -376,14 +374,14 @@ export default function AIWebsiteGeneratorLoader({
                     "flex items-center gap-3 pt-2",
                     isPopupOpen
                       ? "justify-center"
-                      : "justify-center flex-col sm:flex-row"
+                      : "justify-center flex-col sm:flex-row",
                   )}
                 >
                   <button
                     onClick={handlePreview}
                     className={cn(
                       isPopupOpen ? "text-sm" : "text-xs",
-                      "w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground  rounded-md cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm"
+                      "w-full sm:w-auto px-4 py-2 bg-primary text-primary-foreground  rounded-md cursor-pointer font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm",
                     )}
                   >
                     <svg
@@ -432,7 +430,7 @@ export default function AIWebsiteGeneratorLoader({
                             "h-8 w-32 rounded bg-accent/30 transition-all duration-500",
                             stageDone(0) || currentMessage >= 1
                               ? "opacity-100 scale-100"
-                              : "opacity-40 scale-95"
+                              : "opacity-40 scale-95",
                           )}
                         />
 
@@ -444,7 +442,7 @@ export default function AIWebsiteGeneratorLoader({
                                 "h-6 w-16 rounded bg-accent/20 transition-all duration-500",
                                 stageDone(0) || currentMessage >= 2
                                   ? "opacity-100 translate-y-0"
-                                  : "opacity-0 translate-y-1"
+                                  : "opacity-0 translate-y-1",
                               )}
                               style={{ transitionDelay: `${i * 80}ms` }}
                             />
@@ -474,7 +472,7 @@ export default function AIWebsiteGeneratorLoader({
                             "h-12 w-3/4 rounded bg-accent/30 transition-all duration-500",
                             stageDone(1) || currentMessage >= 0
                               ? "opacity-100 translate-y-0"
-                              : "opacity-0 translate-y-2"
+                              : "opacity-0 translate-y-2",
                           )}
                         />
                         <div
@@ -482,7 +480,7 @@ export default function AIWebsiteGeneratorLoader({
                             "h-6 w-1/2 rounded bg-accent/20 transition-all duration-300 delay-100",
                             stageDone(1) || currentMessage >= 1
                               ? "opacity-100 translate-y-0"
-                              : "opacity-0 translate-y-2"
+                              : "opacity-0 translate-y-2",
                           )}
                         />
                         <div className="flex gap-2 mt-1">
@@ -491,7 +489,7 @@ export default function AIWebsiteGeneratorLoader({
                               "h-6 w-16 rounded bg-accent/20 transition-all duration-300 delay-100",
                               stageDone(1) || currentMessage >= 1
                                 ? "opacity-100 translate-y-0"
-                                : "opacity-0 translate-y-2"
+                                : "opacity-0 translate-y-2",
                             )}
                           />
                           <div
@@ -499,7 +497,7 @@ export default function AIWebsiteGeneratorLoader({
                               "h-6 w-16 rounded bg-accent/20 transition-all duration-300 delay-100",
                               stageDone(1) || currentMessage >= 1
                                 ? "opacity-100 translate-y-0"
-                                : "opacity-0 translate-y-2"
+                                : "opacity-0 translate-y-2",
                             )}
                           />
                         </div>
@@ -526,7 +524,7 @@ export default function AIWebsiteGeneratorLoader({
                             "relative h-40 rounded-lg border border-border/40 bg-muted/40 overflow-hidden transition-all duration-500",
                             stageDone(2) || currentMessage >= i
                               ? "opacity-100 translate-y-0"
-                              : "opacity-0 translate-y-2"
+                              : "opacity-0 translate-y-2",
                           )}
                           style={{ transitionDelay: `${i * 120}ms` }}
                         >
@@ -647,7 +645,6 @@ interface HeaderLabelProps {
   doneText: string;
 }
 
-
 function HeaderLabel({ active, done, activeText, doneText }: HeaderLabelProps) {
   return (
     <div className="flex items-center gap-2 mb-1.5 text-foreground">
@@ -683,7 +680,7 @@ function AISection({ visible, children }: AISectionProps) {
         "transition-all duration-500 ease-out",
         visible
           ? "opacity-100 translate-y-0 max-h-[400px]"
-          : "opacity-0 translate-y-3 max-h-0 pointer-events-none"
+          : "opacity-0 translate-y-3 max-h-0 pointer-events-none",
       )}
     >
       {children}

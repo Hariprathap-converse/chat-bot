@@ -70,13 +70,11 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
     const inputRef = useRef<HTMLInputElement>(null);
     const [isTruncated, setIsTruncated] = useState(false);
 
-    
     const charCount = value.length;
     const maxLength = config?.validation?.maxLength?.value;
     const showCharCounter =
       config.behavior.showCharCounter && (isFocused || charCount > 0);
 
-    
     useEffect(() => {
       if (config.behavior.dataMasking?.enabled) {
         if (isFocused && config.behavior.dataMasking.unmaskOnFocus) {
@@ -106,16 +104,13 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       }
     }, [value, isFocused, config.behavior.dataMasking, unmaskedValue]);
 
-    
     const isValid = !error;
     const showClearIcon =
       config.behavior.showClearIcon && !config.isReadOnly && charCount > 0;
 
-    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       let newValue = e.target.value;
 
-      
       if (config.behavior.dataMasking?.enabled) {
         if (config.behavior.dataMasking.realTimeMasking) {
           newValue = DataMasking.formatAsUserTypes(
@@ -136,12 +131,10 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       }
     };
 
-    
     const handleFocus = () => {
       setIsHovered(false);
       setIsFocused(true);
 
-      
       if (
         config.behavior.dataMasking?.enabled &&
         config.behavior.dataMasking.unmaskOnFocus
@@ -152,13 +145,12 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       onFocus?.();
     };
 
-    
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
       let newValue = e.target.value;
       setIsFocused(false);
       setShowadditionalInfo(false);
       config.value = newValue;
-      
+
       if (
         config.behavior.dataMasking?.enabled &&
         config.behavior.dataMasking.maskOnBlur
@@ -167,7 +159,7 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
           DataMasking.maskValue(unmaskedValue, config.behavior.dataMasking),
         );
       }
-      
+
       if (config.behavior.autoTrim) {
         newValue = newValue.trim();
         onChange(newValue);
@@ -176,25 +168,20 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       onBlur?.();
     };
 
-    
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      
       if (e.key === "Enter") {
         if (config.type === "text" || config.type === "email") {
           inputRef.current?.blur();
         }
       }
 
-      
       if (e.ctrlKey || e.metaKey) {
         if (e.key === "a" || e.key === "c" || e.key === "v") {
-          
           return;
         }
       }
     };
 
-    
     const calculatePasswordStrength = (password: string) => {
       let score = 0;
 
@@ -214,7 +201,6 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       return { score: 4, label: "Strong", color: "bg-green-500" };
     };
 
-    
     const handleClear = () => {
       onChange("");
       inputRef.current?.focus();
@@ -223,16 +209,13 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       setUnmaskedValue("");
     };
 
-    
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword);
     };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      
       const char = e.key;
 
-      
       if (char.length > 1) return;
       if (config?.validation?.pattern) {
         const allowRegex = new RegExp(`[${config?.validation?.pattern}]`);
@@ -244,7 +227,6 @@ export const AdvancedInput = forwardRef<HTMLInputElement, AdvancedInputProps>(
       }
     };
 
-    
     const isVisible =
       config.isVisible !== false &&
       (!config.conditionalLogic?.showWhen ||

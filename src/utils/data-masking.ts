@@ -39,7 +39,7 @@ export class DataMasking {
   static maskValue(
     value: string,
     config: any,
-    scenario: "display" | "edit" | "export" | "print" = "display"
+    scenario: "display" | "edit" | "export" | "print" = "display",
   ): string {
     if (!config.enabled || !value) return value;
 
@@ -64,7 +64,7 @@ export class DataMasking {
         customPattern,
         maskChar,
         showLast,
-        showFirst
+        showFirst,
       );
     }
 
@@ -79,13 +79,13 @@ export class DataMasking {
           username,
           maskChar,
           showFirst,
-          showLast
+          showLast,
         );
         const maskedDomain = this.maskPortion(
           domain,
           maskChar,
           0,
-          Math.min(2, domain.length)
+          Math.min(2, domain.length),
         );
         return `${maskedUsername}@${maskedDomain}.${tld}`;
       }
@@ -107,7 +107,7 @@ export class DataMasking {
     value: string,
     maskChar: string,
     showFirst: number,
-    showLast: number
+    showLast: number,
   ): string {
     if (value.length <= showFirst + showLast) return value;
 
@@ -124,7 +124,7 @@ export class DataMasking {
     pattern: string,
     maskChar: string,
     showLast: number,
-    showFirst = 0
+    showFirst = 0,
   ): string {
     let masked = "";
     let valueIndex = 0;
@@ -163,7 +163,7 @@ export class DataMasking {
           return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3)}`;
         return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(
           3,
-          5
+          5,
         )}-${digitsOnly.slice(5, 9)}`;
 
       case "credit-card":
@@ -175,7 +175,7 @@ export class DataMasking {
           return `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(3)}`;
         return `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(
           3,
-          6
+          6,
         )}-${digitsOnly.slice(6, 10)}`;
 
       case "license":
@@ -185,7 +185,7 @@ export class DataMasking {
           return `${alphaNumeric.slice(0, 3)}-${alphaNumeric.slice(3)}`;
         return `${alphaNumeric.slice(0, 3)}-${alphaNumeric.slice(
           3,
-          6
+          6,
         )}-${alphaNumeric.slice(6, 10)}`;
 
       default:

@@ -30,12 +30,7 @@ export default function EmployeeDetails({
   function onSubmit(data: any) {
     setIsSubmitting(true);
 
-
     setTimeout(() => {
-  
-      console.log("📋 Employee Details Form Data:", data);
-
-  
       const mockResponse = {
         success: true,
         message: "Employee details saved successfully",
@@ -46,9 +41,6 @@ export default function EmployeeDetails({
         },
       };
 
-      console.log("✅ API Response:", mockResponse);
-
-  
       toast.success("Sent successfully", {
         description: "Employee details have been saved",
         duration: 3000,
@@ -56,11 +48,10 @@ export default function EmployeeDetails({
 
       setIsSubmitting(false);
 
-  
       setTimeout(() => {
         onCancel?.();
       }, 1000);
-    }, 1500)
+    }, 1500);
   }
 
   const setLabelAlignment = (alignment: string) => {
@@ -99,7 +90,6 @@ export default function EmployeeDetails({
         setManualGridOverride={setManualGridOverride}
         onCancel={onCancel}
         isSubmitting={isSubmitting}
-    
       />
     </>
   );

@@ -30,7 +30,7 @@ const FormContainerProps = ({
   const requiredFields = useMemo(() => {
     return (
       formData?.form?.fields?.filter(
-        (field) => field.isRequired?.value == true
+        (field) => field.isRequired?.value == true,
       ) ?? []
     );
   }, [formData?.form?.fields]);
@@ -156,7 +156,7 @@ const FormContainerProps = ({
       return CrossFieldValidator.validateMultiple(
         value,
         field.validation.crossFieldValidation,
-        formSubmitData
+        formSubmitData,
       );
     }
 
@@ -187,8 +187,6 @@ const FormContainerProps = ({
     try {
       const fullData = { ...formData };
 
-      console.log("fullData: ", fullData);
-
       let api = { url: "", methods: "" };
       if (fullData.form.mode == "create") {
         api.url = "http://localhost:5000/api/v1/form/add";
@@ -200,15 +198,12 @@ const FormContainerProps = ({
 
       const result = { success: true, error: { fieldName: "", message: "" } };
       const response = { ok: true };
-      console.log("✅ Success:", result);
 
       if (!response.ok || result.success === false) {
         const newErrors = { ...errors };
         newErrors[result.error.fieldName] = result.error.message;
 
         setErrors(newErrors);
-
-        console.log("newErrors:", newErrors);
 
         showToastMessage("error", result.error.message as string);
       }
