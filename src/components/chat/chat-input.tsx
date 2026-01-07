@@ -25,15 +25,21 @@ export function ChatInput({
   };
 
   return (
-    <div className="flex relative p-0">
-      <div className="p-px rounded-[14px] w-full min-w-full flex items-center shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)]">
+    <div className="flex relative p-0  w-full overflow-hidden">
+      <div className="p-px rounded-[14px] w-full min-w-0 flex items-center shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)]">
         <Textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           className={cn(
-            "p-0 min-h-14 max-h-[400px] rounded-[14px] resize-none border-0 bg-white px-[21px] pr-[72px] flex items-center placeholder:font-normal placeholder:text-base placeholder:text-foreground leading-[150%] tracking-normal font-normal !text-base text-heading outline-none overflow-auto focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title",
+            "p-0 min-h-14 max-h-[400px] rounded-[14px] resize-none border-0 bg-white px-[21px] pr-[72px] flex items-center outline-none overflow-auto",
             value.length > 0 ? "py-4" : "pt-4",
+            "placeholder:font-normal placeholder:text-base placeholder:text-foreground",
+            "leading-[150%] tracking-normal font-normal !text-base text-heading",
+            "focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title",
+            "w-full max-w-full min-w-0",
+            "whitespace-pre-wrap break-all",
+            "overflow-y-auto overflow-x-hidden"
           )}
           placeholder={placeholder}
         />
