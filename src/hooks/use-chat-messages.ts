@@ -298,7 +298,7 @@ export function useChatMessages() {
             type: "text",
           },
         ]);
-      }, 5000);
+      }, 500);
     }
   };
 
