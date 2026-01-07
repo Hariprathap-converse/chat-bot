@@ -27,22 +27,15 @@ export default function EmployeeDetails({
     }));
   };
 
-  /**
-   * Handle form submission
-   * - Shows loading state
-   * - Logs form data to console
-   * - Shows success toast
-   * - In future: will send to API
-   */
   function onSubmit(data: any) {
     setIsSubmitting(true);
 
-    // Simulate API call
+
     setTimeout(() => {
-      // Log the submitted data
+  
       console.log("📋 Employee Details Form Data:", data);
 
-      // Mock API response
+  
       const mockResponse = {
         success: true,
         message: "Employee details saved successfully",
@@ -55,7 +48,7 @@ export default function EmployeeDetails({
 
       console.log("✅ API Response:", mockResponse);
 
-      // Show success toast
+  
       toast.success("Sent successfully", {
         description: "Employee details have been saved",
         duration: 3000,
@@ -63,11 +56,11 @@ export default function EmployeeDetails({
 
       setIsSubmitting(false);
 
-      // Close the form after successful submission
+  
       setTimeout(() => {
         onCancel?.();
       }, 1000);
-    }, 1500); // Simulate network delay
+    }, 1500)
   }
 
   const setLabelAlignment = (alignment: string) => {
@@ -106,7 +99,7 @@ export default function EmployeeDetails({
         setManualGridOverride={setManualGridOverride}
         onCancel={onCancel}
         isSubmitting={isSubmitting}
-        // progress={progress}
+    
       />
     </>
   );

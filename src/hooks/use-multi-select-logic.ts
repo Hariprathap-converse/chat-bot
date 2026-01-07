@@ -50,7 +50,7 @@ export const useMultiSelectLogic = ({
       searchQuery: string,
       pageNum: number,
       append?: boolean,
-      value?: any,
+      value?: any
     ) => {
       if (config?.dataSource !== "api") return;
 
@@ -71,13 +71,13 @@ export const useMultiSelectLogic = ({
           setOptions((prev) => {
             const existing = new Set(prev.map((o: any) => o.value));
             const unique = newOptions.filter(
-              (opt: any) => !existing.has(opt.value),
+              (opt: any) => !existing.has(opt.value)
             );
             return [...prev, ...unique];
           });
         } else {
           setOptions(newOptions);
-          const normalized = normalizeMultiSelectValues(value); // 1 or many new values
+          const normalized = normalizeMultiSelectValues(value);
           setOptions((prevOptions) => {
             const merged = [...normalized, ...prevOptions];
 
@@ -94,8 +94,8 @@ export const useMultiSelectLogic = ({
                 (item) =>
                   !normalized.some(
                     (sel) =>
-                      sel.value.toLowerCase() === item.value.toLowerCase(),
-                  ),
+                      sel.value.toLowerCase() === item.value.toLowerCase()
+                  )
               ),
             ];
             return ordered;
@@ -115,7 +115,7 @@ export const useMultiSelectLogic = ({
         }
       }
     },
-    [],
+    []
   );
 
   useEffect(() => {
@@ -125,7 +125,6 @@ export const useMultiSelectLogic = ({
     }
   }, [debouncedQuery, fetchOptions, value]);
 
-  // Scroll handler
   const handleScroll = useCallback(() => {
     if (
       !containerRef.current ||
@@ -145,7 +144,6 @@ export const useMultiSelectLogic = ({
     }
   }, [page, loading, hasMore, debouncedQuery, fetchOptions]);
 
-  // Attach scroll listener once dropdown is open and ref is available
   useEffect(() => {
     if (!isPopoveropen) return;
 
@@ -154,17 +152,15 @@ export const useMultiSelectLogic = ({
     const attachScrollListener = () => {
       const el = containerRef.current;
       if (el) {
-        el.removeEventListener("scroll", handleScroll); // Clean before re-adding
+        el.removeEventListener("scroll", handleScroll);
         el.addEventListener("scroll", handleScroll);
         return true;
       }
       return false;
     };
 
-    // Try attaching immediately if the ref is already available
     const isAttached = attachScrollListener();
 
-    // If not available yet, observe the DOM
     if (!isAttached) {
       observer = new MutationObserver(() => {
         if (attachScrollListener() && observer) {

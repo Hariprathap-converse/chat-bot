@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import FormFooter from "./form-footer";
 import FieldRender from "./field-render";
-// import { FormProvider } from 'react-hook-form'
+
 import { CrossFieldValidator } from "@/utils/cross-field-validator";
 import { useLayout } from "@/context/layout-context";
 import Stepper from "./stepper";
@@ -30,7 +30,7 @@ const FormContainerProps = ({
   const requiredFields = useMemo(() => {
     return (
       formData?.form?.fields?.filter(
-        (field) => field.isRequired?.value == true,
+        (field) => field.isRequired?.value == true
       ) ?? []
     );
   }, [formData?.form?.fields]);
@@ -93,7 +93,7 @@ const FormContainerProps = ({
     if (field.type == "select" && !field.isRequired.value && !value) {
       return null;
     }
-    // Required validation
+
     if (
       field.type !== "select" &&
       field.type !== "calendar" &&
@@ -115,7 +115,6 @@ const FormContainerProps = ({
         : `${field.label} is required`;
     }
 
-    // Length validation
     if (
       field.type !== "select" &&
       field.type !== "calendar" &&
@@ -149,7 +148,6 @@ const FormContainerProps = ({
         : `${field.label} must not exceed ${field.validation.maxLength.value} characters`;
     }
 
-    // Enhanced cross-field validation
     if (
       field.type !== "calendar" &&
       field?.validation?.crossFieldValidation &&
@@ -158,50 +156,12 @@ const FormContainerProps = ({
       return CrossFieldValidator.validateMultiple(
         value,
         field.validation.crossFieldValidation,
-        formSubmitData,
+        formSubmitData
       );
     }
 
     return null;
   };
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   const fullDate = { ...formData }
-  //   e.preventDefault()
-  //   const newErrors: Record<string, string> = {}
-  //   formFields?.forEach((field: any) => {
-  //     const value = formSubmitData?.[field.name] || ''
-  //     const error = validateField(field, value)
-  //     console.log('error: ', error)
-  //     if (error) {
-  //       console.log('enttter')
-  //       newErrors[field.name] = error
-  //       console.log('newErrors: ', newErrors)
-  //       setErrors(newErrors)
-  //     }
-  //   })
-  //   // if (errors) {
-  //   //   console.log('first')
-  //   //   try {
-  //   //     const response = await fetch('http://localhost:5000/api/v1/form/add', {
-  //   //       method: 'POST',
-  //   //       headers: {
-  //   //         'Content-Type': 'application/json',
-  //   //       },
-  //   //       body: JSON.stringify(fullDate),
-  //   //     })
-
-  //   //     if (!response.ok) {
-  //   //       throw new Error(`HTTP error! Status: ${response.status}`)
-  //   //     }
-
-  //   //     const result = await response.json()
-  //   //     console.log('✅ Success:', result)
-  //   //   } catch (error) {
-  //   //     console.error('❌ Error submitting form:', error)
-  //   //   }
-  //   // }
-  // }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -238,13 +198,6 @@ const FormContainerProps = ({
         api.methods = "PUT";
       }
 
-      // const response = await fetch(api.url, {
-      //   method: api.methods,
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(fullData),
-      // })
-
-      // const result = await response.json()
       const result = { success: true, error: { fieldName: "", message: "" } };
       const response = { ok: true };
       console.log("✅ Success:", result);

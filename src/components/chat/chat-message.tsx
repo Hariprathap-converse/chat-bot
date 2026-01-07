@@ -1,7 +1,3 @@
-/**
- * Chat Message Component
- * Displays individual chat messages with actions
- */
 import { useEffect, useRef, useState } from "react";
 import {
   Copy,
@@ -147,7 +143,6 @@ export function ChatMessage({
     );
   }
 
-  // Handle Special Components inline
   if (message.type === "website-loader") {
     return (
       <div className="flex w-full  justify-start mt-2 mb-2">
@@ -185,7 +180,6 @@ export function ChatMessage({
     );
   }
 
-  // Bot Message
   return (
     <div className="flex w-full justify-start">
       <div className="flex group relative flex-col gap-[4px]">

@@ -75,7 +75,7 @@ export function DateTimePicker({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const calendarRef = React.useRef<HTMLDivElement>(null);
   const [selectedFormat, setSelectedFormat] = React.useState<DateFormatKey>(
-    config.dateFormat || "DD/MM/YYYY",
+    config.dateFormat || "DD/MM/YYYY"
   );
   const [typedDate, setTypedDate] = useState<string>("");
   const [inputDay, setInputDay] = useState<number | null>(null);
@@ -106,8 +106,8 @@ export function DateTimePicker({
   );
 
   const clamp = (num: number, min: number, max: number, state?: "year") => {
-    if (num > max) return state == "year" ? MIN_YEAR : min; // wrap forward
-    if (num < min) return max; // wrap backward
+    if (num > max) return state == "year" ? MIN_YEAR : min;
+    if (num < min) return max;
     return num;
   };
 
@@ -156,23 +156,20 @@ export function DateTimePicker({
 
   const parseInputDate = (inputValue: string): Date | null => {
     try {
-      // Try parsing with the current format
       const parsedDate = parse(
         inputValue,
         currentFormatConfig.format,
-        new Date(),
+        new Date()
       );
 
       if (isValid(parsedDate)) {
         return parsedDate;
       }
 
-      // For text-based months, try alternative parsing
       if (
         selectedFormat === "Month DD, YYYY" ||
         selectedFormat === "DD Month YYYY"
       ) {
-        // Try parsing with different month formats
         const formats = [
           currentFormatConfig.format,
           selectedFormat === "Month DD, YYYY" ? "MMM dd, yyyy" : "dd MMM yyyy",
@@ -226,19 +223,19 @@ export function DateTimePicker({
     const value =
       part.type === "day"
         ? inputDay === null
-          ? (String(part.value) ?? "dd")
+          ? String(part.value) ?? "dd"
           : String(inputDay).padStart(2, "0")
         : part.type === "month"
-          ? inputMonth === null
-            ? (String(part.value) ?? "mm")
-            : String(inputMonth).padStart(2, "0")
-          : part.type === "year"
-            ? inputYear === null
-              ? (String(part.value) ?? "yyyy")
-              : String(inputYear).padStart(4, "0")
-            : part.type === "monthName"
-              ? monthName || "Month"
-              : part.value || "Month";
+        ? inputMonth === null
+          ? String(part.value) ?? "mm"
+          : String(inputMonth).padStart(2, "0")
+        : part.type === "year"
+        ? inputYear === null
+          ? String(part.value) ?? "yyyy"
+          : String(inputYear).padStart(4, "0")
+        : part.type === "monthName"
+        ? monthName || "Month"
+        : part.value || "Month";
     return (
       <div
         key={index}
@@ -262,7 +259,7 @@ export function DateTimePicker({
             value.startsWith("y") ||
             value.startsWith("Y")
             ? "text-[hsl(var(--disabled-placeholder))] font-light"
-            : "text-[#31363f] font-medium",
+            : "text-[#31363f] font-medium"
         )}
         aria-label={part.type}
         aria-disabled={config.isDisabled || formConfig.viewMode}
@@ -274,10 +271,10 @@ export function DateTimePicker({
         }
         aria-valuenow={
           part.type === "day"
-            ? (inputDay ?? 1)
+            ? inputDay ?? 1
             : part.type === "month"
-              ? (inputMonth ?? 1)
-              : (inputYear ?? MIN_YEAR)
+            ? inputMonth ?? 1
+            : inputYear ?? MIN_YEAR
         }
         onBlur={() => {
           let fullDate = "";
@@ -312,7 +309,7 @@ export function DateTimePicker({
               config.value = fullDate;
 
               onChange?.(zonedDate);
-              // Clear any existing errors
+
               setErrors?.((prev: any) => {
                 const newErrors = { ...prev };
                 delete newErrors[fieldName];
@@ -349,7 +346,7 @@ export function DateTimePicker({
                 undefined as any,
                 undefined as any,
                 "monthName",
-                undefined as any,
+                undefined as any
               );
               break;
           }
@@ -375,7 +372,6 @@ export function DateTimePicker({
       allowedDateRange,
     } = calendarDisableConfig;
 
-    // Check allowed date range
     if (allowedDateRange) {
       const { from, to } = allowedDateRange;
       if (isBefore(date, startOfDay(from)) || isAfter(date, startOfDay(to))) {
@@ -388,7 +384,6 @@ export function DateTimePicker({
     const tomorrow = startOfDay(addDays(today, 1));
     const yesterday = startOfDay(subDays(today, 1));
 
-    // Check today, tomorrow, yesterday
     if (
       (disableToday && isSameDay(date, today)) ||
       (disableTomorrow && isSameDay(date, tomorrow)) ||
@@ -397,7 +392,6 @@ export function DateTimePicker({
       return true;
     }
 
-    // Check disabled date range
     if (
       disableStartDate instanceof Date &&
       disableEndDate instanceof Date &&
@@ -409,27 +403,22 @@ export function DateTimePicker({
       return true;
     }
 
-    // Check disabled weekdays
     if (disabledWeekdays?.includes(day)) {
       return true;
     }
 
-    // Check weekends
     if (disableWeekends && (day === 0 || day === 6)) {
       return true;
     }
 
-    // Check disabled years
     if (disabledYearIndexes?.includes(date.getFullYear())) {
       return true;
     }
 
-    // Check past dates
     if (disablePastDates && startOfDay(date) < startOfDay(disablePastDates)) {
       return true;
     }
 
-    // Check future dates
     if (
       disableFutureDates &&
       startOfDay(date) > startOfDay(disableFutureDates)
@@ -437,13 +426,12 @@ export function DateTimePicker({
       return true;
     }
 
-    // Check disabled year-month pairs
     const currentYear = date.getFullYear();
     const currentMonth = date.getMonth();
     if (
       disabledYearMonthPairs?.some(
         ({ year, month }: { year: number; month: number }) =>
-          year === currentYear && month === currentMonth,
+          year === currentYear && month === currentMonth
       )
     ) {
       return true;
@@ -462,7 +450,7 @@ export function DateTimePicker({
       setHasBeenModified(true);
       setTypedDate(formatDate(zonedDate, currentFormatConfig.format));
       const day = zonedDate.getDate().toString().padStart(2, "0");
-      const month = (zonedDate.getMonth() + 1).toString().padStart(2, "0"); // months are 0-based
+      const month = (zonedDate.getMonth() + 1).toString().padStart(2, "0");
       const monthIndex = zonedDate.getMonth();
       const year = zonedDate.getFullYear().toString();
 
@@ -493,7 +481,7 @@ export function DateTimePicker({
   const handlePresetClick = (presetDate: Date) => {
     const zonedDate = toZonedTime(presetDate, timeZone);
     const day = zonedDate.getDate().toString().padStart(2, "0");
-    const month = (zonedDate.getMonth() + 1).toString().padStart(2, "0"); // months are 0-based
+    const month = (zonedDate.getMonth() + 1).toString().padStart(2, "0");
     const monthIndex = zonedDate.getMonth();
     const year = zonedDate.getFullYear().toString();
 
@@ -546,11 +534,10 @@ export function DateTimePicker({
   const handleFormatChange = (newFormat: DateFormatKey) => {
     setSelectedFormat(newFormat);
 
-    // Update the typed date with the new format if we have a date
     if (date) {
       const newFormatConfig = DATE_FORMATS[newFormat];
       setTypedDate(
-        formatDate(toZonedTime(date, timeZone), newFormatConfig.format),
+        formatDate(toZonedTime(date, timeZone), newFormatConfig.format)
       );
     }
   };
@@ -666,7 +653,7 @@ export function DateTimePicker({
           className={cn(
             "w-1/3 relative my-auto",
             error && "pt-0",
-            formConfig.viewMode && "pt-0",
+            formConfig.viewMode && "pt-0"
           )}
         >
           <CalendarLabelElement

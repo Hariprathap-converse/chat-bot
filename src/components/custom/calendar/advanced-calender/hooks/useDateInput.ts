@@ -36,7 +36,7 @@ export interface useDateInputProps {
     num: number,
     min: number,
     max: number,
-    state?: "year" | undefined,
+    state?: "year" | undefined
   ) => number;
   parseInputDate: (inputValue: string) => Date | null;
 }
@@ -70,12 +70,12 @@ export const useDateInput = ({
     max: number,
     state: "day" | "month" | "year" | "monthName",
     digits: number,
-    MIN_YEAR?: number | undefined,
+    MIN_YEAR?: number | undefined
   ) => {
     const key = e.key;
     const buffer = buffers.current[state];
     const currentIndex = parts.findIndex(
-      (p: { type: string }) => p.type === state,
+      (p: { type: string }) => p.type === state
     );
     const timeZone = "Asia/Kolkata";
 
@@ -105,7 +105,6 @@ export const useDateInput = ({
       const newBuffer = buffer + key;
       const num = parseInt(newBuffer, 10);
 
-      // Only accept if within range OR if still typing partial number
       if (num >= min) {
         buffers.current[state] = "";
         if (state === "day") setInputDay(clamp(num, min, max));
@@ -118,7 +117,7 @@ export const useDateInput = ({
           delete newErrors[fieldName];
           return newErrors;
         });
-        // Auto-advance: if full length reached or can't type more valid digits
+
         if (newBuffer.length >= digits) {
           if (MIN_YEAR && num < MIN_YEAR && state === "year") {
             setInputYear(MIN_YEAR);
@@ -137,7 +136,6 @@ export const useDateInput = ({
           buffers.current[state] = "";
         }
       } else {
-        // Reset to just the latest digit if first digit invalid
         buffers.current[state] = key;
         const singleNum = parseInt(key, 10);
         if (singleNum >= min && singleNum <= max) {
@@ -165,12 +163,10 @@ export const useDateInput = ({
       ].includes(key)
     ) {
       if (/^[a-zA-Z]$/.test(key)) {
-        // Add to buffer
         typedBuffer.current += key;
 
-        // Find match
         const matchIndex = monthNames.findIndex((m: string) =>
-          m.toLowerCase().startsWith(typedBuffer.current.toLowerCase()),
+          m.toLowerCase().startsWith(typedBuffer.current.toLowerCase())
         );
 
         if (matchIndex !== -1) {
@@ -200,13 +196,12 @@ export const useDateInput = ({
       }
     }
 
-    // Move to next field with / or -
     if (key === "/" || key === "-") {
       buffers.current[state] = "";
       e.preventDefault();
       return;
     }
-    // Increment/decrement
+
     if (key === "ArrowUp") {
       if (state === "day") {
         setInputDay((v) => clamp((v ?? 0) + 1, min, max));
@@ -217,7 +212,7 @@ export const useDateInput = ({
         setInputYear((v) => clamp((v ?? MIN_YEAR) + 1, min, max, state));
       if (state === "monthName") {
         setCount((c: number) => {
-          const newIndex = (c + 1) % 12; // wrap forward
+          const newIndex = (c + 1) % 12;
           console.log("newIndex: ", newIndex);
           setMonthName(monthNames[newIndex]);
           return newIndex;
@@ -261,14 +256,12 @@ export const useDateInput = ({
 
       let newIndex = currentIndex;
       if (key === "ArrowLeft") {
-        // find previous non-separator
         !zonedDate ? onChange?.(undefined) : onChange?.(parsedDate);
 
         do {
           newIndex--;
         } while (newIndex >= 0 && parts[newIndex].type === "separator");
       } else {
-        // ArrowRight → find next non-separator
         !zonedDate ? onChange?.(undefined) : onChange?.(parsedDate);
 
         do {
@@ -285,7 +278,6 @@ export const useDateInput = ({
       }
     }
 
-    // Home/End
     if (key === "Home") {
       if (state === "day") setInputDay(min);
       if (state === "month") setInputMonth(min);
@@ -300,7 +292,7 @@ export const useDateInput = ({
       e.preventDefault();
       return;
     }
-    // Backspace → reset to placeholder
+
     if (key === "Backspace") {
       buffers.current[state] = "";
       if (state === "day") setInputDay(null);

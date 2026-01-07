@@ -1,21 +1,12 @@
-/**
- * Website Auto Generator - Skeleton Loader
- * Displays progressive website layout generation with animation
- */
+
 "use client";
 import { useEffect, useState } from "react";
 
-/**
- * Layout configuration interface
- */
 interface LayoutRow {
   name: string;
   rows: string[][];
 }
 
-/**
- * Predefined layout templates for skeleton generation
- */
 const layouts = [
   {
     name: "Hero + Subgrid",

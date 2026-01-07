@@ -81,7 +81,7 @@ const FieldRender = ({
 
   const handleFieldChange = (fieldName: string, value: string) => {
     const field = formData.form?.fields?.find(
-      (f: FieldConfig) => f.name === fieldName,
+      (f: FieldConfig) => f.name === fieldName
     );
     onFieldChange(fieldName, value);
     setFormSubmitData((prev) => ({ ...prev, [fieldName]: value }));
@@ -90,7 +90,6 @@ const FieldRender = ({
       setErrors((prev) => ({ ...prev, [fieldName]: "" }));
     }
 
-    // Real-time validation
     if (touched?.[fieldName] && field) {
       const error = validateField(field, value);
       if (error) {
@@ -103,7 +102,7 @@ const FieldRender = ({
     setTouched((prev) => ({ ...prev, [fieldName]: true }));
 
     const field = formData.form?.fields?.find(
-      (f: FieldConfig) => f.name === fieldName,
+      (f: FieldConfig) => f.name === fieldName
     );
     const value = formSubmitData?.[fieldName] || "";
     if (field) {
@@ -117,7 +116,11 @@ const FieldRender = ({
   return (
     <>
       <div
-        className={`grid ${formData.form.layout.gridCols == "auto" ? `${gridColClass} !w-auto` : gridColClass} gap-6 gap-y-0 ${computedGap} p-4 `}
+        className={`grid ${
+          formData.form.layout.gridCols == "auto"
+            ? `${gridColClass} !w-auto`
+            : gridColClass
+        } gap-6 gap-y-0 ${computedGap} p-4 `}
       >
         {Array.isArray(formFields) &&
           (showRequiredFields

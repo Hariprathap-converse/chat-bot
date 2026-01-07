@@ -22,7 +22,6 @@ export const TruncateTooltip = ({
   const ref = useRef<HTMLDivElement | null>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
-  // Check if text is overflowing
   useEffect(() => {
     const checkOverflow = () => {
       if (ref.current) {

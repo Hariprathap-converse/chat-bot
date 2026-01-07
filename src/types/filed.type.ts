@@ -34,7 +34,6 @@ export type FormLayout = {
 
 export type FormHeader = {
   header: string;
-  // title: string
 };
 export type FormType = "basic" | "stepper" | "wizard";
 
@@ -46,8 +45,6 @@ export type IdsType = {
 
 export type FormDefinition = {
   form: {
-    // formId: string
-    // formKey: string
     ids: IdsType;
     formName: string;
     formType: FormType;

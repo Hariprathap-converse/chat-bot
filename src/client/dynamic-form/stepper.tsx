@@ -28,7 +28,6 @@ const Stepper = ({
         const isFirst = index === 0;
         const isLast = index === stepList.length - 1;
 
-        // Define clip-paths for each position
         const clipPath = isFirst
           ? "polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%)"
           : isLast

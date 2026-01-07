@@ -1,11 +1,9 @@
-// FeatureRichSelect/index.tsx
+
 import dynamic from "next/dynamic";
 import { FeatureRichSelectProps } from "@/types/components/select-config.types";
 
-// Dynamically import components for performance (optional)
 const DefaultSelect = dynamic(() => import("./default-select"));
 const MultiSelect = dynamic(() => import("./multi-select"), { ssr: false });
-// const MultiSelectSearch = dynamic(() => import("./MultiSelectSearch"));
 
 const variantMap: Record<
   string,

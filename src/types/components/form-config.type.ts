@@ -37,7 +37,7 @@ export interface InputFieldConfig {
     prefix?: string;
     suffix?: string;
   };
-  // Validation
+
   validation?: {
     minLength?: {
       value: number;
@@ -48,12 +48,11 @@ export interface InputFieldConfig {
       message?: string;
     };
     pattern?: string;
-    customValidator?: string; // function name
+    customValidator?: string;
     crossFieldValidation?: CrossFieldValidation[];
     additionalInfo?: string;
   };
 
-  // Auto-population
   autoPopulate: {
     defaultValue?: string;
     referenceField?: string;
@@ -61,7 +60,6 @@ export interface InputFieldConfig {
     autoFill: boolean;
   };
 
-  // UI Behavior
   behavior: {
     showCharCounter?: boolean;
     showClearIcon?: boolean;
@@ -72,13 +70,11 @@ export interface InputFieldConfig {
     preventScreenshot?: boolean;
   };
 
-  // Security & Audit
   security: {
     fieldLevelSecurity?: "visible" | "hidden" | "readonly";
     auditEnabled: boolean;
   };
 
-  // Conditional Logic
   conditionalLogic?: {
     showWhen?: {
       field: string;

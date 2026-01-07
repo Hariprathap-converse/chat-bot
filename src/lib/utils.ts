@@ -14,7 +14,7 @@ export const scrollToElement = (
   container: HTMLElement,
   element: HTMLElement,
   duration: number = 500,
-  offset: number = 0,
+  offset: number = 0
 ) => {
   const containerTop = container.scrollTop;
   const elementTop = element.offsetTop - offset;
@@ -25,7 +25,6 @@ export const scrollToElement = (
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
 
-    // Ease function (easeInOutQuad)
     const ease =
       progress < 0.5
         ? 2 * progress * progress
@@ -41,7 +40,6 @@ export const scrollToElement = (
   requestAnimationFrame(animateScroll);
 };
 
-// Capital case helper
 export function toCapitalCase(input?: string): string {
   if (!input || typeof input !== "string") return "";
   return input
@@ -51,17 +49,15 @@ export function toCapitalCase(input?: string): string {
     .join(" ");
 }
 
-// Type guard to check if an object is a GroupedOption
 function isGroupedOption(option: OptionOrGroup): option is GroupedOption {
   return typeof option === "object" && option !== null && "items" in option;
 }
 
-// Normalize function
 export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
   return options
     .filter(
       (option): option is OptionOrGroup =>
-        !!option && typeof option === "object",
+        !!option && typeof option === "object"
     )
     .map((option) => {
       if (isGroupedOption(option)) {
@@ -72,7 +68,7 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
             ? option.items
                 .filter(
                   (item): item is Option =>
-                    !!item && typeof item === "object" && "value" in item,
+                    !!item && typeof item === "object" && "value" in item
                 )
                 .map((item) => ({
                   ...item,
@@ -82,7 +78,6 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
         };
       }
 
-      // Flat option
       if ("value" in option && typeof option.value === "string") {
         return {
           ...option,
@@ -94,12 +89,12 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
 }
 
 export function normalizeMultiSelectValues(
-  values: Option[] | Option,
+  values: Option[] | Option
 ): Option[] {
   return (Array.isArray(values) ? values : [])
     .filter(
       (item): item is Option =>
-        !!item && typeof item === "object" && "id" in item && "value" in item,
+        !!item && typeof item === "object" && "id" in item && "value" in item
     )
     .map((item) => ({
       ...item,

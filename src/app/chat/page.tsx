@@ -34,7 +34,6 @@ export default function ChatPage() {
     botTyping,
   } = useChatMessages();
 
-  // Scroll function
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({
@@ -48,12 +47,10 @@ export default function ChatPage() {
     }
   };
 
-  // Auto-scroll to bottom on new messages
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Group messages into pairs (user + bot)
   const grouped = [];
   for (let i = 0; i < messages.length; i += 2) {
     grouped.push([messages[i], messages[i + 1]]);

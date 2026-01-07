@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 
-// Types (same as before)
+
 interface Header {
   title: string;
   subtitle: string;
@@ -17,7 +17,7 @@ interface Header {
 }
 
 interface SectionItem {
-  key: string; // NEW
+  key: string; 
   label: string;
   icon: string;
   hoverIcon?: string;
@@ -35,7 +35,7 @@ interface FooterItem {
 }
 
 interface FooterSection {
-  sectionKey: string; // NEW (used to filter by selected section)
+  sectionKey: string; 
   title: string;
   icon: string | null;
   items: FooterItem[];
@@ -48,7 +48,7 @@ interface OpsBotData {
     buttonIcon: string;
   };
   sections: Section[];
-  footerSection: FooterSection[]; // updated structure
+  footerSection: FooterSection[]; 
   chat: {
     introTitle: string;
     subtitle: string;
@@ -162,7 +162,7 @@ const defaultData: OpsBotData = {
       ],
     },
 
-    // ⭐ NEW FOOTER 2
+    
     {
       sectionKey: "payroll",
       title: "Payroll Operations",
@@ -183,13 +183,13 @@ const defaultData: OpsBotData = {
   },
 };
 
-// Context
+
 const OpsBotContext = createContext<OpsBotContextType>({
   data: defaultData,
   setData: () => {},
 });
 
-// Provider
+
 export const OpsBotProvider = ({ children }: { children: ReactNode }) => {
   const [data, setData] = useState<OpsBotData>(defaultData);
 
@@ -204,12 +204,12 @@ export const OpsBotProvider = ({ children }: { children: ReactNode }) => {
         setData(parsed);
       } catch (e) {
         console.error("Failed to parse opsBotData from localStorage", e);
-        // Clear corrupted localStorage and set default
+        
         localStorage.setItem("opsBotData", JSON.stringify(defaultData));
         setData(defaultData);
       }
     } else {
-      // First time user: save defaultData
+      
       localStorage.setItem("opsBotData", JSON.stringify(defaultData));
     }
   }, []);
@@ -228,5 +228,5 @@ export const OpsBotProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook
+
 export const useOpsBot = () => useContext(OpsBotContext);

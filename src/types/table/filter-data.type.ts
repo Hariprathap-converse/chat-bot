@@ -1,4 +1,3 @@
-// Define Types
 export interface InputField {
   placeholder: string;
   type: string;

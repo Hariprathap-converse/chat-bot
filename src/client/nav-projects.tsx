@@ -38,7 +38,6 @@ export function NavProjects({
   const { isMobile } = useSidebar();
 
   return (
-    // <SidebarGroup className="group-data-[collapsible=icon]:hidden pt-0">
     <SidebarGroup
       className="
     pt-0

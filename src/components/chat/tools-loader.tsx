@@ -21,7 +21,7 @@ export function ToolsLoader({
   const [elapsed, setElapsed] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(true);
 
-  // Timer logic
+  
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (status === "processing" || status === "sending") {
@@ -33,19 +33,19 @@ export function ToolsLoader({
     return () => clearInterval(interval);
   }, [status]);
 
-  // Auto-close logic on success or error
+  
   useEffect(() => {
     if (status === "success" || status === "error") {
       setInternalStage(status === "success" ? "done" : "error");
       const timeout = setTimeout(() => {
         setIsPopupOpen(false);
-        // Delay callback to allow DOM to update (transition from fixed to inline)
+        
         setTimeout(() => {
           if (onPopupClose) {
             onPopupClose();
           }
         }, 100);
-      }, 3500); // Wait 3.5s before closing popup
+      }, 3500); 
       return () => clearTimeout(timeout);
     }
   }, [status, onPopupClose]);
@@ -57,7 +57,7 @@ export function ToolsLoader({
     if (status === "sending") {
       setInternalStage("draft");
     }
-    // Success is handled in the auto-close effect
+    
   }, [status]);
 
   if (!type) return null;
@@ -71,7 +71,7 @@ export function ToolsLoader({
         "transition-all duration-300 ease-in-out",
         isPopupOpen
           ? "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in"
-          : "contents", // Inline mode
+          : "contents", 
       )}
     >
       <div

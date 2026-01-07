@@ -5,12 +5,10 @@ export const fetchDropDownData = async (queryString: string) => {
     const page = parseInt(params.get("page") || "1", 10);
     const recordLimit = parseInt(params.get("record_limit") || "10");
 
-    // Simulate delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // Build API URL
     const url = `http://localhost:4000/options?q=${encodeURIComponent(
-      search,
+      search
     )}&_page=${page}&_limit=${recordLimit}`;
 
     const res = await fetch(url);
@@ -20,7 +18,6 @@ export const fetchDropDownData = async (queryString: string) => {
     const totalCount = res.headers.get("X-Total-Count");
     const data = await res.json();
 
-    // Detect if data is grouped (i.e. contains "group" and "items" keys)
     const isGrouped =
       Array.isArray(data) && data[0]?.group && Array.isArray(data[0]?.items);
 

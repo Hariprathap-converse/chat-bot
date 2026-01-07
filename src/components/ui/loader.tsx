@@ -7,7 +7,6 @@ const Loader: React.FC = () => {
       style={{
         background:
           "conic-gradient(from 90deg at 30% 50%, rgba(29, 87, 199, 0.0001) 0deg, #1D57C7 359.96deg, rgba(29, 87, 199, 0.0001) 360deg)",
-        // clipPath: "circle(50% at 50% 50%)",
         WebkitMask:
           "radial-gradient(circle at 50% 50%, transparent 50%, black 60%)",
       }}

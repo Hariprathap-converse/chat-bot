@@ -1,7 +1,3 @@
-/**
- * Empty Chat State Component
- * Displays when no messages exist
- */
 interface EmptyChatStateProps {
   title: string;
   subtitle: string;

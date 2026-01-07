@@ -19,7 +19,6 @@ export interface CustomSelectProps {
   placeholder?: string;
 }
 
-// time input field
 
 export interface TimeInputProps {
   value: string;

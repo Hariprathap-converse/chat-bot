@@ -30,14 +30,6 @@ const ThemeSwitcherForMobile = () => {
   const [baseTheme, setBaseTheme] = useState<"light" | "dark">();
   const [colorTheme, setColorTheme] = useState<string>("");
 
-  // useEffect(() => {
-  //   const savedTheme = localStorage.getItem('theme') as 'light' | 'dark'
-  //   const savedColor = localStorage.getItem('colorTheme')
-
-  //   if (savedTheme) setBaseTheme(savedTheme)
-  //   if (savedColor) setColorTheme(savedColor)
-  // }, [])
-
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
     const savedColor = localStorage.getItem("colorTheme");
@@ -45,7 +37,6 @@ const ThemeSwitcherForMobile = () => {
     if (savedTheme) {
       setBaseTheme(savedTheme);
     } else {
-      // detect system preference
       const prefersDark = window.matchMedia(
         "(prefers-color-scheme: dark)",
       ).matches;

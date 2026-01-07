@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Input } from "@/components/ui/input"; // Assuming you have an Input component
-import { Label } from "@/components/ui/label"; // Assuming you have a Label component
+import { Input } from "@/components/ui/input"; 
+import { Label } from "@/components/ui/label"; 
 import { cn } from "@/lib/utils";
 import { FieldError } from "react-hook-form";
 

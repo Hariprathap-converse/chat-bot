@@ -49,7 +49,7 @@ export const DATE_FORMATS = {
     placeholder: "Month DD, YYYY",
     separator: " ",
     pattern: /^([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})$/,
-    autoFormat: (value: string) => value, // No auto-formatting for text months
+    autoFormat: (value: string) => value, 
     parseOrder: ["month", "day", "year"] as const,
   },
   "DD Month YYYY": {
@@ -57,7 +57,7 @@ export const DATE_FORMATS = {
     placeholder: "DD Month YYYY",
     separator: " ",
     pattern: /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/,
-    autoFormat: (value: string) => value, // No auto-formatting for text months
+    autoFormat: (value: string) => value, 
     parseOrder: ["day", "month", "year"] as const,
   },
   "DD-MM-YYYY": {

@@ -4,7 +4,7 @@ export class CrossFieldValidator {
   static validate(
     fieldValue: any,
     validation: CrossFieldValidation,
-    formData: Record<string, any>,
+    formData: Record<string, any>
   ): string | null {
     const {
       dependsOn,
@@ -16,13 +16,11 @@ export class CrossFieldValidator {
       maxDifference,
     } = validation;
 
-    // Get dependent field values
     const dependentValues = dependsOn.map((fieldName) => formData[fieldName]);
 
-    // Skip validation if dependent fields are empty (unless explicitly checking for empty)
     if (
       dependentValues.some(
-        (val) => val === undefined || val === null || val === "",
+        (val) => val === undefined || val === null || val === ""
       )
     ) {
       if (rule !== "not_equals" && rule !== "different_day") return null;
@@ -209,7 +207,7 @@ export class CrossFieldValidator {
   static validateMultiple(
     fieldValue: any,
     validations: CrossFieldValidation[],
-    formData: Record<string, any>,
+    formData: Record<string, any>
   ): string | null {
     for (const validation of validations) {
       const error = this.validate(fieldValue, validation, formData);

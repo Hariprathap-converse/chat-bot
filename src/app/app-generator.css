@@ -1,17 +1,8 @@
-/**
- * AI Website Generator Animations & Styles
- * Production-ready CSS for AI generation loader components
- */
 
-/* -------------------------
-  Brand variable
-------------------------- */
 :root {
   --brand: #6e8cff;
-  /* change to your brand color */
 }
 
-/* Card / Popover base styles rely on Tailwind. Add supportive classes here. */
 
 /* Holographic frame (glowing border) */
 .ai-holo-frame {

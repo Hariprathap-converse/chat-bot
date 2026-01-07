@@ -39,7 +39,7 @@ export class DataMasking {
   static maskValue(
     value: string,
     config: any,
-    scenario: "display" | "edit" | "export" | "print" = "display",
+    scenario: "display" | "edit" | "export" | "print" = "display"
   ): string {
     if (!config.enabled || !value) return value;
 
@@ -64,14 +64,13 @@ export class DataMasking {
         customPattern,
         maskChar,
         showLast,
-        showFirst,
+        showFirst
       );
     }
 
     const patternConfig = this.patterns[pattern as keyof typeof this.patterns];
     if (!patternConfig) return value;
 
-    // Special handling for email
     if (pattern === "email") {
       const emailMatch = value.match(/^([^@]+)@([^.]+)\.(.+)$/);
       if (emailMatch) {
@@ -80,25 +79,23 @@ export class DataMasking {
           username,
           maskChar,
           showFirst,
-          showLast,
+          showLast
         );
         const maskedDomain = this.maskPortion(
           domain,
           maskChar,
           0,
-          Math.min(2, domain.length),
+          Math.min(2, domain.length)
         );
         return `${maskedUsername}@${maskedDomain}.${tld}`;
       }
     }
 
-    // Format the value first if preserveFormat is true
     let formatted = value;
     if (preserveFormat) {
       formatted = patternConfig.format(value.replace(/\D/g, ""));
     }
 
-    // Apply masking based on showFirst and showLast
     if (showFirst > 0 || showLast > 0) {
       return this.maskPortion(formatted, maskChar, showFirst, showLast);
     }
@@ -110,7 +107,7 @@ export class DataMasking {
     value: string,
     maskChar: string,
     showFirst: number,
-    showLast: number,
+    showLast: number
   ): string {
     if (value.length <= showFirst + showLast) return value;
 
@@ -127,7 +124,7 @@ export class DataMasking {
     pattern: string,
     maskChar: string,
     showLast: number,
-    showFirst = 0,
+    showFirst = 0
   ): string {
     let masked = "";
     let valueIndex = 0;
@@ -164,7 +161,10 @@ export class DataMasking {
         if (digitsOnly.length <= 3) return digitsOnly;
         if (digitsOnly.length <= 5)
           return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3)}`;
-        return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3, 5)}-${digitsOnly.slice(5, 9)}`;
+        return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(
+          3,
+          5
+        )}-${digitsOnly.slice(5, 9)}`;
 
       case "credit-card":
         return digitsOnly.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
@@ -173,14 +173,20 @@ export class DataMasking {
         if (digitsOnly.length <= 3) return digitsOnly;
         if (digitsOnly.length <= 6)
           return `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(3)}`;
-        return `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(3, 6)}-${digitsOnly.slice(6, 10)}`;
+        return `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(
+          3,
+          6
+        )}-${digitsOnly.slice(6, 10)}`;
 
       case "license":
         const alphaNumeric = value.replace(/[^A-Z0-9]/gi, "").toUpperCase();
         if (alphaNumeric.length <= 3) return alphaNumeric;
         if (alphaNumeric.length <= 6)
           return `${alphaNumeric.slice(0, 3)}-${alphaNumeric.slice(3)}`;
-        return `${alphaNumeric.slice(0, 3)}-${alphaNumeric.slice(3, 6)}-${alphaNumeric.slice(6, 10)}`;
+        return `${alphaNumeric.slice(0, 3)}-${alphaNumeric.slice(
+          3,
+          6
+        )}-${alphaNumeric.slice(6, 10)}`;
 
       default:
         return value;

@@ -47,7 +47,7 @@ export default function Login() {
       const response = await authService.login(data.email, data.password);
       localStorage.setItem("token", response.access_token);
       localStorage.setItem("refresh_token", response.refresh_token);
-      Cookies.set("token", response.access_token, { expires: 7 }); // Expires in 7 days
+      Cookies.set("token", response.access_token, { expires: 7 }); 
       toast.success("Logged in successfully");
       router.push("/chat");
     } catch (err: any) {

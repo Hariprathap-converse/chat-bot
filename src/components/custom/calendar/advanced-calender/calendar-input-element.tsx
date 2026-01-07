@@ -86,7 +86,7 @@ export const CalendarInputElement: React.FC<InputElementProps> = ({
                     ? ""
                     : "text-disabledPlaceholder font-light",
                   (config.isDisabled == true || formConfig.viewMode == true) &&
-                    "!pointer-events-none cursor-not-allowed",
+                    "!pointer-events-none cursor-not-allowed"
                 )}
               >
                 <div
@@ -96,7 +96,7 @@ export const CalendarInputElement: React.FC<InputElementProps> = ({
                     className,
                     inputDay && (monthName || inputMonth) && inputYear
                       ? ""
-                      : "text-disabledPlaceholder font-light",
+                      : "text-disabledPlaceholder font-light"
                   )}
                   onMouseEnter={
                     config.isDisabled == true || formConfig.viewMode == true
@@ -143,37 +143,6 @@ export const CalendarInputElement: React.FC<InputElementProps> = ({
                 >
                   <PopoverTrigger asChild className="">
                     <div
-                      onClick={() => {
-                        // if (
-                        //   config.isDisabled == false ||
-                        //   formConfig.viewMode == false
-                        // ) {
-                        //   setIsOpen(true)
-                        //   setIsFocused(true)
-                        // }
-                      }}
-                      // onFocus={(e) => {
-                      //   // Only auto-open if focus came from Tab (not mouse click, not after Esc)
-                      //   if (
-                      //     e.relatedTarget &&
-                      //     (!config.isDisabled || !formConfig.viewMode)
-                      //   ) {
-                      //     console.log(
-                      //       'shouldOpenCalender: ',
-                      //       shouldOpenCalender
-                      //     )
-
-                      //     if (shouldOpenCalender == false) {
-                      //       console.log('first')
-                      //       setIsOpen((prev) => !prev)
-                      //       setIsFocused(true)
-                      //     } else {
-                      //       console.log('close')
-                      //       setIsOpen(false)
-                      //       setIsFocused(false)
-                      //     }
-                      //   }
-                      // }}
                       tabIndex={!shouldOpenCalender ? 0 : -1}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" || e.key === " ") {
@@ -191,7 +160,7 @@ export const CalendarInputElement: React.FC<InputElementProps> = ({
                           "cursor-not-allowed":
                             config.isDisabled == true ||
                             formConfig.viewMode == true,
-                        },
+                        }
                       )}
                     >
                       {!formConfig.viewMode && !config.isDisabled && (
@@ -251,7 +220,7 @@ export const CalendarInputElement: React.FC<InputElementProps> = ({
                   isFocused ? "w-full " : "w-0",
                   isFocused && (!config.isDisabled || !formConfig.viewMode)
                     ? "w-full "
-                    : "w-0",
+                    : "w-0"
                 )}
               />
             </div>

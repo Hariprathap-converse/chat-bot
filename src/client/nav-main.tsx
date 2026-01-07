@@ -37,7 +37,6 @@ export function NavMain({
   const { open, setOpen } = useSidebar();
   return (
     <SidebarGroup className="">
-      {/* <SidebarGroupLabel className="font-medium text-sub-heading">Platform</SidebarGroupLabel> */}
       <SidebarMenu className={cn(open ? "" : " gap-2 ")}>
         {items.map((item) => (
           <Collapsible

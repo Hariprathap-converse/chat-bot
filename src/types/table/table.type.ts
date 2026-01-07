@@ -41,7 +41,7 @@ export interface DesktopFiltersProps {
   onApplyFilters: () => void;
   onResetFilters: () => void;
   isAllRangesValid: boolean;
-  hideApplyButton?: boolean; // New prop to hide Apply button
+  hideApplyButton?: boolean;
 }
 
 export interface MobileFiltersProps {
@@ -51,7 +51,7 @@ export interface MobileFiltersProps {
   onApplyFilters: () => void;
   onResetFilters: () => void;
   isAllRangesValid: boolean;
-  hideApplyButton?: boolean; // New prop to hide Apply button
+  hideApplyButton?: boolean;
 }
 
 export interface QuickFiltersProps {
@@ -60,7 +60,7 @@ export interface QuickFiltersProps {
   onFilterChange: (fieldName: string, value: string) => void;
   onApplyFilters: () => void;
   onResetFilters: () => void;
-  onImmediateFilterChange?: (filterValues: Record<string, string>) => void; // New prop for immediate fetch
+  onImmediateFilterChange?: (filterValues: Record<string, string>) => void;
 }
 
 export interface IconProps {
@@ -121,7 +121,7 @@ export type TableData = any;
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   metadata: TableMetadata;
-  fetchDataFn: boolean; // Corrected to accept fetchData function
+  fetchDataFn: boolean;
 }
 
 export interface CustomTableMeta extends TableMeta<TableData> {
@@ -130,10 +130,8 @@ export interface CustomTableMeta extends TableMeta<TableData> {
   onMoreAction?: (action: string, rowId: string) => void;
 }
 
-export interface CustomColumnMeta<TData, TValue> extends ColumnMeta<
-  TData,
-  TValue
-> {
+export interface CustomColumnMeta<TData, TValue>
+  extends ColumnMeta<TData, TValue> {
   isActionColumn?: boolean;
   isMoreActionColumn?: boolean;
 }
@@ -185,7 +183,6 @@ export interface BulkActionApi {
   userIds: string[];
 }
 
-// types for sortable headder componennet
 export interface SortableHeaderProps {
   column: any;
   title: string;
@@ -224,11 +221,9 @@ export interface GlobalPreferencesContextType {
       dataWrap: boolean;
       theme: string;
       per_page: number;
-    }>,
+    }>
   ) => void;
 }
-
-// table component inline edit types
 
 export interface EditState {
   rowId: string | null;
