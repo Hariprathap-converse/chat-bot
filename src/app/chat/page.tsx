@@ -81,7 +81,7 @@ export default function ChatPage() {
           className="w-full  flex flex-col h-full mx-auto overflow-y-auto  gap-6 pb-4 px-4 md:px-0"
         >
           {messages.length <= 0 && (
-            <div className="flex flex-col items-center gap-[27px]">
+            <div className="flex flex-col items-center gap-[27px] ">
               <EmptyChatState
                 title={data.chat.introTitle}
                 subtitle={data.chat.subtitle}
@@ -89,7 +89,7 @@ export default function ChatPage() {
             </div>
           )}
           <div>
-            <div className="w-full max-w-[70%] 2xl:max-w-[58%] flex flex-col  h-full mx-auto  gap-6 pb-4 px-4 md:px-0">
+            <div className="w-full max-w-full sm:max-w-[90%] md:max-w-[78%] lg:max-w-[80%] xl:max-w-[74%] xl:mx-auto   md:mr-[calc(100%-90%)] 2xl:max-w-[57%] flex flex-col  h-full sm:mx-auto  gap-6 pb-4 px-2 md:px-0 ">
               {grouped.map((pair, idx) => (
                 <div key={`group-${idx}`} className="flex flex-col gap-1">
                   {pair[0] && (
@@ -120,8 +120,7 @@ export default function ChatPage() {
         {/* Messages Container */}
 
         {/* Input Area */}
-        <div className="flex mx-auto z-40 flex-col-reverse p-5 px-0 pt-0 w-full 2xl:max-w-[58%]">
-          {/* <div className="flex mx-auto z-40 flex-col-reverse p-5 pt-0 w-full min-w-[65%]  md:max-w-[70%] lg:max-w-[65%] xl:min-w-[61%] 2xl:min-w-[1167px]  2xl:max-w-[1167px]"> */}
+        <div className="flex mx-auto z-40 flex-col-reverse p-5 md:px-0 pt-0 w-full md:max-w-[76%] lg:max-w-[80%] xl:max-w-[75%] 2xl:max-w-[58%]">
           <ChatInput
             value={input}
             onChange={setInput}
