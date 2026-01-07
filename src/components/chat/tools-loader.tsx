@@ -76,10 +76,10 @@ export function ToolsLoader({
     >
       <div
         className={cn(
-          "relative overflow-hidden bg-white shadow-xl border border-slate-100 transition-all duration-300",
+          "relative overflow-hidden bg-white  border border-slate-100 transition-all duration-300",
           isPopupOpen
-            ? "w-full max-w-sm rounded-2xl"
-            : "w-full rounded-2xl my-2",
+            ? "w-full max-w-sm rounded-2xl shadow-xl" 
+            : "w-full rounded-2xl my-2 shadow-md",
         )}
       >
         {/* Refactored Header: White bg, Gradient Text */}

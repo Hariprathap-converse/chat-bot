@@ -1,17 +1,11 @@
-/**
- * Refactored Chat Page
- * Clean architecture with reusable components
- */
 "use client";
 import { useEffect, useRef } from "react";
 import { AppSidebar } from "@/client/app-sidebar";
 import { useOpsBot } from "@/context/json-context";
 import Profile from "@/client/profile";
 
-// Custom Hooks
 import { useChatMessages } from "@/hooks/use-chat-messages";
 
-// Components
 import { EmptyChatState } from "@/components/chat/empty-chat-state";
 import { ChatMessage } from "@/components/chat/chat-message";
 import { ChatInput } from "@/components/chat/chat-input";
@@ -134,7 +128,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input Area */}
-        <div className="flex mx-auto z-40 flex-col-reverse p-5 w-full min-w-[65%]  md:max-w-[70%] lg:max-w-[65%] xl:min-w-[61%] 2xl:max-w-[700px] ">
+        <div className="flex mx-auto z-40 flex-col-reverse p-5 pt-0 w-full min-w-[65%]  md:max-w-[70%] lg:max-w-[65%] xl:min-w-[61%] 2xl:min-w-[1167px]  2xl:max-w-[1167px] ">
           <ChatInput
             value={input}
             onChange={setInput}

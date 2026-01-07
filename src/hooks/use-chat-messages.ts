@@ -80,7 +80,7 @@ const INITIAL_MESSAGES: Message[] = [
 ];
 
 export function useChatMessages() {
-  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [showEmployeeLoader, setShowEmployeeLoader] = useState(false);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);

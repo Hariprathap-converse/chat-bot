@@ -25,8 +25,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Message } from "@/hooks/use-chat-messages";
-import AIWebsiteGeneratorLoader from "@/app/loader/3/page";
 import { ToolsLoader } from "@/components/chat/tools-loader";
+import AIWebsiteGeneratorLoader from "./ai-website-generator-loader";
 
 interface ChatMessageProps {
   message: Message;
@@ -76,7 +76,7 @@ export function ChatMessage({
           {/* User Actions */}
           <div
             className={cn(
-              "opacity-0 group-hover:opacity-100 flex gap-3 items-center h-[10px]",
+              "opacity-0 group-hover:opacity-100  flex gap-3 !z-40  items-center h-[10px]",
               isOpen ? "opacity-100" : "opacity-0",
             )}
           >
@@ -207,7 +207,7 @@ export function ChatMessage({
         </div>
 
         {/* Bot Actions */}
-        <div className="relative mt-1 z-50 h-[16px]">
+        <div className="relative mt-1 z-40 h-[16px]">
           <div
             className={cn(
               "opacity-0 group-hover:opacity-100 flex pl-8 max-h-[20px] gap-2 items-center",

@@ -30,7 +30,7 @@ export function ChatInput({
 
   return (
     <div className="flex relative p-0">
-      <div className="p-px rounded-[14px] w-full flex items-center shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)]">
+      <div className="p-px rounded-[14px] w-full min-w-full flex items-center shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)]">
         <Textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
