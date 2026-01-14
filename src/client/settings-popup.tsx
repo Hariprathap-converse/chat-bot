@@ -86,22 +86,22 @@ export function SettingsPopup({ open, onOpenChange }: SettingsPopupProps) {
 
                 <Tabs defaultValue="personal-details" className="flex flex-col flex-1 overflow-hidden">
                     <div className="px-6 border-b-0">
-                        <TabsList className="bg-transparent p-0 justify-start max-w-fit gap-6 h-auto">
+                        <TabsList className="bg-transparent p-0 justify-start max-w-fit gap-3 h-auto">
                             <TabsTrigger
                                 value="personal-details"
-                                className="bg-transparent border-none shadow-none  p-1.5 px-5 data-[state=active]:bg-violet-100 data-[state=active]:text-violet-600 text-gray-500 data-[state=active]:shadow-none transition-colors font-medium rounded-[6px]"
+                                className="bg-transparent border-none shadow-none  p-1.5 px-5 data-[state=active]:bg-[hsla(245,96%,70%,0.1)] hover:bg-[hsla(245,96%,70%,0.1)] hover:text-[hsla(245,96%,70%,1)] cursor-pointer data-[state=active]:text-[hsla(245,96%,70%,1)] text-gray-500 data-[state=active]:shadow-none transition-colors font-medium rounded-[6px]"
                             >
                                 Personal Details
                             </TabsTrigger>
                             <TabsTrigger
                                 value="chat-history"
-                                className="bg-transparent border-none shadow-none  p-1.5 px-5 data-[state=active]:bg-violet-100 data-[state=active]:text-violet-600 text-gray-500 data-[state=active]:shadow-none transition-colors font-medium rounded-[6px]"
+                                className="bg-transparent border-none shadow-none  p-1.5 px-5 data-[state=active]:bg-[hsla(245,96%,70%,0.1)] hover:bg-[hsla(245,96%,70%,0.1)] hover:text-[hsla(245,96%,70%,1)] cursor-pointer data-[state=active]:text-[hsla(245,96%,70%,1)] text-gray-500 data-[state=active]:shadow-none transition-colors font-medium rounded-[6px]"
                             >
                                 Chat History
                             </TabsTrigger>
                             <TabsTrigger
                                 value="theme"
-                                className="bg-transparent border-none shadow-none  p-1.5 px-5 data-[state=active]:bg-violet-100 data-[state=active]:text-violet-600 text-gray-500 data-[state=active]:shadow-none transition-colors font-medium rounded-[6px]"
+                                className="bg-transparent border-none shadow-none   p-1.5 px-5 data-[state=active]:bg-[hsla(245,96%,70%,0.1)] hover:bg-[hsla(245,96%,70%,0.1)] hover:text-[hsla(245,96%,70%,1)] cursor-pointer data-[state=active]:text-[hsla(245,96%,70%,1)] text-gray-500 data-[state=active]:shadow-none transition-colors font-medium rounded-[6px]"
                             >
                                 Theme
                             </TabsTrigger>
@@ -115,7 +115,7 @@ export function SettingsPopup({ open, onOpenChange }: SettingsPopupProps) {
                         <TabsContent value="chat-history" className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-0 px-5 shadow-none">
                             <ChatHistoryTab />
                         </TabsContent>
-                        <TabsContent value="theme" className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-8 shadow-none">
+                        <TabsContent value="theme" className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-8 py-5 shadow-none">
                             <ThemeTab />
                         </TabsContent>
                     </div>
@@ -284,6 +284,8 @@ function DetailItem({ label, value }: { label: string, value: string }) {
 }
 
 function ChatHistoryTab() {
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
     return (
         <div className="flex flex-col gap-4 py-2">
             <div className="flex items-center justify-between gap-4">
@@ -291,8 +293,18 @@ function ChatHistoryTab() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <Input placeholder="Search your activity..." className="pl-9 bg-white border-gray-200" />
                 </div>
-                <Button variant="outline" className="text-indigo-500 border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 gap-2">
-                    <Trash2 className="w-4 h-4" />
+                <Button
+                    onClick={() => setShowDeleteConfirm(true)}
+                    className="gap-2  transition-all duration-300 bg-transparent hover:bg-primary/10 hover:border-transparent cursor-pointer text-primary  shadow-none border rounded-[4px] "
+
+                >
+                    <span className="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                            <path d="M11.9055 5.56055C11.9055 5.56055 11.5166 10.3845 11.291 12.4165C11.1835 13.387 10.584 13.9557 9.60205 13.9736C7.73335 14.0073 5.86251 14.0094 3.99453 13.97C3.0498 13.9507 2.46033 13.3748 2.35504 12.4215C2.12799 10.3716 1.74121 5.56055 1.74121 5.56055" stroke="#7468FC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M12.8962 3.24875H0.75" stroke="#7468FC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M10.5553 3.24899C9.99306 3.24899 9.50887 2.85148 9.39857 2.30068L9.22452 1.42972C9.11708 1.0279 8.75323 0.75 8.33852 0.75H5.30664C4.89193 0.75 4.52807 1.0279 4.42064 1.42972L4.24659 2.30068C4.13628 2.85148 3.6521 3.24899 3.08984 3.24899" stroke="#7468FC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </span>
                     Delete all
                 </Button>
             </div>
@@ -333,6 +345,36 @@ function ChatHistoryTab() {
                     </div>
                 </div>
             </div>
+
+            <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+                <DialogContent className="sm:max-w-[600px] p-6 !rounded-[8px] bg-white border-none shadow-xl gap-0">
+                    <div className="flex gap-4 items-center">
+                        <div className="w-10 h-10 rounded-full bg-[#eeeefc] flex items-center justify-center shrink-0">
+                            <Trash2 className="w-6 h-6 text-primary stroke-2.5" />
+                        </div>
+                        <div className="flex-1 pt-1">
+                            <DialogTitle className="text-[16px] font-bold text-gray-900 mb-1">Are you sure?</DialogTitle>
+                            <p className="text-[14px] text-gray-500 leading-relaxed">Are you sure you want to delete this activity?</p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 w-full mt-6">
+                        <Button
+                            variant="ghost"
+                            onClick={() => setShowDeleteConfirm(false)}
+                            className="text-[#6366f1] font-normal cursor-pointer hover:bg-transparent hover:font-medium"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={() => setShowDeleteConfirm(false)}
+                            className=" bg-[hsl(245,96%,78%)] border border-primary hover:bg-[hsl(245,96%,78%)] text-white shadow-lg px-6 rounded-lg font-medium transition-all group "
+                        >
+                            <p className="group-hover:scale-105 cursor-pointer  duration-300 transition-all">Delete</p>
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
@@ -349,7 +391,7 @@ function HistoryItem({ title, subtitle, time }: { title: string, subtitle: strin
                     <Clock className="w-3 h-3" />
                     {time}
                 </div>
-                <a href="#" className="text-xs text-indigo-500 font-medium hover:underline">View Details</a>
+                <a href="#" className="text-xs text-indigo-500 font-medium hover:font-semibold">View Details</a>
                 <X className="w-4 h-4 text-gray-400 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity hover:text-red-500" />
             </div>
         </div>
@@ -358,23 +400,23 @@ function HistoryItem({ title, subtitle, time }: { title: string, subtitle: strin
 
 function ThemeTab() {
     return (
-        <div className="space-y-6">
-            <h3 className="text-sm text-gray-400 font-medium uppercase tracking-wider">Theme</h3>
+        <div className="space-y-5">
+            <h3 className="text-[12px] text-gray-400   tracking-wider">Theme</h3>
             <div className="flex items-center gap-8">
                 <label className="flex items-center gap-2 cursor-pointer group">
-                    <div className="w-5 h-5 rounded-full border border-indigo-500 flex items-center justify-center">
-                        <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                    <div className="w-[18px] h-[18px] rounded-full border-none bg-indigo-500 flex items-center justify-center">
+                        <div className="w-2 h-2 rounded-full bg-background" />
                     </div>
-                    <Sun className="w-5 h-5 text-gray-600 group-hover:text-indigo-500 transition-colors" />
-                    <span className="text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors">Light</span>
+                    <Sun className="w-5 h-5 text-gray-600 transition-colors" />
+                    <span className="text-sm font-medium text-gray-700  transition-colors">Light</span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer group">
-                    <div className="w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
+                    <div className="w-[18px] h-[18px] rounded-full border border-gray-300 flex items-center justify-center">
                         {/* Unchecked state */}
                     </div>
-                    <Moon className="w-4 h-4 text-gray-400 group-hover:text-indigo-500 transition-colors" />
-                    <span className="text-sm font-medium text-gray-500 group-hover:text-indigo-600 transition-colors">Dark</span>
+                    <Moon className="w-4 h-4 text-gray-400 transition-colors" />
+                    <span className="text-sm font-medium text-gray-500  transition-colors">Dark</span>
                 </label>
             </div>
         </div>
