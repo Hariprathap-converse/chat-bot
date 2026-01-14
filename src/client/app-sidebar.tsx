@@ -27,6 +27,7 @@ import { BsStars } from "react-icons/bs";
 import { MdOutlineWbIncandescent } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { SettingsPopup } from "./settings-popup";
 
 const Navdata = {
   navMain: [
@@ -149,6 +150,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open, setOpen } = useSidebar();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <Sidebar
@@ -210,7 +212,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </span>
             </div>
             <div
-              onClick={() => setOpen(true)}
+              onClick={() => setSettingsOpen(true)}
               className={cn(
                 open ? "" : "ml-2 max-w-[40px]",
                 " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
@@ -262,6 +264,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         </div>
       </SidebarContent>
+      <SettingsPopup open={settingsOpen} onOpenChange={setSettingsOpen} />
     </Sidebar>
   );
 }

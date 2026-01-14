@@ -129,10 +129,29 @@ export function DateTimePicker({
   const currentFormatConfig = DATE_FORMATS[selectedFormat];
 
   React.useEffect(() => {
+    setDate(value);
+  }, [value]);
+
+  React.useEffect(() => {
     const currentYear = toZonedTime(month, timeZone).getFullYear();
     const pageIndex = Math.floor((currentYear - MIN_YEAR) / YEARS_PER_PAGE);
     setYearPage(Math.max(0, Math.min(pageIndex, TOTAL_PAGES - 1)));
   }, [month]);
+
+  React.useEffect(() => {
+    if (date) {
+      const zonedDate = toZonedTime(date, timeZone);
+      setInputDay(zonedDate.getDate());
+      setInputMonth(zonedDate.getMonth() + 1);
+      setInputYear(zonedDate.getFullYear());
+      setMonthName(monthNames[zonedDate.getMonth()]);
+    } else {
+      setInputDay(null);
+      setInputMonth(null);
+      setInputYear(null);
+      setMonthName(null);
+    }
+  }, [date]);
 
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
