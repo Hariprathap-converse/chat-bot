@@ -1,6 +1,7 @@
 import { z } from "zod";
+import { setTokens } from "@/lib/api-client";
 
-const API_URL = "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 interface ApiResponse<T> {
   success: boolean;
@@ -54,6 +55,8 @@ export const authService = {
       if (!result.data) {
         throw new Error("No data received from server");
       }
+
+      setTokens(result.data.access_token, result.data.refresh_token);
 
       return result.data;
     } catch (error: any) {

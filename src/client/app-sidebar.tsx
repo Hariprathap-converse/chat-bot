@@ -230,9 +230,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               onClick={async () => {
                 setLoading(true);
                 const Cookies = (await import("js-cookie")).default;
-                localStorage.removeItem("token");
-                localStorage.removeItem("refresh_token");
+                // localStorage.removeItem("token");
+                // localStorage.removeItem("refresh_token");
                 Cookies.remove("token");
+                Cookies.remove("refresh_token");
                 router.push("/login");
 
                 window.location.href = "/login";

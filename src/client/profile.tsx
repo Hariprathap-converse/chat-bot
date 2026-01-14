@@ -116,9 +116,10 @@ const Profile = () => {
             <button
               onClick={async () => {
                 const Cookies = (await import("js-cookie")).default;
-                localStorage.removeItem("token");
-                localStorage.removeItem("refresh_token");
+                // localStorage.removeItem("token");
+                // localStorage.removeItem("refresh_token");
                 Cookies.remove("token");
+                Cookies.remove("refresh_token");
                 window.location.href = "/login";
               }}
               className="w-full group flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground  font-medium "

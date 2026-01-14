@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { apiClient } from "@/lib/api-client";
 
 export interface Message {
   id: string;
@@ -104,9 +105,8 @@ export function useChatMessages() {
           ),
         );
       }, 2000);
-      const res = await fetch("http://localhost:8000/auth/tools-send-email", {
+      const result = await apiClient("/auth/tools-send-email", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           recipient_email: to,
           subject: subject,
@@ -114,46 +114,31 @@ export function useChatMessages() {
         }),
       });
 
-      const result = await res.json();
       if (!result.success) {
         toast.error(result.message || "Failed to send email");
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === messageId
               ? {
-                  ...msg,
-                  toolData: { ...msg.toolData, status: "error" },
-                  content: result.message ?? "Failed to send email",
-                }
+                ...msg,
+                toolData: { ...msg.toolData, status: "error" },
+                content: result.message ?? "Failed to send email",
+              }
               : msg,
           ),
         );
       } else {
         toast.success(result.message || "Email sent successfully");
       }
-      if (!res.ok) {
-        toast.error(result.message || "Failed to send email");
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === messageId
-              ? {
-                  ...msg,
-                  toolData: { ...msg.toolData, status: "error" },
-                  content: result.message ?? "Failed to send email",
-                }
-              : msg,
-          ),
-        );
-      }
 
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === messageId
             ? {
-                ...msg,
-                toolData: { ...msg.toolData, status: "success" },
-                content: `Email sent to ${to}`,
-              }
+              ...msg,
+              toolData: { ...msg.toolData, status: "success" },
+              content: `Email sent to ${to}`,
+            }
             : msg,
         ),
       );
@@ -171,10 +156,10 @@ export function useChatMessages() {
         prev.map((msg) =>
           msg.id === messageId
             ? {
-                ...msg,
-                toolData: { ...msg.toolData, status: "error" },
-                content: errorMessage,
-              }
+              ...msg,
+              toolData: { ...msg.toolData, status: "error" },
+              content: errorMessage,
+            }
             : msg,
         ),
       );

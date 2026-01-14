@@ -45,9 +45,10 @@ export default function Login() {
       const { authService } = await import("@/services/auth");
       const Cookies = (await import("js-cookie")).default;
       const response = await authService.login(data.email, data.password);
-      localStorage.setItem("token", response.access_token);
-      localStorage.setItem("refresh_token", response.refresh_token);
+      // localStorage.setItem("token", response.access_token);
+      // localStorage.setItem("refresh_token", response.refresh_token);
       Cookies.set("token", response.access_token, { expires: 7 });
+      Cookies.set("refresh_token", response.refresh_token, { expires: 8 });
       toast.success("Logged in successfully");
       router.push("/chat");
     } catch (err: any) {
@@ -212,7 +213,7 @@ export default function Login() {
                 type="submit"
                 disabled={loading}
                 className={cn(
-                  " w-full mt-5 capitalize text-base font-semibold h-[45px]  hover:scale-[101%]  bg-sidebar-accent  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
+                  " w-full mt-5 capitalize text-base font-semibold h-[45px]  hover:scale-[101%]  bg-sidebar-accent  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
                 )}
               >
                 {loading ? "Logging in..." : "Log In"}

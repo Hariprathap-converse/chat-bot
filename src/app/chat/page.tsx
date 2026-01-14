@@ -78,7 +78,7 @@ export default function ChatPage() {
       <main className="grid grid-rows-[1fr_auto]  pb-0  w-full h-full pt-[50px] max-h-screen overflow-hidden items-center">
         <div
           ref={containerRef}
-          className="w-full  flex flex-col h-full mx-auto overflow-y-auto  gap-6 pb-4 px-4 md:px-0"
+          className="w-full  flex flex-col h-full mx-auto overflow-y-auto pt-[5px]  gap-6 pb-4 px-4 md:px-0"
         >
           {messages.length <= 0 && (
             <div className="flex flex-col items-center gap-[27px] ">
