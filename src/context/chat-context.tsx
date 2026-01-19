@@ -18,6 +18,7 @@ interface ChatContextType {
     createNewChat: () => void;
     selectConversation: (id: string) => void;
     updateConversationTitle: (id: string, title: string) => void;
+    deleteConversation: (id: string) => void;
     addMessageToConversation: (
         conversationId: string,
         message: Message
@@ -209,6 +210,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         );
     };
 
+    const deleteConversation = (id: string) => {
+        setConversations((prev) => prev.filter((c) => c.id !== id));
+        setMessagesMap((prev) => {
+            const newMap = { ...prev };
+            delete newMap[id];
+            return newMap;
+        });
+        if (activeConversationId === id) {
+            createNewChat();
+        }
+    };
+
     return (
         <ChatContext.Provider
             value={{
@@ -222,6 +235,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                 updateConversationTitle,
                 addMessageToConversation,
                 ensureActiveConversation,
+                deleteConversation,
             }}
         >
             {children}
