@@ -17,9 +17,17 @@ export function ToolsLoader({
 }: ToolsLoaderProps) {
   const [internalStage, setInternalStage] = useState<
     "scan" | "draft" | "fly" | "done" | "error"
-  >("scan");
+  >(() => {
+    if (status === "success") return "done";
+    if (status === "error") return "error";
+    if (status === "sending") return "draft";
+    return "scan";
+  });
   const [elapsed, setElapsed] = useState(0);
-  const [isPopupOpen, setIsPopupOpen] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(() => {
+    // If loading from history as done/error, start closed
+    return !(status === "success" || status === "error");
+  });
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -33,20 +41,23 @@ export function ToolsLoader({
   }, [status]);
 
   useEffect(() => {
-    if (status === "success" || status === "error") {
+    if ((status === "success" || status === "error")) {
       setInternalStage(status === "success" ? "done" : "error");
-      const timeout = setTimeout(() => {
-        setIsPopupOpen(false);
 
-        setTimeout(() => {
-          if (onPopupClose) {
-            onPopupClose();
-          }
-        }, 100);
-      }, 3500);
-      return () => clearTimeout(timeout);
+      if (isPopupOpen) {
+        const timeout = setTimeout(() => {
+          setIsPopupOpen(false);
+
+          setTimeout(() => {
+            if (onPopupClose) {
+              onPopupClose();
+            }
+          }, 100);
+        }, 3500);
+        return () => clearTimeout(timeout);
+      }
     }
-  }, [status, onPopupClose]);
+  }, [status, onPopupClose, isPopupOpen]);
 
   useEffect(() => {
     if (status === "processing") {

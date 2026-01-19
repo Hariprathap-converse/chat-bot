@@ -23,6 +23,11 @@ interface ChatContextType {
         conversationId: string,
         message: Message
     ) => void;
+    updateMessage: (
+        conversationId: string,
+        messageId: string,
+        updates: Partial<Message>
+    ) => void;
     ensureActiveConversation: (firstMessageContent: string) => string;
 }
 
@@ -148,6 +153,20 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         });
     };
 
+    const updateMessage = (
+        conversationId: string,
+        messageId: string,
+        updates: Partial<Message>
+    ) => {
+        setMessagesMap((prev) => {
+            const currentMsgs = prev[conversationId] || [];
+            const newMsgs = currentMsgs.map((msg) =>
+                msg.id === messageId ? { ...msg, ...updates } : msg
+            );
+            return { ...prev, [conversationId]: newMsgs };
+        });
+    };
+
     // Override setMessages to also update the map if we have an active conversation
     const setMessagesExternal: React.Dispatch<React.SetStateAction<Message[]>> = (
         value
@@ -234,6 +253,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                 selectConversation,
                 updateConversationTitle,
                 addMessageToConversation,
+                updateMessage,
                 ensureActiveConversation,
                 deleteConversation,
             }}

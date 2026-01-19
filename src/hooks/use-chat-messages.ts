@@ -15,7 +15,7 @@ export interface Message {
 }
 
 export function useChatMessages() {
-  const { messages, addMessageToConversation, ensureActiveConversation, setMessages } = useChat();
+  const { messages, addMessageToConversation, updateMessage, ensureActiveConversation, setMessages } = useChat();
   const [input, setInput] = useState("");
   const [showEmployeeLoader, setShowEmployeeLoader] = useState(false);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
@@ -29,25 +29,16 @@ export function useChatMessages() {
     conversationId: string
   ) => {
     try {
-      // Update status to idle -> sending
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageId
-            ? { ...msg, toolData: { ...msg.toolData, status: "idle" } }
-            : msg
-        )
-      );
+      // 1. Initial State: Processing/Scanning (Implicit or set by caller)
+      // Wait for visual effect (Scanning phase)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      setTimeout(() => {
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === messageId
-              ? { ...msg, toolData: { ...msg.toolData, status: "sending" } }
-              : msg
-          )
-        );
-      }, 2000);
+      // 2. Second State: Sending (Drafting/Flying phase)
+      updateMessage(conversationId, messageId, {
+        toolData: { target: to, status: "sending" }
+      });
 
+      // 3. API Call (Wait for it!)
       const result = await apiClient("/auth/tools-send-email", {
         method: "POST",
         body: JSON.stringify({
@@ -57,34 +48,21 @@ export function useChatMessages() {
         }),
       });
 
+      // 4. Final State: Success or Error
       if (!result.success) {
         toast.error(result.message || "Failed to send email");
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === messageId
-              ? {
-                ...msg,
-                toolData: { ...msg.toolData, status: "error" },
-                content: result.message ?? "Failed to send email",
-              }
-              : msg
-          )
-        );
+        updateMessage(conversationId, messageId, {
+          toolData: { target: to, status: "error" },
+          content: result.message ?? "Failed to send email"
+        });
       } else {
         toast.success(result.message || "Email sent successfully");
+        updateMessage(conversationId, messageId, {
+          toolData: { target: to, status: "success" },
+          content: `Email sent to ${to}`
+        });
       }
 
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageId
-            ? {
-              ...msg,
-              toolData: { ...msg.toolData, status: "success" },
-              content: `Email sent to ${to}`,
-            }
-            : msg
-        )
-      );
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error && err.message === "Failed to fetch"
@@ -95,17 +73,10 @@ export function useChatMessages() {
 
       toast.error(errorMessage);
 
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === messageId
-            ? {
-              ...msg,
-              toolData: { ...msg.toolData, status: "error" },
-              content: errorMessage,
-            }
-            : msg
-        )
-      );
+      updateMessage(conversationId, messageId, {
+        toolData: { target: to, status: "error" },
+        content: errorMessage
+      });
     }
   };
 
@@ -150,11 +121,12 @@ export function useChatMessages() {
         type: "email-tool",
         toolData: {
           target: targetEmail,
-          status: "processing",
+          status: "processing", // Start at processing
         },
       };
 
       addMessageToConversation(conversationId, toolMsg);
+      // Fire and forget the async tool handler
       sendEmailTool(toolMessageId, targetEmail, subject, body, conversationId);
       return;
     }

@@ -98,8 +98,8 @@ export default function AIWebsiteGeneratorLoader({
   const progress = isCompleted
     ? 100
     : ((currentStage * 3 + currentMessage + 1) /
-        (generationStages.length * 3)) *
-      100;
+      (generationStages.length * 3)) *
+    100;
 
   const handlePreview = () => {
     window.open("http://localhost:3001", "_blank");
@@ -592,11 +592,10 @@ export default function AIWebsiteGeneratorLoader({
               <div className="flex items-center justify-center gap-4 text-xs font-medium text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-2 h-2 rounded-full ${
-                      isCompleted
-                        ? "bg-green-500"
-                        : "bg-linear-to-r from-[#7468FC] to-[#918FFF]"
-                    } animate-pulse`}
+                    className={`w-2 h-2 rounded-full ${isCompleted
+                      ? "bg-green-500"
+                      : "bg-linear-to-r from-[#7468FC] to-[#918FFF]"
+                      } animate-pulse`}
                   />
                   <span className="text-sub-title">
                     {isCompleted ? "Completed" : "AI Processing"}
@@ -605,11 +604,10 @@ export default function AIWebsiteGeneratorLoader({
                 <div className="h-3 w-px bg-border" />
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-2 h-2 rounded-full ${
-                      isCompleted
-                        ? ""
-                        : "bg-linear-to-r from-[#ED799C] to-[#918FFF]"
-                    } animate-pulse`}
+                    className={`w-2 h-2 rounded-full ${isCompleted
+                      ? ""
+                      : "bg-linear-to-r from-[#ED799C] to-[#918FFF]"
+                      } animate-pulse`}
                   />
                   <span className="text-sub-title">
                     {isCompleted ? "" : "Building Components"}
