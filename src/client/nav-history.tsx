@@ -34,7 +34,7 @@ export function NavHistory() {
                     className="text-sm text-sub-heading font-medium mb-1 cursor-pointer w-full flex items-center justify-between"
                 >
                     <CollapsibleTrigger>
-                    Your Chats
+                        Your Chats
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </CollapsibleTrigger>
                 </SidebarGroupLabel>
@@ -45,10 +45,10 @@ export function NavHistory() {
                                 <SidebarMenuButton
                                     onClick={() => selectConversation(item.id)}
                                     isActive={activeConversationId === item.id}
-                                    className="w-full min-h-[36px]"
+                                    className="w-full min-h-[36px] "
                                     asChild
                                 >
-                                    <div className="flex w-full gap-2 items-center min-w-0 cursor-pointer">
+                                    <div className="flex w-full gap-2 items-center min-w-0  cursor-pointer">
                                         <span
                                             className="whitespace-nowrap overflow-hidden text-ellipsis text-sm"
                                         >

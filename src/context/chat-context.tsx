@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { Message } from "@/hooks/use-chat-messages";
 import {
     initialConversations,
@@ -27,6 +27,12 @@ interface ChatContextType {
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
+const STORAGE_KEYS = {
+    CONVERSATIONS: "opsbot_conversations",
+    MESSAGES: "opsbot_messages",
+    ACTIVE_ID: "opsbot_active_id",
+};
+
 export function ChatProvider({ children }: { children: ReactNode }) {
     const [conversations, setConversations] = useState<Conversation[]>(
         initialConversations
@@ -38,20 +44,72 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         string | null
     >(null);
 
-    // Current view messages (derived or state? Better to synchronize)
-    // To allow independent "typing" state in hook, we might just expose the raw data here.
-    // But useChatMessages has "setMessages".
-    // Let's keep a local "messages" state that syncs with the active conversation.
+    // Load from LocalStorage on mount
+    useEffect(() => {
+        const storedConvos = localStorage.getItem(STORAGE_KEYS.CONVERSATIONS);
+        const storedMsgs = localStorage.getItem(STORAGE_KEYS.MESSAGES);
+        const storedActiveId = localStorage.getItem(STORAGE_KEYS.ACTIVE_ID);
+
+        if (storedConvos) {
+            try {
+                setConversations(JSON.parse(storedConvos));
+            } catch (e) {
+                console.error("Failed to parse stored conversations", e);
+            }
+        }
+
+        if (storedMsgs) {
+            try {
+                setMessagesMap(JSON.parse(storedMsgs));
+            } catch (e) {
+                console.error("Failed to parse stored messages", e);
+            }
+        }
+
+        if (storedActiveId) {
+            setActiveConversationId(storedActiveId);
+        }
+    }, []);
+
+    // Save to LocalStorage whenever state changes
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEYS.CONVERSATIONS, JSON.stringify(conversations));
+    }, [conversations]);
+
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messagesMap));
+    }, [messagesMap]);
+
+    useEffect(() => {
+        if (activeConversationId) {
+            localStorage.setItem(STORAGE_KEYS.ACTIVE_ID, activeConversationId);
+        } else {
+            localStorage.removeItem(STORAGE_KEYS.ACTIVE_ID);
+        }
+    }, [activeConversationId]);
+
     const [currentMessages, setCurrentMessages] = useState<Message[]>([]);
+
+    // Sync currentMessages when activeConversationId or messagesMap changes
+    useEffect(() => {
+        if (activeConversationId && messagesMap[activeConversationId]) {
+            setCurrentMessages(messagesMap[activeConversationId]);
+        } else if (activeConversationId === null) {
+            // Only clear if we explicitly set to null (New Chat)
+            // If we are just starting up and activeConversationId is null, we are empty anyway.
+            setCurrentMessages([]);
+        }
+    }, [activeConversationId, messagesMap]);
 
     const createNewChat = () => {
         setActiveConversationId(null);
-        setCurrentMessages([]);
+        setCurrentMessages([]); // Clear view immediately
+        localStorage.removeItem(STORAGE_KEYS.ACTIVE_ID);
     };
 
     const selectConversation = (id: string) => {
         setActiveConversationId(id);
-        setCurrentMessages(messagesMap[id] || []);
+        // currentMessages will sync via useEffect
     };
 
     // Helper to lazily create conversation on first message
@@ -87,30 +145,62 @@ export function ChatProvider({ children }: { children: ReactNode }) {
             const existing = prev[conversationId] || [];
             return { ...prev, [conversationId]: [...existing, message] };
         });
-
-        // If we are currently viewing this conversation, update currentMessages
-        if (activeConversationId === conversationId || activeConversationId === null) {
-            // Note: ensuring activeConversation set activeConversationId BEFORE calling this usually
-            setCurrentMessages((prev) => [...prev, message]);
-        }
     };
 
     // Override setMessages to also update the map if we have an active conversation
     const setMessagesExternal: React.Dispatch<React.SetStateAction<Message[]>> = (
         value
     ) => {
-        // This is tricky because hook might use functional update.
+        // We update local state first for immediate UI feedback if needed, 
+        // but primarily we must update the messagesMap to persist.
+        // However, the hook uses this to "setMessages".
+
+        // If we have an active conversation, we should update the map.
+        // If we are in "New Chat" (null id), we might just be updating local state 
+        // before the conversation is "created" (though ensureActiveConversation handles creation).
+
+        // Wait, useChatMessages calls "ensureActiveConversation" BEFORE "setMessages" usually.
+        // BUT the tools (email/sms) call setMessages directly on 'prev'.
+
+        // The issue: "value" can be a function updater.
+        // We need to know the calculated new value to update the map.
+
+        // Let's use a dual update strategy.
+
+        let calculatedNewMessages: Message[] = [];
+
         setCurrentMessages((prev) => {
             const newValue = value instanceof Function ? value(prev) : value;
-
-            if (activeConversationId) {
-                setMessagesMap((prevMap) => ({
-                    ...prevMap,
-                    [activeConversationId]: newValue
-                }));
-            }
+            calculatedNewMessages = newValue;
             return newValue;
         });
+
+        // We need to defer this slightly or just run it. 
+        // But we are inside the set function callback... no we are not.
+        // The above setCurrentMessages call is sync-ish for the calculate part? No.
+
+        // Actually, "setMessagesExternal" is called by the hook.
+        // We can't easily plug into "setCurrentMessages" updater to update "messagesMap".
+        // Better approach: Update messagesMap DIRECTLY, and let the useEffect sync currentMessages.
+
+        if (activeConversationId) {
+            setMessagesMap((prevMap) => {
+                const currentConvoMsgs = prevMap[activeConversationId] || [];
+                const newValue = value instanceof Function ? value(currentConvoMsgs) : value;
+                return {
+                    ...prevMap,
+                    [activeConversationId]: newValue
+                };
+            });
+        } else {
+            // No active conversation? 
+            // This might happen if we haven't "ensured" it yet, 
+            // but the hook usually ensures it before sending.
+            // What about tool updates? They rely on "messages" state.
+
+            // If we are truly in "New Chat" state, we just update local currentMessages.
+            setCurrentMessages(value);
+        }
     };
 
     const updateConversationTitle = (id: string, title: string) => {
