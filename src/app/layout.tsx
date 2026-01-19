@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/client/app-sidebar";
 import { LayoutProvider } from "@/context/layout-context";
+import { ChatProvider } from "@/context/chat-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +43,9 @@ export default function RootLayout({
           <Toaster richColors position="top-right" />
           <SidebarProvider defaultOpen={false}>
             <LayoutProvider>
-              <OpsBotProvider>{children}</OpsBotProvider>
+              <ChatProvider>
+                <OpsBotProvider>{children}</OpsBotProvider>
+              </ChatProvider>
             </LayoutProvider>
           </SidebarProvider>
         </ThemeProvider>

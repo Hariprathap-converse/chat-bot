@@ -19,6 +19,8 @@ import {
 import { NavMain } from "./nav-main";
 import { NavChatBot } from "@/Icons/global/home";
 import { NavProjects } from "@/client/nav-projects";
+import { NavHistory } from "@/client/nav-history";
+import { useChat } from "@/context/chat-context";
 
 import { cn } from "@/lib/utils";
 import { BiCategory } from "react-icons/bi";
@@ -151,6 +153,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { createNewChat } = useChat();
 
   return (
     <Sidebar
@@ -192,10 +195,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div>
             <NavMain items={Navdata.navMain} />
             <NavProjects projects={Navdata.projects} />
+            <NavHistory />
           </div>
           <div className={cn(open ? "" : "pr-2", "w-full flex flex-col gap-2")}>
             <div
-              onClick={() => setOpen(true)}
+              onClick={() => {
+                setOpen(true);
+                createNewChat();
+              }}
               className={cn(
                 open ? "" : "ml-2 max-w-[40px]  ",
                 " flex  items-center  rounded-[4px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm text-white font-medium p-2 pr-0  gap-2  shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
