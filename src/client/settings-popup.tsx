@@ -19,7 +19,6 @@ import {
     Sun,
     Moon
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { AdvancedInput } from "@/components/custom/advanced-input";
 import { DateTimePicker } from "@/components/custom/calendar/advanced-calender";
 import { FormConfig, InputFieldConfig, DataMaskingConfig } from "@/types/components/form-config.type";
@@ -29,10 +28,18 @@ import { CalendarFieldConfig } from "@/types/components/calender";
 const createFormConfig = (): FormConfig => ({
     theme: "light",
     primaryColor: "hsl(221.2 83.2% 53.3%)",
-    fontSize: "medium",
+    fontSize: "small",
     layout: { columns: 3, labelPosition: "top" },
     viewMode: false,
     editMode: true,
+});
+const createFormConfigz = (): FormConfig => ({
+    theme: "light",
+    primaryColor: "hsl(221.2 83.2% 53.3%)",
+    fontSize: "small",
+    layout: { columns: 3, labelPosition: "top" },
+    viewMode: true,
+    editMode: false,
 });
 
 const createInputConfig = (id: string, label: string, value: string, type: "text" | "email" = "text"): InputFieldConfig => ({
@@ -76,16 +83,16 @@ interface SettingsPopupProps {
 export function SettingsPopup({ open, onOpenChange }: SettingsPopupProps) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="min-w-[60%] !px-8  !rounded-[14px] min-h-[570px] max-h-[570px] flex flex-col p-0 overflow-hidden bg-white dark:bg-zinc-950 sm:max-w-5xl  border-none shadow-none">
-                <div className="p-6 pb-2">
+            <DialogContent className="min-w-[60%] !px-8 gap-2 !rounded-[14px] min-h-[570px] max-h-[570px] flex flex-col p-0 overflow-hidden bg-white dark:bg-zinc-950 sm:max-w-5xl  border-none shadow-none">
+                <div className="p-6 pb-1">
                     <DialogHeader className="flex flex-row items-center justify-between space-y-0">
                         <DialogTitle className="text-xl  text-indigo-500">Settings</DialogTitle>
                         {/* Close button is automatically added by DialogContent */}
                     </DialogHeader>
                 </div>
 
-                <Tabs defaultValue="personal-details" className="flex flex-col flex-1 overflow-hidden">
-                    <div className="px-6 border-b-0">
+                <Tabs defaultValue="personal-details" className="flex flex-col flex-1 gap-1 overflow-hidden">
+                    <div className="px-6 border-b-0 pt-1">
                         <TabsList className="bg-transparent p-0 justify-start max-w-fit gap-3 h-auto">
                             <TabsTrigger
                                 value="personal-details"
@@ -109,7 +116,7 @@ export function SettingsPopup({ open, onOpenChange }: SettingsPopupProps) {
                     </div>
 
                     <div className="flex-1 overflow-y-auto p-6 bg-white dark:bg-zinc-950">
-                        <TabsContent value="personal-details" className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-8 shadow-none">
+                        <TabsContent value="personal-details" className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-6 pt-4 pr-3 shadow-none">
                             <PersonalDetailsTab />
                         </TabsContent>
                         <TabsContent value="chat-history" className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-0 px-5 shadow-none">
@@ -149,25 +156,15 @@ function PersonalDetailsTab() {
     };
 
     const formConfig = createFormConfig();
+    const formConfigz = createFormConfigz();
 
     return (
         <div className="relative h-full flex flex-col">
-            {!isEditing && (
-                <div className="absolute top-0 right-0 z-10">
-                    <Button
-                        variant="outline"
-                        onClick={() => setIsEditing(true)}
-                        className="text-indigo-500 border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 gap-2"
-                    >
-                        <Edit2 className="w-4 h-4" />
-                        Edit
-                    </Button>
-                </div>
-            )}
+
 
             {isEditing ? (
                 <div className="flex flex-col h-full bg-white dark:bg-zinc-950">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6 flex-1 overflow-y-auto pr-2 pb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-0 flex-1 overflow-y-auto pr-2 pb-4">
                         <AdvancedInput
                             config={createInputConfig("employeeId", "Employee ID", formData.employeeId)}
                             formConfig={formConfig}
@@ -237,7 +234,7 @@ function PersonalDetailsTab() {
                         />
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
+                    <div className="flex justify-end gap-3 mt-4 pt-4 border-none">
                         <Button
                             variant="outline"
                             onClick={() => setIsEditing(false)}
@@ -254,20 +251,103 @@ function PersonalDetailsTab() {
                     </div>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-4 pr-20">
-                    <DetailItem label="Employee ID" value={formData.employeeId} />
-                    <DetailItem label="First Name" value={formData.firstName} />
-                    <DetailItem label="Last Name" value={formData.lastName} />
+                <div className="flex w-full">
+                    {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-0 h-fit  flex-1 overflow-y-auto pr-2 pb-4 ">
+                        <AdvancedInput
+                            config={createInputConfig("employeeId", "Employee ID", formData.employeeId)}
+                            formConfig={formConfigz}
+                            value={formData.employeeId}
+                            onChange={(val) => handleInputChange("employeeId", val)}
+                        />
+                        <AdvancedInput
+                            config={createInputConfig("firstName", "First Name", formData.firstName)}
+                            formConfig={formConfigz}
+                            value={formData.firstName}
+                            onChange={(val) => handleInputChange("firstName", val)}
+                        />
+                        <AdvancedInput
+                            config={createInputConfig("lastName", "Last Name", formData.lastName)}
+                            formConfig={formConfigz}
+                            value={formData.lastName}
+                            onChange={(val) => handleInputChange("lastName", val)}
+                        />
 
-                    <DetailItem label="Email Address" value={formData.email} />
-                    <DetailItem label="Phone No" value={formData.phone} />
-                    <DetailItem label="Date Of Birth" value={formData.dob.toLocaleDateString()} />
+                        <AdvancedInput
+                            config={createInputConfig("email", "Email Address", formData.email, "email")}
+                            formConfig={formConfigz}
+                            value={formData.email}
+                            onChange={(val) => handleInputChange("email", val)}
+                        />
+                        <AdvancedInput
+                            config={createInputConfig("phone", "Phone No", formData.phone)}
+                            formConfig={formConfigz}
+                            value={formData.phone}
+                            onChange={(val) => handleInputChange("phone", val)}
+                        />
+                        <DateTimePicker
+                            config={createCalendarConfig("dob", "Date Of Birth", formData.dob.toISOString())}
+                            formConfig={formConfigz}
+                            fieldName="dob"
+                            value={formData.dob}
 
-                    <DetailItem label="Address" value={formData.address} />
-                    <DetailItem label="Gender" value={formData.gender} />
-                    <DetailItem label="Nationality" value={formData.nationality} />
+                            onChange={(val) => handleInputChange("dob", val)}
+                            calendarDisableConfig={{} as any}
+                            formValues={formData}
+                        />
 
-                    <DetailItem label="Marital Status" value={formData.maritalStatus} />
+                        <AdvancedInput
+                            config={createInputConfig("address", "Address", formData.address)}
+                            formConfig={formConfigz}
+                            value={formData.address}
+                            onChange={(val) => handleInputChange("address", val)}
+                        />
+                        <AdvancedInput
+                            config={createInputConfig("gender", "Gender", formData.gender)}
+                            formConfig={formConfigz}
+                            value={formData.gender}
+                            onChange={(val) => handleInputChange("gender", val)}
+                        />
+                        <AdvancedInput
+                            config={createInputConfig("nationality", "Nationality", formData.nationality)}
+                            formConfig={formConfigz}
+                            value={formData.nationality}
+                            onChange={(val) => handleInputChange("nationality", val)}
+                        />
+
+                        <AdvancedInput
+                            config={createInputConfig("maritalStatus", "Marital Status", formData.maritalStatus)}
+                            formConfig={formConfigz}
+                            value={formData.maritalStatus}
+                            onChange={(val) => handleInputChange("maritalStatus", val)}
+                        />
+                    </div> */}
+                    <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-4 ">
+                        <DetailItem label="Employee ID" value={formData.employeeId} />
+                        <DetailItem label="First Name" value={formData.firstName} />
+                        <DetailItem label="Last Name" value={formData.lastName} />
+
+                        <DetailItem label="Email Address" value={formData.email} />
+                        <DetailItem label="Phone No" value={formData.phone} />
+                        <DetailItem label="Date Of Birth" value={formData.dob.toLocaleDateString()} />
+
+                        <DetailItem label="Address" value={formData.address} />
+                        <DetailItem label="Gender" value={formData.gender} />
+                        <DetailItem label="Nationality" value={formData.nationality} />
+
+                        <DetailItem label="Marital Status" value={formData.maritalStatus} />
+                    </div>
+                    {!isEditing && (
+                        <div className="">
+                            <Button
+                                variant="outline"
+                                onClick={() => setIsEditing(true)}
+                                className="gap-2 ml-5 !px-5 transition-all border border-primary/20 duration-300 bg-transparent hover:bg-primary/10 hover:border-transparent cursor-pointer text-primary  shadow-none border rounded-[4px] max-h-[30px]"
+                            >
+                                <Edit2 className="w-4 h-4" />
+                                Edit
+                            </Button>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
@@ -276,9 +356,9 @@ function PersonalDetailsTab() {
 
 function DetailItem({ label, value }: { label: string, value: string }) {
     return (
-        <div className="flex flex-col gap-1">
-            <span className="text-sm text-gray-400 font-medium">{label}</span>
-            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{value}</span>
+        <div className="flex flex-col gap-2">
+            <span className="text-sm text-gray-400 font-normal">{label}</span>
+            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{value}</span>
         </div>
     )
 }
@@ -314,7 +394,7 @@ function ChatHistoryTab() {
                 <div className="bg-gray-50/50 dark:bg-zinc-900/50 rounded-[6px] overflow-hidden border border-none ">
                     <div className="bg-gray-50 dark:bg-zinc-900 px-4 py-2 flex items-center justify-between">
                         <span className="text-sm text-gray-500 font-medium">Today</span>
-                        <X className="w-4 h-4 text-gray-400 cursor-pointer hover:text-gray-600" />
+                        <X onClick={() => setShowDeleteConfirm(true)} className="w-4 h-4 text-gray-400 cursor-pointer hover:text-gray-600" />
                     </div>
                     <div className="divide-y divide-gray-100 dark:divide-zinc-800">
                         <HistoryItem
