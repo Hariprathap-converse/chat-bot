@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Message } from "@/hooks/use-chat-messages";
 import { ToolsLoader } from "@/components/chat/tools-loader";
+import { useChat } from "@/context/chat-context";
 import AIWebsiteGeneratorLoader from "./ai-website-generator-loader";
 
 interface ChatMessageProps {
@@ -64,6 +65,8 @@ export function ChatMessage({
       liked: prev.disliked ? prev.liked : false,
     }));
   };
+
+  const { activeConversationId, updateMessage } = useChat();
 
   if (isUser) {
     return (
@@ -151,7 +154,17 @@ export function ChatMessage({
             <NavChatBot />
           </div>
           <div className="w-full max-w-full lg:max-w-4xl">
-            <AIWebsiteGeneratorLoader onPopupClose={scrollToBottom} />
+            <AIWebsiteGeneratorLoader
+              onPopupClose={scrollToBottom}
+              status={message.toolData?.status}
+              onComplete={() => {
+                if (activeConversationId) {
+                  updateMessage(activeConversationId, message.id, {
+                    toolData: { status: "success" },
+                  });
+                }
+              }}
+            />
           </div>
         </div>
       </div>

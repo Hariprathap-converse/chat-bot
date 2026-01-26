@@ -200,7 +200,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className={cn(open ? "" : "pr-2", "w-full flex flex-col gap-2")}>
             <div
               onClick={() => {
-                setOpen(true);
                 createNewChat();
               }}
               className={cn(

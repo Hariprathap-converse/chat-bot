@@ -178,6 +178,7 @@ export function useChatMessages() {
           role: "bot",
           content: "Generating your website...",
           type: "website-loader",
+          toolData: { status: "processing" },
         };
         addMessageToConversation(conversationId, botMsg);
       }, 500);

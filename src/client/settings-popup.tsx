@@ -202,7 +202,7 @@ function PersonalDetailsTab() {
                             fieldName="dob"
                             value={formData.dob}
 
-                            onChange={(val) => handleInputChange("dob", val)}
+                            // onChange={(val) => handleInputChange("dob", val)}
                             calendarDisableConfig={{} as any}
                             formValues={formData}
                         />

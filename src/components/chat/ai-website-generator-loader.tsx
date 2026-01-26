@@ -50,15 +50,27 @@ const generationStages: GenerationStage[] = [
 export default function AIWebsiteGeneratorLoader({
   setGenLoader,
   onPopupClose,
+  status = "processing",
+  onComplete,
 }: {
   setGenLoader?: (value: boolean) => void;
   onPopupClose?: () => void;
+  status?: "idle" | "processing" | "sending" | "success" | "error";
+  onComplete?: () => void;
 }) {
-  const [currentStage, setCurrentStage] = useState(0);
-  const [currentMessage, setCurrentMessage] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [currentStage, setCurrentStage] = useState(() =>
+    status === "success" ? generationStages.length - 1 : 0
+  );
+  const [currentMessage, setCurrentMessage] = useState(() => {
+    if (status === "success") {
+      const lastStage = generationStages[generationStages.length - 1];
+      return lastStage.messages.length - 1;
+    }
+    return 0;
+  });
+  const [isCompleted, setIsCompleted] = useState(status === "success");
   const [isVisible, setIsVisible] = useState(true);
-  const [isPopupOpen, setIsPopupOpen] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(status !== "success");
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -78,6 +90,9 @@ export default function AIWebsiteGeneratorLoader({
         setCurrentMessage(0);
       } else {
         setIsCompleted(true);
+        if (onComplete) {
+          onComplete();
+        }
       }
     }, 1200);
 
