@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api-client";
 import { useChat } from "@/context/chat-context";
@@ -20,6 +20,78 @@ export function useChatMessages() {
   const [showEmployeeLoader, setShowEmployeeLoader] = useState(false);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
   const [botTyping, setBotTyping] = useState(false);
+
+  useEffect(() => {
+    const checkPendingSummary = async () => {
+      const stored = localStorage.getItem("pendingSummary");
+      if (!stored) return;
+
+      try {
+        const { input } = JSON.parse(stored);
+        localStorage.removeItem("pendingSummary");
+
+        // Ensure conversation exists
+        const conversationId = ensureActiveConversation(input);
+
+        // 1. Add User Message
+        const userMsg: Message = {
+          id: Date.now().toString(),
+          role: "user",
+          content: input,
+          type: "text",
+        };
+        addMessageToConversation(conversationId, userMsg);
+
+        // 2. Add Bot Loader Message
+        const tempBotId = (Date.now() + 1).toString();
+        const botLoaderMsg: Message = {
+          id: tempBotId,
+          role: "bot",
+          content: "Generating summary...",
+          type: "text", // Using text with typing indicator effect or just text
+        };
+
+        // Simulating loader with bot typing state if we want, or just add message
+        setBotTyping(true);
+
+        // Call API
+        try {
+          const response = await fetch("http://localhost:4000/summarize");
+          if (!response.ok) throw new Error("Failed to fetch summary");
+
+          const data = await response.json();
+          const summaryText = data[0]?.response || "Summary not available.";
+
+          setBotTyping(false);
+          // 3. Add Bot Response
+          const botMsg: Message = {
+            id: (Date.now() + 2).toString(),
+            role: "bot",
+            content: summaryText,
+            type: "text",
+          };
+          addMessageToConversation(conversationId, botMsg);
+
+        } catch (error) {
+          setBotTyping(false);
+          const errorMsg: Message = {
+            id: (Date.now() + 2).toString(),
+            role: "bot",
+            content: "Sorry, I encountered an error while summarizing.",
+            type: "text",
+          };
+          addMessageToConversation(conversationId, errorMsg);
+        }
+
+      } catch (e) {
+        console.error("Failed to parse pending summary", e);
+      }
+    };
+
+    // Small timeout to ensure context is ready
+    const t = setTimeout(checkPendingSummary, 500);
+    return () => clearTimeout(t);
+  }, []);
 
   const sendEmailTool = async (
     messageId: string,

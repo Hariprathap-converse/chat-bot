@@ -26,6 +26,7 @@ import Profile from "./profile";
 import { AppSidebar } from "./app-sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
+import { SummarizeModal } from "./summarize-modal";
 
 const SendIcon = () => (
   <svg
@@ -82,6 +83,7 @@ export default function DynamicHome() {
   const { data } = useOpsBot();
   const { setOpen } = useSidebar();
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [isSummarizeModalOpen, setIsSummarizeModalOpen] = useState(false);
   useEffect(() => {
     setOpen(false);
   }, []);
@@ -173,7 +175,7 @@ export default function DynamicHome() {
                     <span
                       className={cn(
                         selectedSection == item.key &&
-                          "scale-[130%] origin-bottom ",
+                        "scale-[130%] origin-bottom ",
                         "relative bottom-2 group-hover:scale-[130%] origin-bottom transition-all duration-[800ms] h-[50px] z-50",
                       )}
                     >
@@ -204,7 +206,13 @@ export default function DynamicHome() {
                   <div
                     key={index}
                     className="border group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
-                    onClick={() => router.push(`/chat`)}
+                    onClick={() => {
+                      if (item.label === "Summarize") {
+                        setIsSummarizeModalOpen(true);
+                      } else {
+                        router.push(`/chat`);
+                      }
+                    }}
                   >
                     <span>{getIcon(item.icon)}</span>
                     <span className="text-xs font-medium">{item.label}</span>
@@ -230,7 +238,13 @@ export default function DynamicHome() {
                     {footer.items.map((item, index) => (
                       <div
                         key={index}
-                        onClick={() => router.push(`/chat`)}
+                        onClick={() => {
+                          if (item.label === "Summarize") {
+                            setIsSummarizeModalOpen(true);
+                          } else {
+                            router.push(`/chat`);
+                          }
+                        }}
                         className="border group rounded-[7px] hover:bg-background hover:border-hover-border cursor-pointer p-[7px] w-full px-3 flex gap-2 items-center"
                       >
                         <span>
@@ -250,6 +264,10 @@ export default function DynamicHome() {
           )}
         </div>
       </main>
+      <SummarizeModal
+        isOpen={isSummarizeModalOpen}
+        onClose={() => setIsSummarizeModalOpen(false)}
+      />
     </div>
   );
 }

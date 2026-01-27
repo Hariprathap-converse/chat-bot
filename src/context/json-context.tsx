@@ -117,6 +117,7 @@ const defaultData: OpsBotData = {
       title: "Leave Operations",
       icon: null,
       items: [
+        { label: "Summarize", icon: "EditIcon" },
         { label: "Create Leave", icon: "EditIcon" },
         { label: "Create Leave Calendar", icon: "EditIcon" },
         { label: "Get Pending Leaves", icon: "EditIcon" },
@@ -133,6 +134,7 @@ const defaultData: OpsBotData = {
       title: "Role Operations",
       icon: null,
       items: [
+        { label: "Extract", icon: "EditIcon" },
         { label: "Create Role", icon: "EditIcon" },
         { label: "Update Role", icon: "EditIcon" },
         { label: "Get Role List", icon: "EditIcon" },
@@ -144,6 +146,7 @@ const defaultData: OpsBotData = {
       title: "Team Operations",
       icon: null,
       items: [
+        { label: "Classify", icon: "EditIcon" },
         { label: "Create Team", icon: "EditIcon" },
         { label: "Update Team", icon: "EditIcon" },
         { label: "Delete Team", icon: "EditIcon" },
@@ -183,7 +186,7 @@ const defaultData: OpsBotData = {
 
 const OpsBotContext = createContext<OpsBotContextType>({
   data: defaultData,
-  setData: () => {},
+  setData: () => { },
 });
 
 export const OpsBotProvider = ({ children }: { children: ReactNode }) => {
