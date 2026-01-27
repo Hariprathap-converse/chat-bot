@@ -9,8 +9,10 @@ import { useLayout } from "@/context/layout-context";
 
 export default function EmployeeDetails({
   onCancel,
+  onSubmitSuccess,
 }: {
   onCancel?: () => void;
+  onSubmitSuccess?: () => void;
 }) {
   const { formData, setFormData } = useLayout();
   const [manualGridOverride, setManualGridOverride] = useState(false);
@@ -50,6 +52,9 @@ export default function EmployeeDetails({
 
       setTimeout(() => {
         onCancel?.();
+        if (onSubmitSuccess) {
+          onSubmitSuccess();
+        }
       }, 1000);
     }, 1500);
   }

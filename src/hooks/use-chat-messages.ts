@@ -7,7 +7,7 @@ export interface Message {
   id: string;
   role: "user" | "bot";
   content: string;
-  type?: "text" | "website-loader" | "email-tool" | "sms-tool";
+  type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader";
   toolData?: {
     target?: string;
     status?: "idle" | "processing" | "sending" | "success" | "error";
@@ -159,13 +159,6 @@ export function useChatMessages() {
 
       setTimeout(() => {
         setBotTyping(false);
-        const botMsg: Message = {
-          id: (Date.now() + 2).toString(),
-          role: "bot",
-          content: "Loading your Employee Details form...",
-          type: "text",
-        };
-        addMessageToConversation(conversationId, botMsg);
       }, 500);
     } else if (
       userMessage.includes("generate website") ||
@@ -205,5 +198,16 @@ export function useChatMessages() {
     employeeDetailsOpen,
     setEmployeeDetailsOpen,
     botTyping,
+    addEmployeeSuccessMessage: () => {
+      const conversationId = ensureActiveConversation("Employee Details");
+      const botMsg: Message = {
+        id: (Date.now()).toString(),
+        role: "bot",
+        content: "",
+        type: "employee-loader",
+        toolData: { status: "success" },
+      };
+      addMessageToConversation(conversationId, botMsg);
+    }
   };
 }

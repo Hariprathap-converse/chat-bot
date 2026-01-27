@@ -3,11 +3,13 @@ import EmployeeDetails from "@/client/dynamic-form/employee-details";
 interface EmployeeDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmitSuccess?: () => void;
 }
 
 export function EmployeeDetailsModal({
   isOpen,
   onClose,
+  onSubmitSuccess,
 }: EmployeeDetailsModalProps) {
   if (!isOpen) return null;
 
@@ -21,7 +23,7 @@ export function EmployeeDetailsModal({
         className="relative z-10 !max-w-[1200px] w-[1200px] h-fit overflow-auto max-h-[80%] p-0 mr-4 bg-background shadow-xl rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <EmployeeDetails onCancel={onClose} />
+        <EmployeeDetails onCancel={onClose} onSubmitSuccess={onSubmitSuccess} />
       </div>
     </div>
   );

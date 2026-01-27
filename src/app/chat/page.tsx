@@ -32,6 +32,7 @@ export default function ChatPage() {
     employeeDetailsOpen,
     setEmployeeDetailsOpen,
     botTyping,
+    addEmployeeSuccessMessage,
   } = useChatMessages();
 
   const scrollToBottom = () => {
@@ -135,6 +136,10 @@ export default function ChatPage() {
       <EmployeeDetailsModal
         isOpen={employeeDetailsOpen}
         onClose={() => setEmployeeDetailsOpen(false)}
+        onSubmitSuccess={() => {
+          setEmployeeDetailsOpen(false);
+          addEmployeeSuccessMessage();
+        }}
       />
     </div>
   );

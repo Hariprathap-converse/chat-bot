@@ -22,6 +22,7 @@ interface FormContainerProps {
 const FormContainerProps = ({
   showRequiredFields,
   onCancel,
+  onSubmit,
 }: FormContainerProps) => {
   const { formData, setFormData, setErrors, errors } = useLayout();
   const [formSubmitData, setFormSubmitData] = useState<Record<string, any>>({});
@@ -184,6 +185,11 @@ const FormContainerProps = ({
       return;
     }
 
+    if (onSubmit) {
+      onSubmit(formSubmitData);
+      return;
+    }
+
     try {
       const fullData = { ...formData };
 
@@ -227,10 +233,10 @@ const FormContainerProps = ({
                 </div>
                 {(formData.form.formType == "basic" ||
                   formData.form.formType == "wizard") && (
-                  <div className="text-[0.9375rem] text-foreground font-medium">
-                    {/* {formData.form.formHeader.title} */}
-                  </div>
-                )}
+                    <div className="text-[0.9375rem] text-foreground font-medium">
+                      {/* {formData.form.formHeader.title} */}
+                    </div>
+                  )}
                 {formData.form.formType == "stepper" && (
                   <Stepper
                     currentStep={currentStepIndex}
