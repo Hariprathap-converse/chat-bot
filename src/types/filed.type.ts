@@ -34,6 +34,7 @@ export type FormLayout = {
 
 export type FormHeader = {
   header: string;
+  buttonText?: string;
 };
 export type FormType = "basic" | "stepper" | "wizard";
 

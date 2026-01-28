@@ -12,10 +12,12 @@ import { FormData as DefaultFormData } from "@/mock-data/form-filed-json";
 export default function EmployeeDetails({
   onCancel,
   onSubmitSuccess,
+  onCancelSuccess,
   dynamicData,
 }: {
   onCancel?: () => void;
-  onSubmitSuccess?: () => void;
+  onSubmitSuccess?: (title: string, message: string) => void;
+  onCancelSuccess?: (title: string, message: string) => void;
   dynamicData?: any;
 }) {
   const { formData, setFormData } = useLayout();
@@ -49,7 +51,7 @@ export default function EmployeeDetails({
       };
 
       toast.success("Sent successfully", {
-        description: "Employee details have been saved",
+        description: `${formData.form.formHeader.header} has been saved`,
         duration: 3000,
       });
 
@@ -58,11 +60,18 @@ export default function EmployeeDetails({
       setTimeout(() => {
         onCancel?.();
         if (onSubmitSuccess) {
-          onSubmitSuccess();
+          onSubmitSuccess(formData.form.formHeader.header, `${formData.form.formHeader.header} has been successfully recorded.`);
         }
       }, 1000);
     }, 1500);
   }
+
+  const handleCancel = () => {
+    onCancel?.();
+    if (onCancelSuccess) {
+      onCancelSuccess(formData.form.formHeader.header, `The request for ${formData.form.formHeader.header} has been cancelled.`);
+    }
+  };
 
   useEffect(() => {
     if (dynamicData) {
@@ -107,7 +116,7 @@ export default function EmployeeDetails({
         setShowRequiredFields={setShowRequiredFields}
         setLabelAlignment={setLabelAlignment}
         setManualGridOverride={setManualGridOverride}
-        onCancel={onCancel}
+        onCancel={handleCancel}
         isSubmitting={isSubmitting}
       />
     </>

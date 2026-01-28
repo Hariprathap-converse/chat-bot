@@ -45,6 +45,7 @@ export function transformBackendFormToDefinition(backendData: any): FormDefiniti
             fontSize: "small",
             formHeader: {
                 header: formattedHeader,
+                buttonText: intent?.includes("create") || intent?.includes("add") ? "Create" : "Submit",
             },
             viewMode: false,
             editMode: false,

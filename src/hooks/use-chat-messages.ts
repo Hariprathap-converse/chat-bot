@@ -16,6 +16,8 @@ export interface Message {
   toolData?: {
     target?: string;
     status?: "idle" | "processing" | "sending" | "success" | "error";
+    title?: string;
+    message?: string;
   };
 }
 
@@ -294,23 +296,12 @@ export function useChatMessages() {
       setBotTyping(false);
 
       if (response.type === "form") {
-        // Handle HR intents (apply_leave, create_employee, etc.)
-        if (response.intent === "create_employee") {
-          setDynamicFormData(null); // Reset dynamic form data for standard intent
-          setShowEmployeeLoader(true);
-          setTimeout(() => {
-            setShowEmployeeLoader(false);
-            setEmployeeDetailsOpen(true);
-          }, 2000);
-        } else {
-          // Dynamic form intent
-          setDynamicFormData(response);
-          setShowEmployeeLoader(true);
-          setTimeout(() => {
-            setShowEmployeeLoader(false);
-            setEmployeeDetailsOpen(true);
-          }, 2000);
-        }
+        setDynamicFormData(response);
+        setShowEmployeeLoader(true);
+        setTimeout(() => {
+          setShowEmployeeLoader(false);
+          setEmployeeDetailsOpen(true);
+        }, 2000);
       } else {
 
         // Handle string response or object with text property
@@ -350,14 +341,33 @@ export function useChatMessages() {
     setEmployeeDetailsOpen,
     dynamicFormData,
     botTyping,
-    addEmployeeSuccessMessage: () => {
-      const conversationId = ensureActiveConversation("Employee Details");
+    addEmployeeSuccessMessage: (title?: string, message?: string) => {
+      const conversationId = ensureActiveConversation(title || "Form Submitted");
       const botMsg: Message = {
         id: (Date.now()).toString(),
         role: "bot",
         content: "",
         type: "employee-loader",
-        toolData: { status: "success" },
+        toolData: {
+          status: "success",
+          title: title || "Submitted",
+          message: message || "Recorded successfully"
+        },
+      };
+      addMessageToConversation(conversationId, botMsg);
+    },
+    addEmployeeCancelMessage: (title?: string, message?: string) => {
+      const conversationId = ensureActiveConversation(title || "Form Cancelled");
+      const botMsg: Message = {
+        id: (Date.now()).toString(),
+        role: "bot",
+        content: "",
+        type: "employee-loader",
+        toolData: {
+          status: "error", // Use error status for cancellation visual
+          title: title ? `${title} Cancelled` : "Cancelled",
+          message: message || "Operation was cancelled."
+        },
       };
       addMessageToConversation(conversationId, botMsg);
     }

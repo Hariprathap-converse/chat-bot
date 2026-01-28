@@ -3,7 +3,8 @@ import EmployeeDetails from "@/client/dynamic-form/employee-details";
 interface EmployeeDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmitSuccess?: () => void;
+  onSubmitSuccess?: (title: string, message: string) => void;
+  onCancelSuccess?: (title: string, message: string) => void;
   dynamicData?: any;
 }
 
@@ -11,6 +12,7 @@ export function EmployeeDetailsModal({
   isOpen,
   onClose,
   onSubmitSuccess,
+  onCancelSuccess,
   dynamicData,
 }: EmployeeDetailsModalProps) {
   if (!isOpen) return null;
@@ -28,6 +30,7 @@ export function EmployeeDetailsModal({
         <EmployeeDetails
           onCancel={onClose}
           onSubmitSuccess={onSubmitSuccess}
+          onCancelSuccess={onCancelSuccess}
           dynamicData={dynamicData}
         />
       </div>

@@ -209,6 +209,7 @@ export function ChatMessage({
           <div className="w-full max-w-full lg:max-w-4xl">
             <EmployeeDetailsLoader
               onPopupClose={scrollToBottom}
+              message={message}
             />
           </div>
         </div>

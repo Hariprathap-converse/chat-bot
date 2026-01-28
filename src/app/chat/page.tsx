@@ -34,6 +34,7 @@ export default function ChatPage() {
     dynamicFormData,
     botTyping,
     addEmployeeSuccessMessage,
+    addEmployeeCancelMessage,
   } = useChatMessages();
 
   const scrollToBottom = () => {
@@ -138,9 +139,13 @@ export default function ChatPage() {
         isOpen={employeeDetailsOpen}
         onClose={() => setEmployeeDetailsOpen(false)}
         dynamicData={dynamicFormData}
-        onSubmitSuccess={() => {
+        onSubmitSuccess={(title, msg) => {
           setEmployeeDetailsOpen(false);
-          addEmployeeSuccessMessage();
+          addEmployeeSuccessMessage(title, msg);
+        }}
+        onCancelSuccess={(title, msg) => {
+          setEmployeeDetailsOpen(false);
+          addEmployeeCancelMessage(title, msg);
         }}
       />
     </div>

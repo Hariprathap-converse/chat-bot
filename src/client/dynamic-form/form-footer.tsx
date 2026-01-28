@@ -6,6 +6,7 @@ import {
 } from "./icons/dynamic-form/all-dynamic-form-icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLayout } from "@/context/layout-context";
 
 interface FormFooterProps {
   progress: number;
@@ -13,6 +14,7 @@ interface FormFooterProps {
 }
 
 const FormFooter = ({ progress, onCancel }: FormFooterProps) => {
+  const { formData } = useLayout();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const handleClick = () => {
@@ -84,7 +86,7 @@ const FormFooter = ({ progress, onCancel }: FormFooterProps) => {
                       : "opacity-100 translate-y-0 transform transition-all duration-700 ",
                 )}
               >
-                {isSuccess ? "Created!" : isLoading ? "" : "Create"}
+                {isSuccess ? `${formData.form.formHeader.buttonText || 'Created'}!` : isLoading ? "" : (formData.form.formHeader.buttonText || "Create")}
               </span>
             </div>
           </Button>

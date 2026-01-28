@@ -2,12 +2,21 @@
 import { useState } from "react";
 import { NavChatBot } from "@/Icons/global/home";
 import { cn } from "@/lib/utils";
+import { Message } from "@/hooks/use-chat-messages";
+import { XCircle } from "lucide-react";
 
 export default function EmployeeDetailsLoader({
     onPopupClose,
+    message,
 }: {
     onPopupClose?: () => void;
+    message?: Message;
 }) {
+    const status = message?.toolData?.status || "success";
+    const title = message?.toolData?.title || "Employee Details Submitted";
+    const resultMessage = message?.toolData?.message || "Details have been successfully recorded.";
+    const isError = status === "error";
+
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const handleClose = () => {
@@ -61,36 +70,51 @@ export default function EmployeeDetailsLoader({
                                 <div className="relative shrink-0 transition-all duration-300">
                                     <div
                                         className={cn(
-                                            "rounded-full bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF] flex items-center justify-center shadow-md transition-all duration-300",
+                                            "rounded-full flex items-center justify-center shadow-md transition-all duration-300",
+                                            isError
+                                                ? "bg-linear-to-br from-red-300 via-red-500 to-red-300"
+                                                : "bg-linear-to-br from-[#7468FC] via-[#ED799C] to-[#918FFF]",
                                             isPopupOpen ? "w-10 h-10" : "w-8 h-8",
                                         )}
                                     >
-                                        <svg
-                                            className={cn(
+                                        {isError ? (
+                                            <XCircle className={cn(
                                                 "text-white transition-all duration-300",
-                                                isPopupOpen ? "w-5 h-5" : "w-4 h-4",
-                                            )}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                            />
-                                        </svg>
+                                                isPopupOpen ? "w-6 h-6" : "w-5 h-5",
+                                            )} />
+                                        ) : (
+                                            <svg
+                                                className={cn(
+                                                    "text-white transition-all duration-300",
+                                                    isPopupOpen ? "w-5 h-5" : "w-4 h-4",
+                                                )}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+                                        )}
                                     </div>
-                                    <div className="absolute inset-0 rounded-full bg-linear-to-br from-[#7468FC] to-[#918FFF] blur-lg opacity-30 animate-pulse" />
+                                    <div className={cn(
+                                        "absolute inset-0 rounded-full blur-lg opacity-30 animate-pulse",
+                                        isError ? "bg-red-200" : "bg-linear-to-br from-[#7468FC] to-[#918FFF]"
+                                    )} />
                                 </div>
                                 <h1
                                     className={cn(
-                                        "bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold leading-tight transition-all duration-300",
+                                        isError
+                                            ? "text-red-400 font-semibold leading-tight transition-all duration-300"
+                                            : "bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent font-semibold leading-tight transition-all duration-300",
                                         isPopupOpen ? "text-2xl" : "text-base",
                                     )}
                                 >
-                                    Employee Details Submitted
+                                    {title}
                                 </h1>
                             </div>
                         </div>
@@ -109,7 +133,6 @@ export default function EmployeeDetailsLoader({
                                 !isPopupOpen && "flex flex-col h-full",
                             )}
                         >
-                            {/* Success Preview Mockup (Empty/Generic) */}
                             <div
                                 className={cn(
                                     "bg-muted/20 rounded-xl border border-border/40 animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-hidden",
@@ -124,8 +147,8 @@ export default function EmployeeDetailsLoader({
                                         "bg-background rounded-lg p-3 space-y-3 border border-border/30 overflow-hidden shadow-xs flex flex-col items-center justify-center text-muted-foreground",
                                     )}
                                 >
-                                    <NavChatBot className="w-12 h-12 opacity-20 mb-2" />
-                                    <p className="text-sm font-medium opacity-60">Details have been successfully recorded.</p>
+                                    <NavChatBot className={cn("w-12 h-12 opacity-20 mb-2", isError && "text-red-500 opacity-40")} />
+                                    <p className={cn("text-sm font-medium opacity-60", isError && "opacity-80")}>{resultMessage}</p>
                                 </div>
                             </div>
 
