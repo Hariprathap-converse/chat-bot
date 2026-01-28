@@ -5,6 +5,7 @@ import { X, Send, Upload, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { FaWandMagicSparkles } from "react-icons/fa6";
 
 export type OperationType = "summarize" | "extract" | "classify";
 
@@ -90,7 +91,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
             <div className="relative z-10 w-full max-w-lg bg-background rounded-xl shadow-2xl border border-border p-6 animate-in fade-in zoom-in-95 duration-200">
                 <button
                     onClick={onClose}
-                    className="absolute right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute cursor-pointer right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
                 >
                     <X className="w-5 h-5" />
                 </button>
@@ -179,10 +180,12 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                         <Button
                             onClick={handleSend}
                             disabled={!inputText.trim() && !selectedFile}
-                            className="bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] hover:opacity-90 transition-opacity capitalize"
+                            className="bg-linear-to-r cursor-pointer font-normal  from-[#7468FC] via-[#ED799C] to-[#918FFF] hover:opacity-95 transition-opacity capitalize"
                         >
-                            <Send className="w-4 h-4 mr-2" />
+
+
                             {type}
+                            <FaWandMagicSparkles className="max-h-4 " />
                         </Button>
                     </div>
                 </div>

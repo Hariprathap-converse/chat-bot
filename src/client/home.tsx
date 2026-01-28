@@ -28,7 +28,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { OperationModal, OperationType } from "./operation-modal";
 
-const SendIcon = () => (
+export const SendIcon = () => (
   <svg
     fill="#FFFF"
     version="1.1"
