@@ -9,12 +9,10 @@ export class MockWebSocket {
     public readyState: number = 0; // 0: CONNECTING, 1: OPEN, 2: CLOSING, 3: CLOSED
 
     constructor(url: string) {
-        console.log(`[MockWS] Connecting to ${url}...`);
         // Simulate connection delay
         setTimeout(() => {
             this.readyState = 1;
             this.dispatchEvent("open", {});
-            console.log(`[MockWS] Connected!`);
         }, 1000);
     }
 
@@ -34,8 +32,6 @@ export class MockWebSocket {
     }
 
     public send(message: string) {
-        console.log(`[MockWS] Client sent:`, message);
-
         // Auto-respond for demonstration
         setTimeout(() => {
             const response = {
@@ -52,7 +48,6 @@ export class MockWebSocket {
         setTimeout(() => {
             this.readyState = 3;
             this.dispatchEvent("close", {});
-            console.log(`[MockWS] Connection closed.`);
         }, 100);
     }
 

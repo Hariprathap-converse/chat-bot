@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 
-export type OperationType = "summarize" | "extract" | "classify";
+export type OperationType = "summarize" | "extract" | "classify" | "sentiment";
 
 interface OperationModalProps {
     isOpen: boolean;
@@ -29,6 +29,8 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                 return "Extract Data";
             case "classify":
                 return "Classify Team";
+            case "sentiment":
+                return "Analyze Sentiment";
             default:
                 return "Summarize Content";
         }
@@ -40,6 +42,8 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                 return "Paste text to extract from...";
             case "classify":
                 return "Describe the team or paste details to classify...";
+            case "sentiment":
+                return "Paste text to analyze sentiment...";
             default:
                 return "Type or paste text here...";
         }

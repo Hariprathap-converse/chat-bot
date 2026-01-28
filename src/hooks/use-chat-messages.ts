@@ -35,7 +35,12 @@ export function useChatMessages() {
           const { type, input, fileName } = JSON.parse(storedOp);
           localStorage.removeItem("pendingOperation");
 
-          const conversationId = ensureActiveConversation(type === "summarize" ? "Summary" : type === "extract" ? "Extraction" : "Classification");
+          const conversationId = ensureActiveConversation(
+            type === "summarize" ? "Summary" :
+              type === "extract" ? "Extraction" :
+                type === "sentiment" ? "Sentiment Analysis" :
+                  "Classification"
+          );
 
           const userMsg: Message = {
             id: Date.now().toString(),
@@ -52,20 +57,19 @@ export function useChatMessages() {
 
           // Determine API endpoint and loading text
           let endpoint = "";
-          let loadingText = "";
 
           switch (type) {
             case "summarize":
-              endpoint = "http://localhost:4000/summarize";
-              loadingText = "Summarizing content...";
+              endpoint = "http://127.0.0.1:5000/ai/summarize";
               break;
             case "extract":
-              endpoint = "http://localhost:4000/extract";
-              loadingText = "Extracting data...";
+              endpoint = "http://127.0.0.1:5000/ai/extract";
               break;
             case "classify":
-              endpoint = "http://localhost:4000/classify";
-              loadingText = "Classifying team...";
+              endpoint = "http://127.0.0.1:5000/ai/classify";
+              break;
+            case "sentiment":
+              endpoint = "http://127.0.0.1:5000/ai/sentiment";
               break;
           }
 
@@ -76,15 +80,15 @@ export function useChatMessages() {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                input: input,
+                text: input,
                 file: fileName ? { name: fileName } : null,
               }),
             });
             if (!response.ok) throw new Error(`Failed to ${type}`);
 
             const data = await response.json();
-            // Mock server returns array or object, we take first item or the data itself
-            const responseText = Array.isArray(data) ? (data[0]?.response || "Operation completed.") : data.response || "Operation completed.";
+            // Real backend returns { summary: ... } or { response: ... } or { category: ... }
+            const responseText = data.summary || data.response || data.category || data.sentiment || "Operation completed.";
 
             setBotTyping(false);
             const botMsg: Message = {
@@ -246,19 +250,19 @@ export function useChatMessages() {
       userMessage.includes("employee details form")
     ) {
       setShowEmployeeLoader(true);
-
       setTimeout(() => {
         setShowEmployeeLoader(false);
         setEmployeeDetailsOpen(true);
       }, 2000);
+      setBotTyping(false);
+      return;
+    }
 
-      setTimeout(() => {
-        setBotTyping(false);
-      }, 500);
-    } else if (
+    if (
       userMessage.includes("generate website") ||
       userMessage.includes("website generator")
     ) {
+      setBotTyping(true);
       setTimeout(() => {
         setBotTyping(false);
         const botMsg: Message = {
@@ -270,18 +274,64 @@ export function useChatMessages() {
         };
         addMessageToConversation(conversationId, botMsg);
       }, 500);
-    } else {
-      setTimeout(() => {
-        setBotTyping(false);
+      return;
+    }
+
+    const wsUrl = "ws://127.0.0.1:5000/ws/chat";
+    const socket = new WebSocket(wsUrl);
+
+    socket.onopen = () => {
+      socket.send(JSON.stringify({ input: userText }));
+    };
+
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log('data', data);
+      const response = data.text;
+      console.log(response);
+      setBotTyping(false);
+
+      if (response.type === "form") {
+        // Handle HR intents (apply_leave, create_employee, etc.)
+        if (response.intent === "create_employee") {
+          setShowEmployeeLoader(true);
+          setTimeout(() => {
+            setShowEmployeeLoader(false);
+            setEmployeeDetailsOpen(true);
+          }, 2000);
+        } else {
+          // generic info message for other forms for now
+          const botMsg: Message = {
+            id: (Date.now() + 1).toString(),
+            role: "bot",
+            content: `I've opened the ${response.intent.replace('_', ' ')} form for you.`,
+          };
+          addMessageToConversation(conversationId, botMsg);
+        }
+      } else {
         const botMsg: Message = {
-          id: (Date.now() + 4).toString(),
+          id: (Date.now() + 1).toString(),
           role: "bot",
-          content: `Bot response to "${userText}"`,
+          content: response || "Sorry, I didn't get that.",
           type: "text",
         };
         addMessageToConversation(conversationId, botMsg);
-      }, 500);
-    }
+      }
+      socket.close();
+    };
+
+    socket.onerror = (event) => {
+      setBotTyping(false);
+
+      const botMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "bot",
+        content: "I couldn't connect to the AI server. Please make sure the backend is running at http://127.0.0.1:5000 and has WebSocket support.",
+        type: "text",
+      };
+      addMessageToConversation(conversationId, botMsg);
+    };
+
   };
 
   return {

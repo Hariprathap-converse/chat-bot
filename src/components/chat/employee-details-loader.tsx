@@ -18,8 +18,7 @@ export default function EmployeeDetailsLoader({
     };
 
     const handlePreview = () => {
-        // Maybe open the details view or something? For now just log or do nothing.
-        console.log("View details clicked");
+        // Maybe open the details view or something?
     };
 
     return (

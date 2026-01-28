@@ -252,6 +252,8 @@ export default function DynamicHome() {
                             setOperationModal({ isOpen: true, type: "extract" });
                           } else if (item.label === "Classify") {
                             setOperationModal({ isOpen: true, type: "classify" });
+                          } else if (item.label === "Analyze Sentiment") {
+                            setOperationModal({ isOpen: true, type: "sentiment" });
                           } else {
                             router.push(`/chat`);
                           }

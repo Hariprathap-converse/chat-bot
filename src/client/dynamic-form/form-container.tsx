@@ -174,14 +174,12 @@ const FormContainerProps = ({
       const error = validateField(field, value);
       if (error) {
         newErrors[field.name] = error;
-        console.log("newErrors: ", newErrors);
       }
     });
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      console.log("Validation failed:", newErrors);
       return;
     }
 
@@ -214,7 +212,7 @@ const FormContainerProps = ({
         showToastMessage("error", result.error.message as string);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      // Failed to submit
     }
   };
 

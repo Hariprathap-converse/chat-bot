@@ -158,6 +158,7 @@ const defaultData: OpsBotData = {
       title: "Attendance Operations",
       icon: null,
       items: [
+        { label: "Analyze Sentiment", icon: "Smile" },
         { label: "Mark Attendance", icon: "CheckIcon" },
         { label: "Get Attendance Report", icon: "FileText" },
         { label: "Update Attendance", icon: "EditIcon" },
