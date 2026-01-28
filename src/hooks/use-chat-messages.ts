@@ -7,7 +7,7 @@ export interface Message {
   id: string;
   role: "user" | "bot";
   content: string;
-  type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader";
+  type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader" | "table";
   file?: {
     name: string;
     size?: number;
@@ -19,6 +19,7 @@ export interface Message {
     title?: string;
     message?: string;
   };
+  tableData?: any;
 }
 
 export function useChatMessages() {
@@ -288,24 +289,55 @@ export function useChatMessages() {
     };
 
     socket.onmessage = (event) => {
-      console.log("event", event)
-      const data = JSON.parse(event.data);
-      console.log('data', data);
-      const response = data;
-      console.log('response', response);
-      setBotTyping(false);
+      try {
+        const response = JSON.parse(event.data);
+        console.log('socket response', response);
+        setBotTyping(false);
 
-      if (response.type === "form") {
-        setDynamicFormData(response);
-        setShowEmployeeLoader(true);
-        setTimeout(() => {
-          setShowEmployeeLoader(false);
-          setEmployeeDetailsOpen(true);
-        }, 2000);
-      } else {
+        // 1. Handle Form Response
+        if (response.type === "form") {
+          setDynamicFormData(response);
+          setShowEmployeeLoader(true);
+          setTimeout(() => {
+            setShowEmployeeLoader(false);
+            setEmployeeDetailsOpen(true);
+          }, 2000);
+          socket.close();
+          return;
+        }
 
-        // Handle string response or object with text property
-        const content = (typeof response === 'object' ? response?.text : response.text) || "Sorry, I didn't get that.";
+        // 2. Handle Table Response (Explicit or Implicit)
+        const isTable = response.type === "table" ||
+          (response.text && typeof response.text === 'object') ||
+          (!response.type && typeof response === 'object' && !response.text && !response.message && !response.content);
+
+        if (isTable) {
+          const tableData = response.type === 'table' ? response.text : (response.text || response);
+          const botMsg: Message = {
+            id: (Date.now() + 1).toString(),
+            role: "bot",
+            content: (typeof response.content === 'string' ? response.content : null) || "Generated structured data:",
+            type: "table",
+            tableData: tableData,
+          };
+          addMessageToConversation(conversationId, botMsg);
+          socket.close();
+          return;
+        }
+
+        // 3. Handle Standard Text Response
+        let content = "Sorry, I didn't get that.";
+        if (typeof response === 'string') {
+          content = response;
+        } else if (response && typeof response === 'object') {
+          content = (
+            typeof response.text === 'string' ? response.text :
+              typeof response.message === 'string' ? response.message :
+                typeof response.content === 'string' ? response.content :
+                  JSON.stringify(response)
+          );
+        }
+
         const botMsg: Message = {
           id: (Date.now() + 1).toString(),
           role: "bot",
@@ -313,8 +345,13 @@ export function useChatMessages() {
           type: "text",
         };
         addMessageToConversation(conversationId, botMsg);
+        socket.close();
+
+      } catch (err) {
+        console.error("Failed to parse socket message", err);
+        setBotTyping(false);
+        socket.close();
       }
-      socket.close();
     };
 
     socket.onerror = (event) => {

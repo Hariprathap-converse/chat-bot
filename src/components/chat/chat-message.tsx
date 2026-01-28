@@ -25,6 +25,7 @@ import { ToolsLoader } from "@/components/chat/tools-loader";
 import { useChat } from "@/context/chat-context";
 import AIWebsiteGeneratorLoader from "./ai-website-generator-loader";
 import EmployeeDetailsLoader from "./employee-details-loader";
+import { TableMessage } from "./table-message";
 import ReactMarkdown from "react-markdown";
 import {
   Tooltip,
@@ -199,6 +200,24 @@ export function ChatMessage({
     );
   }
 
+  if (message.type === "table") {
+    return (
+      <div className="flex w-full justify-start mt-2 mb-2">
+        <div className="flex items-start w-full gap-2">
+          <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center shrink-0">
+            <NavChatBot />
+          </div>
+          <div className="w-full max-w-full lg:max-w-4xl">
+            <TableMessage
+              data={message.tableData}
+              title={message.content !== "Here is the requested information:" ? message.content : undefined}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (message.type === "employee-loader") {
     return (
       <div className="flex w-full  justify-start mt-2 mb-2">
@@ -254,7 +273,7 @@ export function ChatMessage({
                   p: ({ node, ...props }) => <p className="m-0 inline" {...props} />,
                 }}
               >
-                {message.content}
+                {typeof message.content === 'string' ? message.content : ""}
               </ReactMarkdown>
             </div>
             {/* Bot message tail */}
