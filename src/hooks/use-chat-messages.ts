@@ -24,6 +24,7 @@ export function useChatMessages() {
   const [input, setInput] = useState("");
   const [showEmployeeLoader, setShowEmployeeLoader] = useState(false);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
+  const [dynamicFormData, setDynamicFormData] = useState<any>(null);
   const [botTyping, setBotTyping] = useState(false);
 
   useEffect(() => {
@@ -295,19 +296,20 @@ export function useChatMessages() {
       if (response.type === "form") {
         // Handle HR intents (apply_leave, create_employee, etc.)
         if (response.intent === "create_employee") {
+          setDynamicFormData(null); // Reset dynamic form data for standard intent
           setShowEmployeeLoader(true);
           setTimeout(() => {
             setShowEmployeeLoader(false);
             setEmployeeDetailsOpen(true);
           }, 2000);
         } else {
-          // generic info message for other forms for now
-          const botMsg: Message = {
-            id: (Date.now() + 1).toString(),
-            role: "bot",
-            content: `I've opened the ${response.intent.replace('_', ' ')} form for you.`,
-          };
-          addMessageToConversation(conversationId, botMsg);
+          // Dynamic form intent
+          setDynamicFormData(response);
+          setShowEmployeeLoader(true);
+          setTimeout(() => {
+            setShowEmployeeLoader(false);
+            setEmployeeDetailsOpen(true);
+          }, 2000);
         }
       } else {
 
@@ -346,6 +348,7 @@ export function useChatMessages() {
     showEmployeeLoader,
     employeeDetailsOpen,
     setEmployeeDetailsOpen,
+    dynamicFormData,
     botTyping,
     addEmployeeSuccessMessage: () => {
       const conversationId = ensureActiveConversation("Employee Details");

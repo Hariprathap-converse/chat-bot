@@ -31,6 +31,7 @@ export default function ChatPage() {
     showEmployeeLoader,
     employeeDetailsOpen,
     setEmployeeDetailsOpen,
+    dynamicFormData,
     botTyping,
     addEmployeeSuccessMessage,
   } = useChatMessages();
@@ -136,6 +137,7 @@ export default function ChatPage() {
       <EmployeeDetailsModal
         isOpen={employeeDetailsOpen}
         onClose={() => setEmployeeDetailsOpen(false)}
+        dynamicData={dynamicFormData}
         onSubmitSuccess={() => {
           setEmployeeDetailsOpen(false);
           addEmployeeSuccessMessage();

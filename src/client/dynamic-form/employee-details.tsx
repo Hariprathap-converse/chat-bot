@@ -6,13 +6,17 @@ import { toast } from "sonner";
 
 import FormContainerProps from "./form-container";
 import { useLayout } from "@/context/layout-context";
+import { transformBackendFormToDefinition } from "@/utils/form-transformer";
+import { FormData as DefaultFormData } from "@/mock-data/form-filed-json";
 
 export default function EmployeeDetails({
   onCancel,
   onSubmitSuccess,
+  dynamicData,
 }: {
   onCancel?: () => void;
   onSubmitSuccess?: () => void;
+  dynamicData?: any;
 }) {
   const { formData, setFormData } = useLayout();
   const [manualGridOverride, setManualGridOverride] = useState(false);
@@ -31,6 +35,7 @@ export default function EmployeeDetails({
 
   function onSubmit(data: any) {
     setIsSubmitting(true);
+    console.log("Submiteddatasda", data);
 
     setTimeout(() => {
       const mockResponse = {
@@ -58,6 +63,15 @@ export default function EmployeeDetails({
       }, 1000);
     }, 1500);
   }
+
+  useEffect(() => {
+    if (dynamicData) {
+      const transformed = transformBackendFormToDefinition(dynamicData);
+      setFormData(transformed);
+    } else {
+      setFormData(DefaultFormData);
+    }
+  }, [dynamicData, setFormData]);
 
   const setLabelAlignment = (alignment: string) => {
     updateForm({
