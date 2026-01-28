@@ -25,6 +25,14 @@ import { ToolsLoader } from "@/components/chat/tools-loader";
 import { useChat } from "@/context/chat-context";
 import AIWebsiteGeneratorLoader from "./ai-website-generator-loader";
 import EmployeeDetailsLoader from "./employee-details-loader";
+import ReactMarkdown from "react-markdown";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { FileText } from "lucide-react";
 
 interface ChatMessageProps {
   message: Message;
@@ -127,12 +135,31 @@ export function ChatMessage({
           <div className="flex items-start w-full gap-1">
             <div className="flex items-center h-full justify-center w-full gap-1">
               <div className="relative w-full font-medium bg-transparent text-foreground rounded-tl-none text-end px-2 py-0">
-                <div className="inline-flex xl:max-w-[70%] xl:min-w-[800px] max-w-[70%] min-w-[75%]  text-left justify-end whitespace-pre-wrap">
-                  <span className="break-all">{message.content}</span>
+                <div className="flex flex-col items-end gap-2">
+                  <div className="inline-flex xl:max-w-[70%] xl:min-w-[800px] max-w-[70%] min-w-[75%]  text-left justify-end whitespace-pre-wrap">
+                    <span className="break-all">{message.content}</span>
+                  </div>
+                  {message.file && (
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex items-center gap-2 p-2 bg-muted/50 hover:bg-muted rounded-lg border border-border cursor-default transition-colors">
+                            <FileText className="w-4 h-4 text-accent" />
+                            <span className="text-xs font-normal text-muted-foreground truncate max-w-[150px]">
+                              {message.file.name.length > 20 ? message.file.name.substring(0, 20) + '...' : message.file.name}
+                            </span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{message.file.name}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="min-w-8 min-h-8 ml-1 rounded-full bg-muted shadow items-start">
+            <div className="min-w-8 min-h-8 ml-1 rounded-full bg-muted shadow items-start shrink-0">
               <Image
                 src="/profile.jpg"
                 width={40}
@@ -219,8 +246,15 @@ export function ChatMessage({
             <NavChatBot />
           </div>
           <div className="relative w-full font-medium bg-bot text-bot-foreground relative z-10 ring-1 ring-accent !rounded-[8px] !rounded-tl-none px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]">
-            <div className="inline-flex justify-start whitespace-pre-wrap">
-              <span className="break-all">{message.content}</span>
+            <div className="prose prose-sm dark:prose-invert max-w-none">
+              <ReactMarkdown
+                components={{
+                  strong: ({ node, ...props }) => <span className="font-bold text-foreground" {...props} />,
+                  p: ({ node, ...props }) => <p className="m-0 inline" {...props} />,
+                }}
+              >
+                {message.content}
+              </ReactMarkdown>
             </div>
             {/* Bot message tail */}
             <div>

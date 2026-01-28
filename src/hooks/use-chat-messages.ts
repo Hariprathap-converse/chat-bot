@@ -8,6 +8,11 @@ export interface Message {
   role: "user" | "bot";
   content: string;
   type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader";
+  file?: {
+    name: string;
+    size?: number;
+    type?: string;
+  };
   toolData?: {
     target?: string;
     status?: "idle" | "processing" | "sending" | "success" | "error";
@@ -32,17 +37,12 @@ export function useChatMessages() {
 
           const conversationId = ensureActiveConversation(type === "summarize" ? "Summary" : type === "extract" ? "Extraction" : "Classification");
 
-          // Add User Message
-          let userContent = input;
-          if (type === "extract" && fileName) {
-            userContent = `[Attached File: ${fileName}]\n\n${input}`;
-          }
-
           const userMsg: Message = {
             id: Date.now().toString(),
             role: "user",
-            content: userContent,
+            content: input,
             type: "text",
+            file: fileName ? { name: fileName } : undefined,
           };
           addMessageToConversation(conversationId, userMsg);
 
@@ -69,26 +69,22 @@ export function useChatMessages() {
               break;
           }
 
-          // Optional: Add a temporary bot message for status if desired, 
-          // but typing indicator is usually enough. 
-          // If we want explicit text status:
-          /*
-          const botLoaderMsg: Message = {
-            id: tempBotId,
-            role: "bot",
-            content: loadingText,
-            type: "text", 
-          };
-          addMessageToConversation(conversationId, botLoaderMsg);
-          */
-
           try {
-            const response = await fetch(endpoint);
+            const response = await fetch(endpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                input: input,
+                file: fileName ? { name: fileName } : null,
+              }),
+            });
             if (!response.ok) throw new Error(`Failed to ${type}`);
 
             const data = await response.json();
-            // Mock server returns array, we take first item
-            const responseText = data[0]?.response || "Operation completed.";
+            // Mock server returns array or object, we take first item or the data itself
+            const responseText = Array.isArray(data) ? (data[0]?.response || "Operation completed.") : data.response || "Operation completed.";
 
             setBotTyping(false);
             const botMsg: Message = {
