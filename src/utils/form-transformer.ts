@@ -14,6 +14,8 @@ export function transformBackendFormToDefinition(backendData: any): FormDefiniti
 
     const mappedFields: FieldConfig[] = (fields || []).map((field: any) => ({
         ...field,
+        // Ensure select fields with options default to static datasource
+        dataSource: field.dataSource || (field.type === "select" && field.options ? "static" : field.dataSource),
         // Ensure basic required properties for FieldConfig if missing
         value: field.value ?? undefined,
         isDisabled: field.isDisabled ?? false,
@@ -24,7 +26,7 @@ export function transformBackendFormToDefinition(backendData: any): FormDefiniti
         security: field.security || {},
         autoPopulate: field.autoPopulate || { autoFill: false },
     }));
-
+    console.log("mappedFields", mappedFields);
     return {
         form: {
             ids: {
@@ -50,6 +52,8 @@ export function transformBackendFormToDefinition(backendData: any): FormDefiniti
             viewMode: false,
             editMode: false,
             fields: mappedFields,
+            action: action,
+            payload: backendData.payload,
         },
     };
 }

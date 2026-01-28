@@ -37,33 +37,87 @@ export default function EmployeeDetails({
 
   function onSubmit(data: any) {
     setIsSubmitting(true);
-    console.log("Submiteddatasda", data);
+    console.log("Submitted raw data:", data);
 
-    setTimeout(() => {
-      const mockResponse = {
-        success: true,
-        message: "Employee details saved successfully",
-        data: {
-          ...data,
-          id: Math.random().toString(36).substr(2, 9),
-          timestamp: new Date().toISOString(),
-        },
-      };
+    const action = (formData.form as any).action;
+    const payloadSchema = (formData.form as any).payload;
 
-      toast.success("Sent successfully", {
-        description: `${formData.form.formHeader.header} has been saved`,
-        duration: 3000,
-      });
+    // Convert data types based on payload schema
+    const formattedData: Record<string, any> = {};
+    if (payloadSchema) {
+      Object.keys(payloadSchema).forEach((key) => {
+        const type = payloadSchema[key];
+        const value = data[key];
 
-      setIsSubmitting(false);
-
-      setTimeout(() => {
-        onCancel?.();
-        if (onSubmitSuccess) {
-          onSubmitSuccess(formData.form.formHeader.header, `${formData.form.formHeader.header} has been successfully recorded.`);
+        if (value === undefined || value === null) {
+          formattedData[key] = value;
+          return;
         }
-      }, 1000);
-    }, 1500);
+
+        switch (type) {
+          case "number":
+            formattedData[key] = Number(value);
+            break;
+          case "boolean":
+            formattedData[key] = String(value).toLowerCase() === "true";
+            break;
+          case "date":
+            formattedData[key] = value; // Keep as is or format if needed
+            break;
+          case "string":
+          default:
+            formattedData[key] = String(value);
+            break;
+        }
+      });
+    } else {
+      Object.assign(formattedData, data);
+    }
+
+    console.log("Formatted data for submission:", formattedData);
+
+    const baseUrl = "http://localhost:8001";
+    const url = action ? `${baseUrl}${action.path}` : `${baseUrl}/api/v1/form/add`;
+    const method = action ? action.method : "POST";
+
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formattedData),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((result) => {
+        toast.success("Sent successfully", {
+          description: `${formData.form.formHeader.header} has been saved`,
+          duration: 3000,
+        });
+
+        setIsSubmitting(false);
+
+        setTimeout(() => {
+          onCancel?.();
+          if (onSubmitSuccess) {
+            onSubmitSuccess(
+              formData.form.formHeader.header,
+              `${formData.form.formHeader.header} has been successfully recorded.`
+            );
+          }
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error("Submission error:", error);
+        toast.error("Submission failed", {
+          description: error.message || "An error occurred while saving details.",
+        });
+        setIsSubmitting(false);
+      });
   }
 
   const handleCancel = () => {
@@ -76,6 +130,7 @@ export default function EmployeeDetails({
   useEffect(() => {
     if (dynamicData) {
       const transformed = transformBackendFormToDefinition(dynamicData);
+      console.log("transformed", transformed);
       setFormData(transformed);
     } else {
       setFormData(DefaultFormData);

@@ -61,5 +61,10 @@ export type FormDefinition = {
       steps: Step[];
     };
     fields?: FieldConfig[];
+    action?: {
+      method: string;
+      path: string;
+    };
+    payload?: Record<string, string>;
   };
 };
