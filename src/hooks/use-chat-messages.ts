@@ -22,74 +22,101 @@ export function useChatMessages() {
   const [botTyping, setBotTyping] = useState(false);
 
   useEffect(() => {
-    const checkPendingSummary = async () => {
-      const stored = localStorage.getItem("pendingSummary");
-      if (!stored) return;
-
-      try {
-        const { input } = JSON.parse(stored);
-        localStorage.removeItem("pendingSummary");
-
-        // Ensure conversation exists
-        const conversationId = ensureActiveConversation(input);
-
-        // 1. Add User Message
-        const userMsg: Message = {
-          id: Date.now().toString(),
-          role: "user",
-          content: input,
-          type: "text",
-        };
-        addMessageToConversation(conversationId, userMsg);
-
-        // 2. Add Bot Loader Message
-        const tempBotId = (Date.now() + 1).toString();
-        const botLoaderMsg: Message = {
-          id: tempBotId,
-          role: "bot",
-          content: "Generating summary...",
-          type: "text", // Using text with typing indicator effect or just text
-        };
-
-        // Simulating loader with bot typing state if we want, or just add message
-        setBotTyping(true);
-
-        // Call API
+    const checkPendingOperation = async () => {
+      // 1. Check for Generic Pending Operation
+      const storedOp = localStorage.getItem("pendingOperation");
+      if (storedOp) {
         try {
-          const response = await fetch("http://localhost:4000/summarize");
-          if (!response.ok) throw new Error("Failed to fetch summary");
+          const { type, input, fileName } = JSON.parse(storedOp);
+          localStorage.removeItem("pendingOperation");
 
-          const data = await response.json();
-          const summaryText = data[0]?.response || "Summary not available.";
+          const conversationId = ensureActiveConversation(type === "summarize" ? "Summary" : type === "extract" ? "Extraction" : "Classification");
 
-          setBotTyping(false);
-          // 3. Add Bot Response
-          const botMsg: Message = {
-            id: (Date.now() + 2).toString(),
-            role: "bot",
-            content: summaryText,
+          // Add User Message
+          let userContent = input;
+          if (type === "extract" && fileName) {
+            userContent = `[Attached File: ${fileName}]\n\n${input}`;
+          }
+
+          const userMsg: Message = {
+            id: Date.now().toString(),
+            role: "user",
+            content: userContent,
             type: "text",
           };
-          addMessageToConversation(conversationId, botMsg);
+          addMessageToConversation(conversationId, userMsg);
 
-        } catch (error) {
-          setBotTyping(false);
-          const errorMsg: Message = {
-            id: (Date.now() + 2).toString(),
+          // Add Bot Loader
+          const tempBotId = (Date.now() + 1).toString();
+          setBotTyping(true);
+
+          // Determine API endpoint and loading text
+          let endpoint = "";
+          let loadingText = "";
+
+          switch (type) {
+            case "summarize":
+              endpoint = "http://localhost:4000/summarize";
+              loadingText = "Summarizing content...";
+              break;
+            case "extract":
+              endpoint = "http://localhost:4000/extract";
+              loadingText = "Extracting data...";
+              break;
+            case "classify":
+              endpoint = "http://localhost:4000/classify";
+              loadingText = "Classifying team...";
+              break;
+          }
+
+          // Optional: Add a temporary bot message for status if desired, 
+          // but typing indicator is usually enough. 
+          // If we want explicit text status:
+          /*
+          const botLoaderMsg: Message = {
+            id: tempBotId,
             role: "bot",
-            content: "Sorry, I encountered an error while summarizing.",
-            type: "text",
+            content: loadingText,
+            type: "text", 
           };
-          addMessageToConversation(conversationId, errorMsg);
+          addMessageToConversation(conversationId, botLoaderMsg);
+          */
+
+          try {
+            const response = await fetch(endpoint);
+            if (!response.ok) throw new Error(`Failed to ${type}`);
+
+            const data = await response.json();
+            // Mock server returns array, we take first item
+            const responseText = data[0]?.response || "Operation completed.";
+
+            setBotTyping(false);
+            const botMsg: Message = {
+              id: (Date.now() + 2).toString(),
+              role: "bot",
+              content: responseText,
+              type: "text",
+            };
+            addMessageToConversation(conversationId, botMsg);
+
+          } catch (error) {
+            setBotTyping(false);
+            const errorMsg: Message = {
+              id: (Date.now() + 2).toString(),
+              role: "bot",
+              content: `Sorry, I encountered an error during ${type}.`,
+              type: "text",
+            };
+            addMessageToConversation(conversationId, errorMsg);
+          }
+
+        } catch (e) {
+          console.error("Failed to parse pending operation", e);
         }
-
-      } catch (e) {
-        console.error("Failed to parse pending summary", e);
       }
     };
 
-    // Small timeout to ensure context is ready
-    const t = setTimeout(checkPendingSummary, 500);
+    const t = setTimeout(checkPendingOperation, 500);
     return () => clearTimeout(t);
   }, []);
 

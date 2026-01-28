@@ -4,5 +4,17 @@
             "id": 1,
             "response": "Here is the summary of your request: The operations have been successfully analyzed and processed according to the standard procedures."
         }
+    ],
+    "extract": [
+        {
+            "id": 1,
+            "response": "Extraction Complete. \n\n**Extracted Data:**\n- **Role:** Senior DevOps Engineer\n- **Experience:** 5+ Years\n- **Key Skills:** Kubernetes, Docker, AWS, CI/CD"
+        }
+    ],
+    "classify": [
+        {
+            "id": 1,
+            "response": "Classification Result: **High Priority / Critical Infrastructure**.\n\nBased on the input, this team falls under the core platform stability group."
+        }
     ]
 }

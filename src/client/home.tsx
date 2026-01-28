@@ -26,7 +26,7 @@ import Profile from "./profile";
 import { AppSidebar } from "./app-sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
-import { SummarizeModal } from "./summarize-modal";
+import { OperationModal, OperationType } from "./operation-modal";
 
 const SendIcon = () => (
   <svg
@@ -83,7 +83,10 @@ export default function DynamicHome() {
   const { data } = useOpsBot();
   const { setOpen } = useSidebar();
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
-  const [isSummarizeModalOpen, setIsSummarizeModalOpen] = useState(false);
+  const [operationModal, setOperationModal] = useState<{
+    isOpen: boolean;
+    type: OperationType;
+  }>({ isOpen: false, type: "summarize" });
   useEffect(() => {
     setOpen(false);
   }, []);
@@ -208,7 +211,11 @@ export default function DynamicHome() {
                     className="border group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
                     onClick={() => {
                       if (item.label === "Summarize") {
-                        setIsSummarizeModalOpen(true);
+                        setOperationModal({ isOpen: true, type: "summarize" });
+                      } else if (item.label === "Extract") {
+                        setOperationModal({ isOpen: true, type: "extract" });
+                      } else if (item.label === "Classify") {
+                        setOperationModal({ isOpen: true, type: "classify" });
                       } else {
                         router.push(`/chat`);
                       }
@@ -240,7 +247,11 @@ export default function DynamicHome() {
                         key={index}
                         onClick={() => {
                           if (item.label === "Summarize") {
-                            setIsSummarizeModalOpen(true);
+                            setOperationModal({ isOpen: true, type: "summarize" });
+                          } else if (item.label === "Extract") {
+                            setOperationModal({ isOpen: true, type: "extract" });
+                          } else if (item.label === "Classify") {
+                            setOperationModal({ isOpen: true, type: "classify" });
                           } else {
                             router.push(`/chat`);
                           }
@@ -264,9 +275,10 @@ export default function DynamicHome() {
           )}
         </div>
       </main>
-      <SummarizeModal
-        isOpen={isSummarizeModalOpen}
-        onClose={() => setIsSummarizeModalOpen(false)}
+      <OperationModal
+        isOpen={operationModal.isOpen}
+        onClose={() => setOperationModal(prev => ({ ...prev, isOpen: false }))}
+        type={operationModal.type}
       />
     </div>
   );
