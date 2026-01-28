@@ -136,7 +136,7 @@ export function ChatMessage({
             <div className="flex items-center h-full justify-center w-full gap-1">
               <div className="relative w-full font-medium bg-transparent text-foreground rounded-tl-none text-end px-2 py-0">
                 <div className="flex flex-col items-end gap-2">
-                  <div className="inline-flex xl:max-w-[70%] xl:min-w-[800px] max-w-[70%] min-w-[75%]  text-left justify-end whitespace-pre-wrap">
+                  <div className="inline-flex :max-w-[70%]  xl:min-w-[800px]  max-w-[400px] min-w-[75%]  text-left justify-end whitespace-pre-wrap">
                     <span className="break-all">{message.content}</span>
                   </div>
                   {message.file && (
@@ -245,7 +245,7 @@ export function ChatMessage({
           <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center">
             <NavChatBot />
           </div>
-          <div className="relative w-full font-medium bg-bot text-bot-foreground relative z-10 ring-1 ring-accent !rounded-[8px] !rounded-tl-none px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]">
+          <div className="relative w-full max-w-fit font-medium bg-bot text-bot-foreground relative z-10 ring-1 ring-accent !rounded-[8px] !rounded-tl-none px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]">
             <div className="prose prose-sm dark:prose-invert max-w-none">
               <ReactMarkdown
                 components={{

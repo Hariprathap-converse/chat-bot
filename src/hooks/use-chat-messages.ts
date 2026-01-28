@@ -281,14 +281,15 @@ export function useChatMessages() {
     const socket = new WebSocket(wsUrl);
 
     socket.onopen = () => {
-      socket.send(JSON.stringify({ input: userText }));
+      socket.send(JSON.stringify({ message: userText }));
     };
 
     socket.onmessage = (event) => {
+      console.log("event", event)
       const data = JSON.parse(event.data);
       console.log('data', data);
-      const response = data.text;
-      console.log(response);
+      const response = data;
+      console.log('response', response);
       setBotTyping(false);
 
       if (response.type === "form") {
@@ -309,10 +310,13 @@ export function useChatMessages() {
           addMessageToConversation(conversationId, botMsg);
         }
       } else {
+
+        // Handle string response or object with text property
+        const content = (typeof response === 'object' ? response?.text : response.text) || "Sorry, I didn't get that.";
         const botMsg: Message = {
           id: (Date.now() + 1).toString(),
           role: "bot",
-          content: response || "Sorry, I didn't get that.",
+          content: content,
           type: "text",
         };
         addMessageToConversation(conversationId, botMsg);
