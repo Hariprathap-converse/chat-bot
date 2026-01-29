@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FaWandMagicSparkles } from "react-icons/fa6";
+import { useChat } from "@/context/chat-context";
 
 export type OperationType = "summarize" | "extract" | "classify" | "sentiment";
 
@@ -20,6 +21,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
+    const { createNewChat } = useChat();
 
     if (!isOpen) return null;
 
@@ -73,9 +75,9 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
 
         // Clear specific pendingSummary if it exists to avoid conflicts
         localStorage.removeItem("pendingSummary");
-
+        createNewChat();
         router.push("/chat");
-        onClose();
+        onClose()
         // Reset state after close
         setTimeout(() => {
             setInputText("");
