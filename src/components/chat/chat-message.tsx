@@ -36,6 +36,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { FileText } from "lucide-react";
+import remarkBreaks from "remark-breaks"
 
 interface ChatMessageProps {
   message: Message;
@@ -45,6 +46,7 @@ interface ChatMessageProps {
   onToolAction?: (messageId: string, data: { to: string; subject: string; body: string }) => void;
   onToolCancel?: (messageId: string) => void;
 }
+
 
 export function ChatMessage({
   message,
@@ -297,6 +299,7 @@ export function ChatMessage({
               </ReactMarkdown> */}
               <div className="prose prose-sm dark:prose-invert max-w-none">
                 <ReactMarkdown
+                  remarkPlugins={[remarkBreaks]}
                   components={{
                     // Paragraphs (DO NOT make inline)
                     p: ({ node, ...props }) => (
@@ -323,7 +326,6 @@ export function ChatMessage({
                     li: ({ node, ...props }) => (
                       <li className="my-1" {...props} />
                     ),
-
                     // Code blocks
                     code: ({ inline, ...props }: any) =>
                       inline ? (

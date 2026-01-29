@@ -123,7 +123,7 @@ export default function EmployeeDetailsLoader({
                     {/* Content Area */}
                     <div
                         className={cn(
-                            "overflow-y-auto transition-all duration-300 scrollbar-thin scrollbar-thumb-accent/10 scrollbar-track-transparent bg-background/50",
+                            "overflow-y-auto transition-all duration-300 scrollbar-thin scrollbar-thumb-accent/10 scrollbar-track-transparent bg-background/50 dark:bg-card/50",
                             isPopupOpen ? "p-6 min-h-[470px] max-h-[550px]" : "p-2 h-auto w-full",
                         )}
                     >

@@ -241,10 +241,9 @@ export default function AIWebsiteGeneratorLoader({
             </div>
           </div>
 
-          {/* Content Area */}
           <div
             className={cn(
-              "overflow-y-auto transition-all duration-300 scrollbar-thin scrollbar-thumb-accent/10 scrollbar-track-transparent bg-background/50",
+              "overflow-y-auto transition-all duration-300 scrollbar-thin scrollbar-thumb-accent/10 scrollbar-track-transparent bg-background/50 dark:bg-card/50",
 
               isPopupOpen
                 ? "p-6 min-h-[470px] max-h-[550px]"
@@ -603,7 +602,7 @@ export default function AIWebsiteGeneratorLoader({
 
           {/* Footer - Hide if completed */}
           {!isCompleted && (
-            <div className="bg-muted/30 px-5 py-3 border-t border-border/50 shrink-0">
+            <div className="bg-muted/30 dark:bg-muted/10 px-5 py-3 border-t border-border/50 shrink-0">
               <div className="flex items-center justify-center gap-4 text-xs font-medium text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <div
