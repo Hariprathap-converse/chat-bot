@@ -11,21 +11,13 @@ import { useLayout } from "@/context/layout-context";
 interface FormFooterProps {
   progress: number;
   onCancel?: () => void;
+  isLoading?: boolean;
+  isSuccess?: boolean;
 }
 
-const FormFooter = ({ progress, onCancel }: FormFooterProps) => {
+const FormFooter = ({ progress, onCancel, isLoading = false, isSuccess = false }: FormFooterProps) => {
   const { formData } = useLayout();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const handleClick = () => {
-    setIsSuccess(false);
-    setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
-    }, 2000);
-  };
   return (
     <>
       <div className="flex items-center w-full p-10  justify-center gap-4 md:gap-[32px]">
@@ -40,10 +32,7 @@ const FormFooter = ({ progress, onCancel }: FormFooterProps) => {
         <div className="relative w-full md:w-[117px] h-[35px]">
           <Button
             type="submit"
-            disabled={progress < 100}
-            onClick={() => {
-              handleClick();
-            }}
+            disabled={progress < 100 || isLoading}
             className={cn(
               "group  w-full h-full disabled:opacity-100 overflow-hidden rounded-md md:rounded-sm border border-transparent !bg-primary shadow-customhover font-normal text-primary-foreground hover:border-primary hover:text-primary transition-all duration-500 ease-in-out",
               isLoading ? "!bg-background !border !border-primary " : " ",

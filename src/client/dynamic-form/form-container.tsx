@@ -18,11 +18,15 @@ interface FormContainerProps {
   progress?: number;
   onCancel?: () => void;
   isSubmitting?: boolean;
+  isLoading?: boolean;
+  isSuccess?: boolean;
 }
 const FormContainerProps = ({
   showRequiredFields,
   onCancel,
   onSubmit,
+  isLoading,
+  isSuccess,
 }: FormContainerProps) => {
   const { formData, setFormData, setErrors, errors } = useLayout();
   const [formSubmitData, setFormSubmitData] = useState<Record<string, any>>({});
@@ -261,7 +265,7 @@ const FormContainerProps = ({
                 }))
               }
             />
-            <FormFooter progress={progress} onCancel={onCancel} />
+            <FormFooter progress={progress} onCancel={onCancel} isLoading={isLoading} isSuccess={isSuccess} />
           </div>
         </div>
       </form>

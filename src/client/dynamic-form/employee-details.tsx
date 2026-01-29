@@ -24,6 +24,7 @@ export default function EmployeeDetails({
   const [manualGridOverride, setManualGridOverride] = useState(false);
   const [showRequiredFields, setShowRequiredFields] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const updateForm = (updates: any) => {
@@ -37,6 +38,7 @@ export default function EmployeeDetails({
 
   function onSubmit(data: any) {
     setIsSubmitting(true);
+    setIsSuccess(false);
     console.log("Submitted raw data:", data);
 
     const action = (formData.form as any).action;
@@ -100,6 +102,8 @@ export default function EmployeeDetails({
         });
 
         setIsSubmitting(false);
+        setIsSuccess(true);
+
 
         setTimeout(() => {
           onCancel?.();
@@ -172,7 +176,8 @@ export default function EmployeeDetails({
         setLabelAlignment={setLabelAlignment}
         setManualGridOverride={setManualGridOverride}
         onCancel={handleCancel}
-        isSubmitting={isSubmitting}
+        isLoading={isSubmitting}
+        isSuccess={isSuccess}
       />
     </>
   );
