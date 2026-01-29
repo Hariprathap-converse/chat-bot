@@ -32,7 +32,7 @@ const FormFooter = ({ progress, onCancel, isLoading = false, isSuccess = false }
         <div className="relative w-full md:w-[117px] h-[35px]">
           <Button
             type="submit"
-            disabled={progress < 100 || isLoading}
+            disabled={progress < 100 || isLoading || isSuccess}
             className={cn(
               "group  w-full h-full disabled:opacity-100 overflow-hidden rounded-md md:rounded-sm border border-transparent !bg-primary shadow-customhover font-normal text-primary-foreground hover:border-primary hover:text-primary transition-all duration-500 ease-in-out",
               isLoading ? "!bg-background !border !border-primary " : " ",

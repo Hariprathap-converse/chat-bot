@@ -71,7 +71,7 @@ export function useChatMessages() {
               endpoint = "http://127.0.0.1:5000/ai/summarize";
               break;
             case "extract":
-              endpoint = "http://127.0.0.1:5000/ai/extract";
+              endpoint = "http://127.0.0.1:5000/ai/extract-invoice";
               break;
             case "classify":
               endpoint = "http://127.0.0.1:5000/ai/classify";
