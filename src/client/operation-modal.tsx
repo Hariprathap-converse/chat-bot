@@ -21,7 +21,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
-    const { createNewChat } = useChat();
+    const { createNewChat, setPendingFile } = useChat();
 
     if (!isOpen) return null;
 
@@ -75,6 +75,11 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
 
         // Clear specific pendingSummary if it exists to avoid conflicts
         localStorage.removeItem("pendingSummary");
+
+        if (type === "extract" && selectedFile) {
+            setPendingFile(selectedFile);
+        }
+
         createNewChat();
         router.push("/chat");
         onClose()
@@ -115,12 +120,14 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                     </div>
 
                     <div className="space-y-4">
-                        <Textarea
-                            value={inputText}
-                            onChange={(e) => setInputText(e.target.value)}
-                            placeholder={getPlaceholder()}
-                            className="min-h-[150px] resize-none focus-visible:ring-accent"
-                        />
+                        {type !== "extract" && (
+                            <Textarea
+                                value={inputText}
+                                onChange={(e) => setInputText(e.target.value)}
+                                placeholder={getPlaceholder()}
+                                className="min-h-[150px] resize-none focus-visible:ring-accent"
+                            />
+                        )}
 
                         {/* File Upload for Extract Only */}
                         {type === "extract" && (

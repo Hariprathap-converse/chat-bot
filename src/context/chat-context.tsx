@@ -29,6 +29,8 @@ interface ChatContextType {
         updates: Partial<Message>
     ) => void;
     ensureActiveConversation: (firstMessageContent: string) => string;
+    pendingFile: File | null;
+    setPendingFile: (file: File | null) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -49,6 +51,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     const [activeConversationId, setActiveConversationId] = useState<
         string | null
     >(null);
+    const [pendingFile, setPendingFile] = useState<File | null>(null);
 
     // Load from LocalStorage on mount
     useEffect(() => {
@@ -256,6 +259,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                 updateMessage,
                 ensureActiveConversation,
                 deleteConversation,
+                pendingFile,
+                setPendingFile,
             }}
         >
             {children}

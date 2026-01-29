@@ -201,6 +201,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <div
               onClick={() => {
                 createNewChat();
+                router.push("/chat");
               }}
               className={cn(
                 open ? "" : "ml-2 max-w-[40px]  ",

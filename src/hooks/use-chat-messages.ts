@@ -23,10 +23,11 @@ export interface Message {
     body?: string;
   };
   tableData?: any;
+  sentimentStars?: number;
 }
 
 export function useChatMessages() {
-  const { messages, addMessageToConversation, updateMessage, ensureActiveConversation, setMessages } = useChat();
+  const { messages, addMessageToConversation, updateMessage, ensureActiveConversation, setMessages, pendingFile, setPendingFile } = useChat();
   const [input, setInput] = useState("");
   const [showEmployeeLoader, setShowEmployeeLoader] = useState(false);
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
@@ -52,7 +53,7 @@ export function useChatMessages() {
           const userMsg: Message = {
             id: Date.now().toString(),
             role: "user",
-            content: input,
+            content: type === "extract" ? `Extracting from document: ${fileName}` : input,
             type: "text",
             file: fileName ? { name: fileName } : undefined,
           };
@@ -81,21 +82,40 @@ export function useChatMessages() {
           }
 
           try {
-            const response = await fetch(endpoint, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                text: input,
-                file: fileName ? { name: fileName } : null,
-              }),
-            });
+            let response;
+            if (type === "extract" && pendingFile) {
+              const formData = new FormData();
+              formData.append("file", pendingFile);
+              response = await fetch(endpoint, {
+                method: "POST",
+                body: formData,
+              });
+              setPendingFile(null); // Clear after sending
+            } else {
+              response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  text: input,
+                  file: fileName ? { name: fileName } : null,
+                }),
+              });
+            }
             if (!response.ok) throw new Error(`Failed to ${type}`);
 
             const data = await response.json();
             // Real backend returns { summary: ... } or { response: ... } or { category: ... }
             const responseText = data.summary || data.response || data.category || data.sentiment || "Operation completed.";
+
+            let sentimentStars = undefined;
+            if (type === "sentiment") {
+              const lowerText = responseText.toLowerCase();
+              if (lowerText.includes("positive")) sentimentStars = 5;
+              else if (lowerText.includes("negative")) sentimentStars = 0;
+              else if (lowerText.includes("neutral")) sentimentStars = 2.5;
+            }
 
             setBotTyping(false);
             const botMsg: Message = {
@@ -103,6 +123,7 @@ export function useChatMessages() {
               role: "bot",
               content: responseText,
               type: "text",
+              sentimentStars,
             };
             addMessageToConversation(conversationId, botMsg);
 
@@ -254,18 +275,18 @@ export function useChatMessages() {
 
     setBotTyping(true);
 
-    if (
-      userMessage.includes("employee details") ||
-      userMessage.includes("employee details form")
-    ) {
-      setShowEmployeeLoader(true);
-      setTimeout(() => {
-        setShowEmployeeLoader(false);
-        setEmployeeDetailsOpen(true);
-      }, 2000);
-      setBotTyping(false);
-      return;
-    }
+    // if (
+    //   userMessage.includes("employee details") ||
+    //   userMessage.includes("employee details form")
+    // ) {
+    //   setShowEmployeeLoader(true);
+    //   setTimeout(() => {
+    //     setShowEmployeeLoader(false);
+    //     setEmployeeDetailsOpen(true);
+    //   }, 2000);
+    //   setBotTyping(false);
+    //   return;
+    // }
 
     if (
       userMessage.includes("generate website") ||

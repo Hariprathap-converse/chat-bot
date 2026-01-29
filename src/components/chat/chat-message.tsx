@@ -9,6 +9,8 @@ import {
   MoreHorizontal,
   ThumbsDown,
   ThumbsUp,
+  Star,
+  StarHalf,
 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -338,6 +340,28 @@ export function ChatMessage({
                 >
                   {typeof message.content === "string" ? message.content : ""}
                 </ReactMarkdown>
+
+                {message.sentimentStars !== undefined && (
+                  <div className="flex items-center gap-1  pb-1 border-t border-accent/20 pt-3">
+                    <span className="text-xs font-semibold text-muted-foreground mr-1">Sentiment:</span>
+                    <div className="flex items-center">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span key={star}>
+                          {message.sentimentStars! >= star ? (
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          ) : message.sentimentStars! >= star - 0.5 ? (
+                            <StarHalf className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          ) : (
+                            <Star className="w-4 h-4 text-muted-foreground/30" />
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-xs font-bold text-foreground ml-1">
+                      {message.sentimentStars} / 5
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
             {/* Bot message tail */}
