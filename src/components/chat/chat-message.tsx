@@ -316,11 +316,11 @@ export function ChatMessage({
                     ),
 
                     // Code blocks
-                    code: ({ inline, ...props }:any) =>
+                    code: ({ inline, ...props }: any) =>
                       inline ? (
                         <code className="px-1 py-0.5 rounded bg-muted text-sm" {...props} />
                       ) : (
-                        <pre className="my-2 p-3 rounded bg-muted overflow-x-auto">
+                        <pre className="my-2 p-3 rounded bg-white overflow-x-auto">
                           <code {...props} />
                         </pre>
                       ),
