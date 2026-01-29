@@ -119,7 +119,7 @@ export default function DynamicHome() {
 
         <div className="flex flex-col gap-[23px] w-full items-center">
           <div className="flex relative w-full h-auto p-0">
-            <div className="p-px rounded-[14px] w-full shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)]">
+            <div className="p-px rounded-[14px] w-full shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] dark:from-[hsla(245,100%,97%,0.1)] dark:to-[hsla(245,100%,94%,0.1)]">
               <Input
                 value={mainInput}
                 onChange={(e) => setMainInput(e.target.value)}
@@ -129,7 +129,7 @@ export default function DynamicHome() {
                     router.push(`/chat`);
                   }
                 }}
-                className="p-0 h-14 rounded-[14px] border-0 bg-white px-[21px] flex items-center placeholder:font-normal placeholder:text-base placeholder:text-foreground leading-[150%] tracking-normal font-normal text-base! text-heading outline-none focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
+                className="p-0 h-14 rounded-[14px] border-0 bg-white dark:bg-input px-[21px] flex items-center placeholder:font-normal placeholder:text-base placeholder:text-foreground dark:placeholder:text-placeholder leading-[150%] tracking-normal font-normal text-base! text-heading dark:text-foreground outline-none focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
                 placeholder={data.search.placeholder}
               />
             </div>
@@ -150,7 +150,7 @@ export default function DynamicHome() {
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="w-full border relative z-0  bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
+              className="w-full border relative z-0 bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
             >
               <div className="flex gap-3 items-center">
                 <span>{getIcon(section.icon)}</span>
@@ -167,7 +167,7 @@ export default function DynamicHome() {
                     onClick={() => setSelectedSection(item.key)}
                     className={cn(
                       selectedSection == item.key ? "border-hover-border" : "",
-                      "group bg-white cursor-pointer w-[150px] md:w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]",
+                      "group bg-white dark:bg-card cursor-pointer w-[150px] md:w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]",
                     )}
                   >
                     <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[39%] left-[46%] bg-circle rounded-full"></div>
@@ -204,7 +204,7 @@ export default function DynamicHome() {
           ))}
 
           {selectedSection === null ? (
-            <div className="w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
+            <div className="w-full border bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
               <div className="flex gap-3 items-center">
                 <span className="text-heading text-base font-medium tracking-normal">
                   Quick Operations
@@ -241,7 +241,7 @@ export default function DynamicHome() {
               .map((footer, idx) => (
                 <div
                   key={idx}
-                  className="w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3"
+                  className="w-full border bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[32px] pb-[23px] pt-3"
                 >
                   <div className="flex gap-3 items-center">
                     <span className="text-heading text-base font-medium tracking-normal">

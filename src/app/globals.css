@@ -323,9 +323,9 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --background: hsla(0, 0%, 0%, 0.9);
+  --foreground: hsla(0, 0%, 77%, 1);
+  --card: hsla(0, 0%, 15%, 1);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
@@ -339,14 +339,15 @@
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --input: hsla(0, 0%, 100%, 0.1);
+  --placeholder: hsla(0, 0%, 43%, 1);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
+  --sidebar: hsla(0, 0%, 11%, 1);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -354,6 +355,11 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --inner-circle: hsla(245, 96%, 70%, 0.24);
+  --heading: hsla(0, 0%, 100%, 1);
+  --sub-title: hsla(0, 0%, 70%, 1);
+  --sub-heading: hsla(245, 100%, 85%, 1);
+  --bot-text: hsla(0, 0%, 90%, 1);
 
   --border-gradient: linear-gradient(180deg, #3a3a5a 0%, #2a2950 100%);
   /* text color */
@@ -612,6 +618,7 @@ body {
 }
 
 @keyframes bounceOnce {
+
   0%,
   100% {
     transform: translateY(0);
@@ -656,6 +663,7 @@ body {
 }
 
 @keyframes bounceColor {
+
   0%,
   50%,
   100% {
@@ -775,6 +783,7 @@ body {
 }
 
 @keyframes ping-slow {
+
   75%,
   100% {
     transform: scale(2);
@@ -784,21 +793,17 @@ body {
 
 .animate-scan {
   animation: scan-line 2s ease-in-out infinite;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    hsl(var(--primary) / 0.5),
-    transparent
-  );
+  background: linear-gradient(to bottom,
+      transparent,
+      hsl(var(--primary) / 0.5),
+      transparent);
 }
 
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 25%,
-    rgba(255, 255, 255, 0.5) 50%,
-    transparent 75%
-  );
+  background: linear-gradient(90deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.5) 50%,
+      transparent 75%);
   background-size: 200% 100%;
   animation: shimmer-skeleton 2s infinite linear;
 }
@@ -812,6 +817,7 @@ body {
 }
 
 @keyframes pulse-fast {
+
   0%,
   100% {
     opacity: 1;
@@ -847,10 +853,13 @@ body {
 }
 
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE & Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  /* IE & Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;             /* Chrome, Safari */
+  display: none;
+  /* Chrome, Safari */
 }

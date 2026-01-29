@@ -478,25 +478,37 @@ function HistoryItem({ title, subtitle, time }: { title: string, subtitle: strin
     )
 }
 
+import { useTheme } from "next-themes";
+
+// ... existing code ...
+
 function ThemeTab() {
+    const { theme, setTheme } = useTheme();
+
     return (
         <div className="space-y-5">
             <h3 className="text-[12px] text-gray-400   tracking-wider">Theme</h3>
             <div className="flex items-center gap-8">
-                <label className="flex items-center gap-2 cursor-pointer group">
-                    <div className="w-[18px] h-[18px] rounded-full border-none bg-indigo-500 flex items-center justify-center">
-                        <div className="w-2 h-2 rounded-full bg-background" />
+                <label
+                    className="flex items-center gap-2 cursor-pointer group"
+                    onClick={() => setTheme("light")}
+                >
+                    <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center ${theme === 'light' ? 'bg-indigo-500' : 'border border-gray-300'}`}>
+                        {theme === 'light' && <div className="w-2 h-2 rounded-full bg-white" />}
                     </div>
-                    <Sun className="w-5 h-5 text-gray-600 transition-colors" />
-                    <span className="text-sm font-medium text-gray-700  transition-colors">Light</span>
+                    <Sun className={`w-5 h-5 transition-colors ${theme === 'light' ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400'}`} />
+                    <span className={`text-sm font-medium transition-colors ${theme === 'light' ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500'}`}>Light</span>
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer group">
-                    <div className="w-[18px] h-[18px] rounded-full border border-gray-300 flex items-center justify-center">
-                        {/* Unchecked state */}
+                <label
+                    className="flex items-center gap-2 cursor-pointer group"
+                    onClick={() => setTheme("dark")}
+                >
+                    <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-indigo-500' : 'border border-gray-300'}`}>
+                        {theme === 'dark' && <div className="w-2 h-2 rounded-full bg-white" />}
                     </div>
-                    <Moon className="w-4 h-4 text-gray-400 transition-colors" />
-                    <span className="text-sm font-medium text-gray-500  transition-colors">Dark</span>
+                    <Moon className={`w-4 h-4 transition-colors ${theme === 'dark' ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400'}`} />
+                    <span className={`text-sm font-medium transition-colors ${theme === 'dark' ? 'text-gray-900 dark:text-gray-100' : 'text-gray-500'}`}>Dark</span>
                 </label>
             </div>
         </div>
