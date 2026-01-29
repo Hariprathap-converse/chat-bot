@@ -53,7 +53,7 @@ export function useChatMessages() {
           const userMsg: Message = {
             id: Date.now().toString(),
             role: "user",
-            content: type === "extract" ? `Extracting from document: ${fileName}` : input,
+            content: type !== "extract" && input,
             type: "text",
             file: fileName ? { name: fileName } : undefined,
           };
@@ -141,6 +141,74 @@ export function useChatMessages() {
         } catch (e) {
           console.error("Failed to parse pending operation", e);
         }
+      }
+
+      // 2. Check for Pending Message (Automatically Send)
+      const pendingMessage = localStorage.getItem("pendingMessage");
+      if (pendingMessage) {
+        localStorage.removeItem("pendingMessage");
+        const conversationId = ensureActiveConversation(pendingMessage);
+
+        const newUserMsg: Message = {
+          id: Date.now().toString(),
+          role: "user",
+          content: pendingMessage,
+          type: "text",
+        };
+        addMessageToConversation(conversationId, newUserMsg);
+
+        setBotTyping(true);
+
+        const wsUrl = "ws://127.0.0.1:5000/ws/chat";
+        const socket = new WebSocket(wsUrl);
+
+        socket.onopen = () => {
+          socket.send(JSON.stringify({ message: pendingMessage }));
+        };
+
+        socket.onmessage = (event) => {
+          try {
+            const response = JSON.parse(event.data);
+            setBotTyping(false);
+
+            let content = "Sorry, I didn't get that.";
+            if (typeof response === 'string') {
+              content = response;
+            } else if (response && typeof response === 'object') {
+              content = response.text || response.message || response.content || JSON.stringify(response);
+            }
+
+            const botMsg: Message = {
+              id: (Date.now() + 1).toString(),
+              role: "bot",
+              content: content,
+              type: "text",
+            };
+            addMessageToConversation(conversationId, botMsg);
+            socket.close();
+          } catch (err) {
+            setBotTyping(false);
+            socket.close();
+          }
+        };
+
+        socket.onerror = () => {
+          setBotTyping(false);
+          const botMsg: Message = {
+            id: (Date.now() + 1).toString(),
+            role: "bot",
+            content: "I couldn't connect to the AI server.",
+            type: "text",
+          };
+          addMessageToConversation(conversationId, botMsg);
+        };
+      }
+
+      // 3. Check for Pending Draft (Pre-fill Input)
+      const pendingDraft = localStorage.getItem("pendingDraft");
+      if (pendingDraft) {
+        localStorage.removeItem("pendingDraft");
+        setInput(pendingDraft);
       }
     };
 

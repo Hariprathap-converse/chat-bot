@@ -158,7 +158,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       collapsible="icon"
-      className="absolute min-h-[80%] max-h-[calc(100vh-40px)] shadow-[0px_0px_10px_0px_hsla(212,72%,59%,0.25)] rounded-2xl"
+      className="absolute min-h-[80%]  max-h-[calc(100vh-40px)] shadow-[0px_0px_10px_0px_hsla(212,72%,59%,0.25)] rounded-2xl"
       {...props}
     >
       <SidebarHeader

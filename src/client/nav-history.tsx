@@ -96,7 +96,7 @@ export function NavHistory() {
                             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                         </CollapsibleTrigger>
                     </SidebarGroupLabel>
-                    <CollapsibleContent>
+                    <CollapsibleContent className="max-h-[310px] overflow-y-auto pr-1">
                         <SidebarMenu className="gap-[2px]">
                             {conversations.map((item) => (
                                 <SidebarMenuItem key={item.id}>

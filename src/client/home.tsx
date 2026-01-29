@@ -87,6 +87,7 @@ export default function DynamicHome() {
     isOpen: boolean;
     type: OperationType;
   }>({ isOpen: false, type: "summarize" });
+  const [mainInput, setMainInput] = useState("");
   useEffect(() => {
     setOpen(false);
   }, []);
@@ -120,30 +121,36 @@ export default function DynamicHome() {
           <div className="flex relative w-full h-auto p-0">
             <div className="p-px rounded-[14px] w-full shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)]">
               <Input
-                className="p-0 h-14 rounded-[14px] border-0 bg-white px-[21px] flex items-center  
-               placeholder:font-normal placeholder:text-base placeholder:text-foreground  
-               leading-[150%] tracking-normal font-normal !text-base text-heading outline-none 
-                focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
-                placeholder={data.search.placeholder}
+                value={mainInput}
+                onChange={(e) => setMainInput(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") {
+                  if (e.key === "Enter" && mainInput.trim()) {
+                    localStorage.setItem("pendingMessage", mainInput.trim());
                     router.push(`/chat`);
                   }
                 }}
+                className="p-0 h-14 rounded-[14px] border-0 bg-white px-[21px] flex items-center placeholder:font-normal placeholder:text-base placeholder:text-foreground leading-[150%] tracking-normal font-normal text-base! text-heading outline-none focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title"
+                placeholder={data.search.placeholder}
               />
             </div>
-            <Link href={"/chat"}>
-              <button className="absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center">
-                {getIcon(data.search.buttonIcon)}
-                <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
-              </button>
-            </Link>
+            <button
+              onClick={() => {
+                if (mainInput.trim()) {
+                  localStorage.setItem("pendingMessage", mainInput.trim());
+                }
+                router.push("/chat");
+              }}
+              className="absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center"
+            >
+              {getIcon(data.search.buttonIcon)}
+              <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
+            </button>
           </div>
 
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="w-full border bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
+              className="w-full border relative z-0  bg-white rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
             >
               <div className="flex gap-3 items-center">
                 <span>{getIcon(section.icon)}</span>
@@ -179,7 +186,7 @@ export default function DynamicHome() {
                       className={cn(
                         selectedSection == item.key &&
                         "scale-[130%] origin-bottom ",
-                        "relative bottom-2 group-hover:scale-[130%] origin-bottom transition-all duration-[800ms] h-[50px] z-50",
+                        "relative bottom-2 group-hover:scale-[130%] origin-bottom transition-all duration-800 h-[50px] z-50",
                       )}
                     >
                       {getIcon(
@@ -187,7 +194,7 @@ export default function DynamicHome() {
                         "h-[55px] w-[55px] text-heading group-hover:text-foreground stroke-[0.7px] group-hover:stroke-[1px]",
                       )}
                     </span>
-                    <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300 z-50 !text-[12px] font-medium text-start">
+                    <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300 z-50 text-[12px]! font-medium text-start">
                       {item.label}
                     </span>
                   </div>
@@ -217,6 +224,7 @@ export default function DynamicHome() {
                       } else if (item.label === "Classify") {
                         setOperationModal({ isOpen: true, type: "classify" });
                       } else {
+                        localStorage.setItem("pendingDraft", item.label);
                         router.push(`/chat`);
                       }
                     }}
@@ -255,6 +263,7 @@ export default function DynamicHome() {
                           } else if (item.label === "Analyze Sentiment") {
                             setOperationModal({ isOpen: true, type: "sentiment" });
                           } else {
+                            localStorage.setItem("pendingDraft", item.label);
                             router.push(`/chat`);
                           }
                         }}

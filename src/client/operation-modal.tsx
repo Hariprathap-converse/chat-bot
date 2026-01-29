@@ -95,13 +95,12 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
             {/* Overlay */}
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
-                onClick={onClose}
-            />
+        />
 
             {/* Modal Content */}
             <div className="relative z-10 w-full max-w-lg bg-background rounded-xl shadow-2xl border border-border p-6 animate-in fade-in zoom-in-95 duration-200">
                 <button
-                    onClick={onClose}
+                    onClick={() => { setInputText(''); onClose() }}
                     className="absolute cursor-pointer right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
                 >
                     <X className="w-5 h-5" />
@@ -125,7 +124,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
                                 placeholder={getPlaceholder()}
-                                className="min-h-[150px] resize-none focus-visible:ring-accent"
+                                className="min-h-[150px] max-h-[400px] resize-none focus-visible:ring-accent"
                             />
                         )}
 
