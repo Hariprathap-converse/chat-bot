@@ -66,7 +66,7 @@ export default function EmployeeDetails({
             break;
           case "string":
           default:
-            formattedData[key] = String(value);
+            formattedData[key] = String(value).toLowerCase();
             break;
         }
       });

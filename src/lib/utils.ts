@@ -66,14 +66,14 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
           group: toCapitalCase(option.group ?? ""),
           items: Array.isArray(option.items)
             ? option.items
-                .filter(
-                  (item): item is Option =>
-                    !!item && typeof item === "object" && "value" in item,
-                )
-                .map((item) => ({
-                  ...item,
-                  value: toCapitalCase(item.value ?? ""),
-                }))
+              .filter(
+                (item): item is Option =>
+                  !!item && typeof item === "object" && "value" in item,
+              )
+              .map((item) => ({
+                ...item,
+                label: toCapitalCase((item.label || item.value) ?? ""),
+              }))
             : [],
         };
       }
@@ -81,7 +81,7 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
       if ("value" in option && typeof option.value === "string") {
         return {
           ...option,
-          value: toCapitalCase(option.value),
+          label: toCapitalCase(option.label || option.value),
         };
       }
       return option;
@@ -98,6 +98,6 @@ export function normalizeMultiSelectValues(
     )
     .map((item) => ({
       ...item,
-      value: toCapitalCase(item.value ?? ""),
+      label: toCapitalCase((item.label || item.value) ?? ""),
     }));
 }

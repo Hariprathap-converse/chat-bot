@@ -132,12 +132,12 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
   useEffect(() => {
     if (!value) return;
     if (isValidInitialValue) {
-      const capitalizedOption = {
+      const optionWithLabel = {
         ...value,
-        value: toCapitalCase(value.value),
+        label: toCapitalCase(value.label || value.value),
       };
-      setSelectedOption(capitalizedOption);
-      config.value = capitalizedOption.id;
+      setSelectedOption(optionWithLabel);
+      config.value = optionWithLabel.id;
     }
   }, [value]);
 
@@ -252,7 +252,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
     setSelectedOption(option);
     config.value = option.id;
     setSearchTerm("");
-    setShowSearchTerm(option.value);
+    setShowSearchTerm(option.label || option.value);
     setIsTyping(true);
     onChange?.(option.value);
   };
@@ -313,8 +313,8 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
             ? "!cursor-not-allowed text-disabledText hover:!border-select-border hover:font-normal hover:bg-transparent hover:text-foreground opacity-50  focus-visible:!bg-transparent focus-visible:text-disabledText  focus-visible:font-normal"
             : "cursor-pointer",
           selectedOption?.value === item.value &&
-            item.disabled == true &&
-            "!text-select-option font-normal  opacity-50",
+          item.disabled == true &&
+          "!text-select-option font-normal  opacity-50",
           config.isReadOnly || formConfig.viewMode
             ? "!cursor-default pointer-events-none"
             : "pointer-events-auto",
@@ -332,7 +332,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
           )}
         >
           <div className="w-full flex items-center justify-center">
-            <TruncateTooltip text={item.value} className={`truncate`} />
+            <TruncateTooltip text={item.label || item.value} className={`truncate`} />
           </div>
           <span
             className={cn(
@@ -380,22 +380,22 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
               onCut={
                 config.behavior?.copyPasteRestriction
                   ? (e) => {
-                      e.preventDefault();
-                    }
+                    e.preventDefault();
+                  }
                   : undefined
               }
               onCopy={
                 config.behavior?.copyPasteRestriction
                   ? (e) => {
-                      e.preventDefault();
-                    }
+                    e.preventDefault();
+                  }
                   : undefined
               }
               onPaste={
                 config.behavior?.copyPasteRestriction
                   ? (e) => {
-                      e.preventDefault();
-                    }
+                    e.preventDefault();
+                  }
                   : undefined
               }
               asChild
@@ -416,7 +416,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                 <span className="text-sm font-normal   ">{item.group}</span>
                 {!isOpen && selectedOptions && (
                   <span className="ml-auto text-xs pb-[1px]  font-light pr-1 text-muted-foreground hover:font-normal truncate ">
-                    {selectedOption?.value}
+                    {selectedOption?.label || selectedOption?.value}
                   </span>
                 )}
               </Button>
@@ -558,7 +558,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
           className={cn(
             "font-normal text-select-lable cursor-pointer",
             config.isRequired.value &&
-              "after:content-['*'] after:text-red-500 after:ml-0",
+            "after:content-['*'] after:text-red-500 after:ml-0",
           )}
         >
           {config.label}
@@ -577,7 +577,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                     "focus:border focus:border-select-border-focused focus-visible:ring-offset-0 focus-visible:ring-0",
                     "relative  focus-visible:hover:!border-b-select-border-focused focus-visible:outline-none focus-visible:after:content-[''] focus-visible:after:absolute focus-visible:after:left-[1px] focus-visible:after:right-[1px] focus-visible:after:bottom-0 focus-visible:after:h-[2px] focus-visible:after:bg-primary focus:ring-0 focus:ring-offset-0",
                     error &&
-                      "!border-b-error-message hover:!border-b-error-message  focus-visible:after:!border-b-select-border-focused   focus-visible:!border-b-select-border-focused  ",
+                    "!border-b-error-message hover:!border-b-error-message  focus-visible:after:!border-b-select-border-focused   focus-visible:!border-b-select-border-focused  ",
                     error && isPopoveropen && "!border-select-border-focused",
                     className,
                   )}
@@ -587,22 +587,22 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                     onCut={
                       config.behavior?.copyPasteRestriction
                         ? (e) => {
-                            e.preventDefault();
-                          }
+                          e.preventDefault();
+                        }
                         : undefined
                     }
                     onCopy={
                       config.behavior?.copyPasteRestriction
                         ? (e) => {
-                            e.preventDefault();
-                          }
+                          e.preventDefault();
+                        }
                         : undefined
                     }
                     onPaste={
                       config.behavior?.copyPasteRestriction
                         ? (e) => {
-                            e.preventDefault();
-                          }
+                          e.preventDefault();
+                        }
                         : undefined
                     }
                     disabled={config.isDisabled}
@@ -612,16 +612,16 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                       "w-full relative bg-background flex items-center justify-start hover:bg-background  h-[35px] font-medium text-select-text border  text-sm border-select-border focus:border focus:border-select-border-focused hover:border hover:border-b-primary hover:rounded-b-[2px]  rounded-[4px]  focus:ring-0 focus:ring-offset-0",
                       "data-[placeholder]:font-light data-[placeholder]:text-select-placeholder ",
                       (formConfig.viewMode || config.isReadOnly) &&
-                        "bg-select-disable-bg !cursor-default hover:bg-select-disable-bg border-[0.5px] hover:!border-select-view-border  !border-select-view-border disabled:text-disabledText disabled:opacity-100",
+                      "bg-select-disable-bg !cursor-default hover:bg-select-disable-bg border-[0.5px] hover:!border-select-view-border  !border-select-view-border disabled:text-disabledText disabled:opacity-100",
                       "placeholder:text-disabledPlaceholder   min-w-0 placeholder:!text-[14px]  truncate  placeholder:font-light font-medium h-[35px] rounded-t-[4px] !rounded-b-[3px] border-[1px]",
                       config.isDisabled &&
-                        "border-select-border  bg-select-disable-bg  hover:bg-select-disable-bg  hover:!border-select-border   disabled:pointer-events-auto disabled:!cursor-not-allowed  disabled:text-select-text disabled:opacity-100 border-[1px] ",
+                      "border-select-border  bg-select-disable-bg  hover:bg-select-disable-bg  hover:!border-select-border   disabled:pointer-events-auto disabled:!cursor-not-allowed  disabled:text-select-text disabled:opacity-100 border-[1px] ",
                       config.placeholder &&
-                        !selectedOption &&
-                        "font-light text-select-placeholder",
+                      !selectedOption &&
+                      "font-light text-select-placeholder",
                       formConfig.viewMode &&
-                        config.isDisabled &&
-                        "hover:bg-select-disable-bg border-[0.5px] hover:!border-select-border  !border-select-border",
+                      config.isDisabled &&
+                      "hover:bg-select-disable-bg border-[0.5px] hover:!border-select-border  !border-select-border",
                       selectedOption
                         ? "text-select-text font-medium"
                         : "text-select-placeholder",
@@ -647,7 +647,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                         >
                           <div className="flex-1 overflow-hidden text-selectSecondaryForeground flex items-center h-full data-[highlighted]:!bg-transparent">
                             <TruncateTooltip
-                              text={selectedOption.value || "Select column"}
+                              text={selectedOption.label || selectedOption.value || "Select column"}
                               className="text-[14px] text-selectOptionMappedSearch hover:!text-selectOptionMappedSearch truncate text-nowrap w-full text-start"
                             />
                           </div>
@@ -690,9 +690,9 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                         dataSide === "top" && "bottom-[0px]",
                         dataSide === "bottom" && "top-[0px]",
                         dataSide === "left" &&
-                          "absolute left-[calc(var(--radix-popover-trigger-width)+5.5px)] min-w-full top-[-1px] ",
+                        "absolute left-[calc(var(--radix-popover-trigger-width)+5.5px)] min-w-full top-[-1px] ",
                         dataSide === "right" &&
-                          "absolute right-[calc(var(--radix-popover-trigger-width)+4px)] top-[-1px]",
+                        "absolute right-[calc(var(--radix-popover-trigger-width)+4px)] top-[-1px]",
                         "absolute bg-transparent  rounded-sm z-50 min-w-full ",
                         "h-[35px]  flex items-center px-2 pl-[17px] ",
                       )}
@@ -710,22 +710,22 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                         onCut={
                           config.behavior?.copyPasteRestriction
                             ? (e) => {
-                                e.preventDefault();
-                              }
+                              e.preventDefault();
+                            }
                             : undefined
                         }
                         onCopy={
                           config.behavior?.copyPasteRestriction
                             ? (e) => {
-                                e.preventDefault();
-                              }
+                              e.preventDefault();
+                            }
                             : undefined
                         }
                         onPaste={
                           config.behavior?.copyPasteRestriction
                             ? (e) => {
-                                e.preventDefault();
-                              }
+                              e.preventDefault();
+                            }
                             : undefined
                         }
                         className={cn(
@@ -775,11 +775,11 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                   dataSide === "right" && "relative left-[0px]  rounded-sm ",
                   dataSide === "left" && "relative right-[2px]  rounded-sm",
                   dataSide === "right" &&
-                    config.variant == "group" &&
-                    "relative left-[0px]",
+                  config.variant == "group" &&
+                  "relative left-[0px]",
                   dataSide === "left" &&
-                    config.variant == "group" &&
-                    "relative right-[0px]",
+                  config.variant == "group" &&
+                  "relative right-[0px]",
 
                   "p-0  min-w-[var(--radix-popover-trigger-width)] border-none rounded-sm",
                   "!animate-none !opacity-100 !transform-none transition-none shadow-select-shadow  ",
@@ -806,15 +806,15 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                       dataSide === "top" && "bottom-[-39px]",
                       dataSide === "bottom" && "top-[-39px]",
                       dataSide === "left" &&
-                        "absolute left-[calc(var(--radix-popover-trigger-width)+5.5px)] min-w-full top-[-1px] ",
+                      "absolute left-[calc(var(--radix-popover-trigger-width)+5.5px)] min-w-full top-[-1px] ",
                       dataSide === "right" &&
-                        "absolute right-[calc(var(--radix-popover-trigger-width)+4px)] top-[-1px]",
+                      "absolute right-[calc(var(--radix-popover-trigger-width)+4px)] top-[-1px]",
                       "absolute bg-transparent  rounded-sm z-50 min-w-full ",
                       "h-[35px]  flex items-center ",
                       (config.variant === "group" ||
                         config.variant === "default" ||
                         config.variant == "creatable") &&
-                        "hidden",
+                      "hidden",
                     )}
                   >
                     {isTyping === false ? (
@@ -825,22 +825,22 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                           onCut={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onCopy={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onPaste={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           className={cn(
@@ -870,22 +870,22 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                           onCut={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onCopy={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onPaste={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           className={cn(
@@ -937,7 +937,7 @@ const DefaultSelect: React.FC<FeatureRichSelectProps> = ({
                       className=" navbar-scroll  pl-1 pb-1  max-h-[11.200rem] overflow-auto shadow-none  rounded-sm border-none  data-[side=bottom]:translate-y-[3px] rounded-t-none  w-full bg-popover z-50 "
                     >
                       {config.variant === "search" ||
-                      config.variant === "default" ? (
+                        config.variant === "default" ? (
                         <SelectSkeleton />
                       ) : (
                         <GroupSkeleton />

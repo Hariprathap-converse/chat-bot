@@ -173,8 +173,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
       (v) => v.value.toLowerCase() === value.value.toLowerCase(),
     )
       ? selectedOptions.filter(
-          (v) => v.value.toLowerCase() !== value.value.toLowerCase(),
-        )
+        (v) => v.value.toLowerCase() !== value.value.toLowerCase(),
+      )
       : [...selectedOptions, value];
     setSelectedOptions(updated);
     onChange?.(value.value);
@@ -243,13 +243,13 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
             ? "!cursor-not-allowed text-disabledText hover:!border-select-border hover:font-normal hover:bg-transparent hover:text-select-option  opacity-50  focus-visible:!bg-transparent focus-visible:text-disabledText  focus-visible:font-normal"
             : "cursor-pointer",
           isSelected &&
-            item.disabled == true &&
-            "!text-select-option font-normal  opacity-50",
+          item.disabled == true &&
+          "!text-select-option font-normal  opacity-50",
           config.isReadOnly || formConfig.viewMode
             ? "!cursor-default pointer-events-none"
             : "pointer-events-auto",
           (formConfig.viewMode == true || config.isReadOnly == true) &&
-            "!text-select-option !font-normal !bg-transparent",
+          "!text-select-option !font-normal !bg-transparent",
           className,
         )}
       >
@@ -272,13 +272,13 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                 "h-[14px] w-[14px] rounded-[3px] ",
                 (formConfig.viewMode || config.isReadOnly == true) && "hidden",
                 item.disabled &&
-                  config.design.optionIcon.disabledIconPosition === "left" &&
-                  "hover:opacity-0 group-hover:opacity-0 transition-all duration-0 ",
+                config.design.optionIcon.disabledIconPosition === "left" &&
+                "hover:opacity-0 group-hover:opacity-0 transition-all duration-0 ",
               )}
             />
 
             <TruncateTooltip
-              text={item.value}
+              text={item.label || item.value}
               className={cn(
                 item.disabled && "!hover:text-select-text",
                 `truncate `,
@@ -293,7 +293,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                   ? "group-hover:opacity-100  opacity-0  "
                   : "hidden",
                 config.design.optionIcon.disabledIconPosition === "right" &&
-                  "transition-all duration-500",
+                "transition-all duration-500",
                 config.design.optionIcon.disabledIconPosition === "left"
                   ? "absolute left-[1px] group-hover:opacity-100 opacity-0"
                   : "",
@@ -388,7 +388,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
 
                     "relative  focus-visible:hover:!border-b-select-border-focused focus-visible:outline-none focus-visible:after:content-[''] focus-visible:after:absolute focus-visible:after:left-[1px] focus-visible:after:right-[1px] focus-visible:after:bottom-0 focus-visible:after:h-[2px] focus-visible:after:bg-primary focus:ring-0 focus:ring-offset-0",
                     error &&
-                      "!border-b-error-message hover:!border-b-error-message  focus-visible:after:!border-b-select-border-focused   focus-visible:!border-b-select-border-focused  ",
+                    "!border-b-error-message hover:!border-b-error-message  focus-visible:after:!border-b-select-border-focused   focus-visible:!border-b-select-border-focused  ",
                     error && isPopoveropen && "!border-select-border-focused",
                   )}
                   asChild
@@ -397,22 +397,22 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                     onCut={
                       config.behavior?.copyPasteRestriction
                         ? (e) => {
-                            e.preventDefault();
-                          }
+                          e.preventDefault();
+                        }
                         : undefined
                     }
                     onCopy={
                       config.behavior?.copyPasteRestriction
                         ? (e) => {
-                            e.preventDefault();
-                          }
+                          e.preventDefault();
+                        }
                         : undefined
                     }
                     onPaste={
                       config.behavior?.copyPasteRestriction
                         ? (e) => {
-                            e.preventDefault();
-                          }
+                          e.preventDefault();
+                        }
                         : undefined
                     }
                     disabled={config.isDisabled}
@@ -422,16 +422,16 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                       "w-full relative bg-background flex items-center justify-start hover:bg-background  h-[35px] font-medium text-select-text border  text-sm border-select-border focus:border focus:border-select-border-focused hover:border hover:border-b-primary hover:rounded-b-[2px]  rounded-[4px]  focus:ring-0 focus:ring-offset-0",
                       "data-[placeholder]:font-light data-[placeholder]:text-select-placeholder ",
                       (formConfig.viewMode || config.isReadOnly) &&
-                        "bg-select-disable-bg   cursor-pointer hover:bg-select-disable-bg border-[0.5px] hover:!border-select-view-border  !border-select-view-border disabled:text-disabledText disabled:opacity-100",
+                      "bg-select-disable-bg   cursor-pointer hover:bg-select-disable-bg border-[0.5px] hover:!border-select-view-border  !border-select-view-border disabled:text-disabledText disabled:opacity-100",
                       "placeholder:text-disabledPlaceholder   min-w-0 placeholder:!text-[14px]  truncate  placeholder:font-light font-medium h-[35px] rounded-t-[4px] !rounded-b-[3px] border-[1px]",
                       config.isDisabled &&
-                        "border-select-border  bg-select-disable-bg  hover:bg-select-disable-bg  hover:!border-select-border  disabled:pointer-events-auto disabled:!cursor-not-allowed  disabled:text-select-text disabled:opacity-100 border-[1px] ",
+                      "border-select-border  bg-select-disable-bg  hover:bg-select-disable-bg  hover:!border-select-border  disabled:pointer-events-auto disabled:!cursor-not-allowed  disabled:text-select-text disabled:opacity-100 border-[1px] ",
                       config.placeholder &&
-                        !selectedOptions &&
-                        "font-light text-select-placeholder",
+                      !selectedOptions &&
+                      "font-light text-select-placeholder",
                       formConfig.viewMode &&
-                        config.isDisabled &&
-                        "hover:bg-select-disable-bg border-[0.5px] hover:!border-select-border  !border-select-border",
+                      config.isDisabled &&
+                      "hover:bg-select-disable-bg border-[0.5px] hover:!border-select-border  !border-select-border",
                       selectedOptions
                         ? "text-select-text font-medium"
                         : "text-select-placeholder",
@@ -441,8 +441,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                         : "",
                       (config.isReadOnly == true ||
                         formConfig.viewMode == true) &&
-                        selectedOptions.length <= 0 &&
-                        "opacity-100 pointer-events-none",
+                      selectedOptions.length <= 0 &&
+                      "opacity-100 pointer-events-none",
                       "focus:ring-0 focus:ring-offset-0",
                     )}
                   >
@@ -454,8 +454,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                           : "opacity-100",
                         (config.isReadOnly == true ||
                           formConfig.viewMode == true) &&
-                          selectedOptions.length <= 0 &&
-                          "opacity-100 pointer-events-none",
+                        selectedOptions.length <= 0 &&
+                        "opacity-100 pointer-events-none",
                         "flex items-center justify-between w-full ",
                       )}
                     >
@@ -488,7 +488,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                                     )}
                                   >
                                     <span className="truncate text-sm">
-                                      {option.value}
+                                      {option.label || option.value}
                                     </span>
                                     <span
                                       role="button"
@@ -504,8 +504,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                                           : "flex",
                                         (formConfig.viewMode == true ||
                                           config.isReadOnly == true) &&
-                                          config.isDisabled == true &&
-                                          "hidden",
+                                        config.isDisabled == true &&
+                                        "hidden",
                                         config.isDisabled == true && "hidden",
                                       )}
                                     >
@@ -519,8 +519,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                                   isPopoveropen ? "opacity-0" : "",
                                   (config.isReadOnly == true ||
                                     formConfig.viewMode == true) &&
-                                    selectedOptions.length <= 0 &&
-                                    "opacity-100",
+                                  selectedOptions.length <= 0 &&
+                                  "opacity-100",
                                   "text-muted-foreground font-light tracking-[0] leading-[17px] text-sm",
                                 )}
                               >
@@ -553,8 +553,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                             : "gap-[10px]",
                           (formConfig.viewMode == true ||
                             config.isReadOnly == true) &&
-                            config.isDisabled == true &&
-                            "gap-[10px]",
+                          config.isDisabled == true &&
+                          "gap-[10px]",
                           "flex items-center",
                         )}
                       >
@@ -615,8 +615,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                               ? "hidden"
                               : "",
                             formConfig.viewMode == true &&
-                              config.isDisabled == true &&
-                              "block",
+                            config.isDisabled == true &&
+                            "block",
                             isPopoveropen ? "" : "",
                             "p-0 m-0 w-2 pr-3",
                           )}
@@ -657,8 +657,8 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                     ? ""
                     : "min-h-[45px]",
                   (config.isReadOnly == true || formConfig.viewMode == true) &&
-                    selectedOptions.length <= 0 &&
-                    "hidden",
+                  selectedOptions.length <= 0 &&
+                  "hidden",
 
                   "p-0  min-w-[var(--radix-popover-trigger-width)] border-none rounded-sm",
                   "!animate-none !opacity-100 !transform-none transition-none shadow-select-shadow  ",
@@ -684,9 +684,9 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                       dataSide === "top" && "bottom-[-39px]",
                       dataSide === "bottom" && "top-[-39px]",
                       dataSide === "left" &&
-                        "absolute left-[calc(var(--radix-popover-trigger-width)+5.5px)] min-w-full top-[-1px] ",
+                      "absolute left-[calc(var(--radix-popover-trigger-width)+5.5px)] min-w-full top-[-1px] ",
                       dataSide === "right" &&
-                        "absolute right-[calc(var(--radix-popover-trigger-width)+4px)] top-[-1px]",
+                      "absolute right-[calc(var(--radix-popover-trigger-width)+4px)] top-[-1px]",
                       "absolute bg-transparent  rounded-sm z-50 min-w-full ",
                       "h-[35px]  flex items-center ",
                       config.variant === "multiSelect" && "hidden",
@@ -700,22 +700,22 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                           onCut={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onCopy={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onPaste={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           className={cn(
@@ -746,22 +746,22 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                           onCut={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onCopy={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           onPaste={
                             config.behavior?.copyPasteRestriction
                               ? (e) => {
-                                  e.preventDefault();
-                                }
+                                e.preventDefault();
+                              }
                               : undefined
                           }
                           className={cn(
@@ -810,7 +810,7 @@ const MultiSelect: React.FC<FeatureRichSelectProps> = ({
                       className=" navbar-scroll  pl-1 pb-1  max-h-[11.200rem] overflow-auto shadow-none  rounded-sm border-none  data-[side=bottom]:translate-y-[3px] rounded-t-none  w-full bg-popover z-50 "
                     >
                       {config.variant === "search" ||
-                      config.variant === "default" ? (
+                        config.variant === "default" ? (
                         <SelectSkeleton />
                       ) : (
                         <GroupSkeleton />
