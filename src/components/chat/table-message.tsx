@@ -1,15 +1,19 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from "@/lib/utils";
-import { Table as TableIcon } from "lucide-react";
+import { Table as TableIcon, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TableMessageProps {
     data: any;
     title?: string;
 }
 
+const ITEMS_PER_PAGE = 6;
+
 export function TableMessage({ data, title }: TableMessageProps) {
+    const [currentPage, setCurrentPage] = useState(1);
+
     if (!data) return null;
 
     // Handle case where data might be wrapped in another object
@@ -21,6 +25,19 @@ export function TableMessage({ data, title }: TableMessageProps) {
     if (items.length === 0) return null;
 
     const headers = Object.keys(items[0]);
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+
+    // Pagination logic
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    const handlePrevious = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+    };
+
+    const handleNext = () => {
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    };
 
     return (
         <div className="w-full animate-in fade-in slide-in-from-bottom-2 duration-300 my-2">
@@ -35,11 +52,27 @@ export function TableMessage({ data, title }: TableMessageProps) {
                             {title || "Data Insight"}
                         </span>
                     </div>
-                    <div className="flex gap-1.5">
-                        <div className="w-[7px] h-[7px] rounded-full bg-blue-500" />
-                        <div className="w-[7px] h-[7px] rounded-full bg-slate-200" />
-                        <div className="w-[7px] h-[7px] rounded-full bg-slate-200" />
-                    </div>
+                    {items.length > ITEMS_PER_PAGE && (
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={handlePrevious}
+                                disabled={currentPage === 1}
+                                className="p-1 rounded-md cursor-pointer hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-slate-500"
+                            >
+                                <ChevronLeft className="w-4 h-4" />
+                            </button>
+                            <span className="text-[10px] font-bold text-slate-400 min-w-[40px] text-center">
+                                PAGE {currentPage} / {totalPages}
+                            </span>
+                            <button
+                                onClick={handleNext}
+                                disabled={currentPage === totalPages}
+                                className="p-1 rounded-md cursor-pointer hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors text-slate-500"
+                            >
+                                <ChevronRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 {/* Table Container */}
@@ -58,10 +91,10 @@ export function TableMessage({ data, title }: TableMessageProps) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
-                            {items.map((item, idx) => (
-                                <tr key={idx} className="hover:bg-blue-50/10 transition-colors group">
+                            {paginatedItems.map((item, idx) => (
+                                <tr key={idx} className="hover:bg-blue-50/10 transition-colors group cursor-pointer">
                                     {headers.map((header) => (
-                                        <td key={header} className="px-5 py-4 text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">
+                                        <td key={header} className="px-5 py-4 text-sm min-w-[160px]  font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">
                                             {typeof item[header] === 'number'
                                                 ? Number.isInteger(item[header]) ? item[header] : item[header].toFixed(1)
                                                 : String(item[header])}
@@ -77,13 +110,14 @@ export function TableMessage({ data, title }: TableMessageProps) {
                 <div className="bg-slate-50/50 px-5 py-3 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                     <span className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                        Verified Report
+                        Showing {startIndex + 1}-{Math.min(startIndex + ITEMS_PER_PAGE, items.length)} of {items.length} Entries
                     </span>
                     <span className="font-mono bg-slate-100 px-2 py-0.5 rounded text-slate-500">
-                        {items.length} {items.length === 1 ? 'Entry' : 'Entries'}
+                        {items.length === 1 ? 'Single Record' : 'Verified Report'}
                     </span>
                 </div>
             </div>
         </div>
     );
 }
+
