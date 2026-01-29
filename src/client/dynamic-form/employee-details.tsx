@@ -134,7 +134,6 @@ export default function EmployeeDetails({
   useEffect(() => {
     if (dynamicData) {
       const transformed = transformBackendFormToDefinition(dynamicData);
-      console.log("transformed", transformed);
       setFormData(transformed);
     } else {
       setFormData(DefaultFormData);

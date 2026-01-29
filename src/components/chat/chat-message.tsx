@@ -267,14 +267,71 @@ export function ChatMessage({
           </div>
           <div className="relative w-full max-w-fit font-medium bg-bot text-bot-foreground relative z-10 ring-1 ring-accent !rounded-[8px] !rounded-tl-none px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]">
             <div className="prose prose-sm dark:prose-invert max-w-none">
-              <ReactMarkdown
+              {/* <ReactMarkdown
                 components={{
-                  strong: ({ node, ...props }) => <span className="font-bold text-foreground" {...props} />,
-                  p: ({ node, ...props }) => <p className="m-0 inline" {...props} />,
+                  strong: ({ node, ...props }) => (
+                    <span className="font-bold text-foreground" {...props} />
+                  ),
+                  p: ({ node, ...props }) => (
+                    <p className="m-0" {...props} />
+                  ),
+                  ul: ({ node, ...props }) => (
+                    <ul className="list-disc pl-5 my-2" {...props} />
+                  ),
+                  li: ({ node, ...props }) => (
+                    <li className="my-1" {...props} />
+                  ),
                 }}
               >
+
                 {typeof message.content === 'string' ? message.content : ""}
-              </ReactMarkdown>
+              </ReactMarkdown> */}
+              <div className="prose prose-sm dark:prose-invert max-w-none">
+                <ReactMarkdown
+                  components={{
+                    // Paragraphs (DO NOT make inline)
+                    p: ({ node, ...props }) => (
+                      <p className="my-1 leading-relaxed" {...props} />
+                    ),
+
+                    // Bold text
+                    strong: ({ node, ...props }) => (
+                      <span className="font-semibold text-foreground" {...props} />
+                    ),
+
+                    // Headings
+                    h2: ({ node, ...props }) => (
+                      <h2 className="mt-4 mb-2 text-base font-bold" {...props} />
+                    ),
+                    h3: ({ node, ...props }) => (
+                      <h3 className="mt-3 mb-1 text-sm font-semibold" {...props} />
+                    ),
+
+                    // Lists
+                    ul: ({ node, ...props }) => (
+                      <ul className="list-disc pl-5 my-2" {...props} />
+                    ),
+                    li: ({ node, ...props }) => (
+                      <li className="my-1" {...props} />
+                    ),
+
+                    // Code blocks
+                    code: ({ inline, ...props }:any) =>
+                      inline ? (
+                        <code className="px-1 py-0.5 rounded bg-muted text-sm" {...props} />
+                      ) : (
+                        <pre className="my-2 p-3 rounded bg-muted overflow-x-auto">
+                          <code {...props} />
+                        </pre>
+                      ),
+
+                    // Horizontal rule
+                    hr: () => <hr className="my-4 border-muted" />,
+                  }}
+                >
+                  {typeof message.content === "string" ? message.content : ""}
+                </ReactMarkdown>
+              </div>
             </div>
             {/* Bot message tail */}
             <div>

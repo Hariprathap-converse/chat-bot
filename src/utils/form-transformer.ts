@@ -26,7 +26,6 @@ export function transformBackendFormToDefinition(backendData: any): FormDefiniti
         security: field.security || {},
         autoPopulate: field.autoPopulate || { autoFill: false },
     }));
-    console.log("mappedFields", mappedFields);
     return {
         form: {
             ids: {
