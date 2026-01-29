@@ -7,6 +7,7 @@ interface ChatInputProps {
   onChange: (value: string) => void;
   onSend: () => void;
   placeholder: string;
+  
   buttonIcon: string;
 }
 

@@ -50,7 +50,7 @@ export default function Login() {
       Cookies.set("token", response.access_token, { expires: 7 });
       Cookies.set("refresh_token", response.refresh_token, { expires: 8 });
       toast.success("Logged in successfully");
-      router.push("/chat");
+      router.push("/");
     } catch (err: any) {
       toast.error(err.message || "Login failed");
     } finally {

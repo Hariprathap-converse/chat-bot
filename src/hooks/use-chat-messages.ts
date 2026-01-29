@@ -44,7 +44,7 @@ export function useChatMessages() {
 
           const conversationId = ensureActiveConversation(
             type === "summarize" ? "Summary" :
-              type === "extract" ? "Extraction" :
+              type === "extract" ? "Document Extract" :
                 type === "sentiment" ? "Sentiment Analysis" :
                   "Classification"
           );

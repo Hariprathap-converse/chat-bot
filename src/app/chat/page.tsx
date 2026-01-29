@@ -96,7 +96,7 @@ export default function ChatPage() {
           <div>
             <div className="w-full max-w-full sm:max-w-[90%] md:max-w-[78%] lg:max-w-[80%] xl:max-w-[74%] xl:mx-auto   md:mr-[calc(100%-90%)] 2xl:max-w-[57%] flex flex-col  h-full sm:mx-auto  gap-5 pb-4 px-2 md:px-0 ">
               {grouped.map((pair, idx) => (
-                <div key={`group-${idx}`} className="flex flex-col gap-2">
+                <div key={`group-${idx}`} className="flex flex-col gap-[10px]">
                   {pair[0] && (
                     <ChatMessage
                       message={pair[0]}

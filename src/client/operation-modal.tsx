@@ -28,7 +28,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
     const getTitle = () => {
         switch (type) {
             case "extract":
-                return "Extract Data";
+                return "Document Extract";
             case "classify":
                 return "Classify Team";
             case "sentiment":

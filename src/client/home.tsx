@@ -92,14 +92,14 @@ export default function DynamicHome() {
   }, []);
   const router = useRouter();
   return (
-    <div className="relative bg-background h-full w-full p-4 md:p-[87px] pb-0 flex item-center justify-center">
+    <div className="relative bg-background w-full max-h-screen  p-4 md:p-[87px] pb-0 md:pb-5 flex item-center justify-center">
       <div className="absolute right-3 top-1.5 z-10">
         <Profile />
       </div>
       <div className="absolute left-5 rounded-2xl top-5 z-10 hidden md:block">
         <AppSidebar />
       </div>
-      <main className="flex flex-col gap-[45px] w-full max-w-[1198px]">
+      <main className="flex flex-col max-h-screen overflow-y-auto  hide-scrollbar  gap-[45px] w-full max-w-[1198px]">
         <div className="flex flex-col items-center gap-[27px] mt-10 md:mt-0">
           <div className="flex flex-col items-center w-full gap-1.5 px-4 text-center">
             <span>{getIcon(data.header.customIcon)}</span>
@@ -212,7 +212,7 @@ export default function DynamicHome() {
                     onClick={() => {
                       if (item.label === "Summarize") {
                         setOperationModal({ isOpen: true, type: "summarize" });
-                      } else if (item.label === "Extract") {
+                      } else if (item.label === "Document Extract") {
                         setOperationModal({ isOpen: true, type: "extract" });
                       } else if (item.label === "Classify") {
                         setOperationModal({ isOpen: true, type: "classify" });
@@ -248,7 +248,7 @@ export default function DynamicHome() {
                         onClick={() => {
                           if (item.label === "Summarize") {
                             setOperationModal({ isOpen: true, type: "summarize" });
-                          } else if (item.label === "Extract") {
+                          } else if (item.label === "Document Extract") {
                             setOperationModal({ isOpen: true, type: "extract" });
                           } else if (item.label === "Classify") {
                             setOperationModal({ isOpen: true, type: "classify" });

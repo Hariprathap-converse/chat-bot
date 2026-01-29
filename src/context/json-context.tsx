@@ -78,6 +78,12 @@ const defaultData: OpsBotData = {
       icon: "MessageIcon",
       items: [
         {
+          key: "Ai Insights",
+          label: "Ai Insights",
+          icon: "BrainCircuit",
+          hoverIcon: "BrainCircuit",
+        },
+        {
           key: "leave",
           label: "Leave",
           icon: "Handshake",
@@ -101,12 +107,7 @@ const defaultData: OpsBotData = {
           icon: "CalendarClock",
           hoverIcon: "CalendarClock",
         },
-        {
-          key: "Ai Insights",
-          label: "Ai Insights",
-          icon: "BrainCircuit",
-          hoverIcon: "BrainCircuit",
-        },
+
       ],
     },
   ],
@@ -134,7 +135,6 @@ const defaultData: OpsBotData = {
       title: "Role Operations",
       icon: null,
       items: [
-        { label: "Extract", icon: "EditIcon" },
         { label: "Create Role", icon: "EditIcon" },
         { label: "Update Role", icon: "EditIcon" },
         { label: "Get Role List", icon: "EditIcon" },
@@ -164,7 +164,6 @@ const defaultData: OpsBotData = {
         { label: "Update Attendance", icon: "EditIcon" },
       ],
     },
-
     {
       sectionKey: "Ai Insights",
       title: "Insights Operations",
@@ -172,14 +171,14 @@ const defaultData: OpsBotData = {
       items: [
         { label: "Summarize", icon: "EditIcon" },
         { label: "Classify", icon: "EditIcon" },
-        // { label: "Extract", icon: "EditIcon" },
         { label: "Analyze Sentiment", icon: "Smile" },
+        { label: "Document Extract", icon: "BookKey" },
       ],
     },
   ],
 
   chat: {
-    introTitle: "Hello Hari!",
+    introTitle: "Hello Converse!",
     subtitle:
       "Your personal assistant for all operational queries. What can I assist you with today?",
     inputPlaceholder: "How can I assist you...",

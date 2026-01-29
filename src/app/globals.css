@@ -845,3 +845,12 @@ body {
 .animate-progress-bar {
   animation: progress-bar 2s ease-in-out infinite;
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari */
+}
