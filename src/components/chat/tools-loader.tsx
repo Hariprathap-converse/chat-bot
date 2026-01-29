@@ -5,10 +5,11 @@ import { Check, Mail, MessageSquare, Smartphone, Zap, X, Send } from "lucide-rea
 interface ToolsLoaderProps {
   type: "email" | "sms" | "calendar" | null;
   target?: string;
-  status?: "idle" | "processing" | "sending" | "success" | "error";
+  status?: "idle" | "processing" | "sending" | "success" | "error" | "cancelled";
   onPopupClose?: () => void;
   toolData?: any;
   onSend?: (data: { to: string; subject: string; body: string }) => void;
+  onCancel?: () => void;
 }
 
 export function ToolsLoader({
@@ -18,13 +19,15 @@ export function ToolsLoader({
   onPopupClose,
   toolData,
   onSend,
+  onCancel,
 }: ToolsLoaderProps) {
   const [internalStage, setInternalStage] = useState<
-    "scan" | "edit" | "draft" | "fly" | "done" | "error"
+    "scan" | "edit" | "draft" | "fly" | "done" | "error" | "cancelled"
   >(() => {
     if (status === "success") return "done";
     if (status === "error") return "error";
     if (status === "sending") return "draft";
+    if (status === "cancelled") return "cancelled";
     return "scan";
   });
 
@@ -36,8 +39,8 @@ export function ToolsLoader({
 
   const [elapsed, setElapsed] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(() => {
-    // If loading from history as done/error, start closed
-    return !(status === "success" || status === "error");
+    // If loading from history as done/error/cancelled, start closed
+    return !(status === "success" || status === "error" || status === "cancelled");
   });
 
   useEffect(() => {
@@ -61,8 +64,10 @@ export function ToolsLoader({
   }, [status, internalStage]);
 
   useEffect(() => {
-    if ((status === "success" || status === "error")) {
-      setInternalStage(status === "success" ? "done" : "error");
+    if (status === "success" || status === "error" || status === "cancelled") {
+      setInternalStage(
+        status === "success" ? "done" : status === "cancelled" ? "cancelled" : "error",
+      );
 
       if (isPopupOpen) {
         const timeout = setTimeout(() => {
@@ -86,6 +91,9 @@ export function ToolsLoader({
     if (status === "sending") {
       setInternalStage("draft");
     }
+    if (status === "cancelled") {
+      setInternalStage("cancelled");
+    }
   }, [status]);
 
   if (!type) return null;
@@ -96,6 +104,12 @@ export function ToolsLoader({
   const handleSend = () => {
     if (onSend) {
       onSend(formData);
+    }
+  };
+
+  const handleCancelClick = () => {
+    if (onCancel) {
+      onCancel();
     }
   };
 
@@ -152,7 +166,9 @@ export function ToolsLoader({
                   ? "bg-green-500"
                   : status === "error"
                     ? "bg-red-500"
-                    : "bg-slate-200",
+                    : status === "cancelled"
+                      ? "bg-slate-500"
+                      : "bg-slate-200",
               )}
             />
           </div>
@@ -161,7 +177,7 @@ export function ToolsLoader({
         {/* Main Content Area */}
         <div
           className={cn(
-            internalStage === "error"
+            internalStage === "error" || internalStage === "cancelled"
               ? "p-0 min-h-[50px]"
               : "min-h-[200px] p-5 flex flex-col justify-center relative",
             "bg-slate-50/30",
@@ -193,8 +209,8 @@ export function ToolsLoader({
           {internalStage === "edit" && status === "processing" && (
             <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
               <div className="space-y-3">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Recipient</label>
+                <div className="space-y-1 flex  gap-1 flex-col">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">Recipient</label>
                   <input
                     type="text"
                     value={formData.to}
@@ -204,8 +220,8 @@ export function ToolsLoader({
                   />
                 </div>
                 {type === "email" && (
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Subject</label>
+                  <div className="space-y-1 flex  gap-1 flex-col">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">Subject</label>
                     <input
                       type="text"
                       value={formData.subject}
@@ -215,24 +231,31 @@ export function ToolsLoader({
                     />
                   </div>
                 )}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Message</label>
+                <div className="space-y-1 flex  gap-1 flex-col">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">Message</label>
                   <textarea
                     rows={4}
                     value={formData.body}
                     onChange={(e) => setFormData({ ...formData, body: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all resize-none min-h-[80px]"
+                    className="w-full px-3 py-2 bg-white border  border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all resize-none min-h-[140px]"
                     placeholder="Type your message here..."
                   />
                 </div>
               </div>
-              <button
-                onClick={handleSend}
-                className="w-full py-2.5 bg-linear-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
-              >
-                <Send className="w-4 h-4" />
-                Send Now
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleCancelClick}
+                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-[10px] font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSend}
+                  className="flex-2 py-2.5 bg-linear-to-r from-violet-600 to-indigo-600 text-white rounded-[10px] font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+                >
+                  Send Now
+                </button>
+              </div>
             </div>
           )}
 
@@ -292,6 +315,33 @@ export function ToolsLoader({
             </div>
           )}
 
+          {/* STAGE: CANCELLED STATE */}
+          {internalStage === "cancelled" && (
+            <div className="flex items-center justify-center animate-scale-in">
+              <div
+                className={cn(
+                  isPopupOpen ? "min-h-[200px]" : "min-h-[50px]",
+                  "p-5 w-full flex items-center justify-between gap-4",
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center shadow-sm shrink-0">
+                    <X className="w-6 h-6 text-slate-500" />
+                  </div>
+
+                  <div className="flex flex-col min-w-0 text-left">
+                    <h2 className="text-base font-bold text-slate-800 leading-tight">
+                      Action Cancelled
+                    </h2>
+                    <p className="text-[11px] text-slate-500 font-medium truncate mt-0.5">
+                      The operation was cancelled by user
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* STAGE: ERROR STATE */}
           {internalStage === "error" && (
             <div className="flex items-center justify-center animate-scale-in">
@@ -330,17 +380,21 @@ export function ToolsLoader({
                   ? "bg-green-500"
                   : status === "error"
                     ? "bg-red-500"
-                    : "bg-indigo-500 animate-pulse",
+                    : status === "cancelled"
+                      ? "bg-slate-500"
+                      : "bg-indigo-500 animate-pulse",
               )}
             />
-            {status === "error" ? "System Error" : "System Active"}
+            {status === "error" ? "System Error" : status === "cancelled" ? "Cancelled" : "System Active"}
           </span>
           <span className="font-mono">
             {status === "processing" || status === "sending"
               ? `${elapsed.toFixed(1)}s`
               : status === "error"
                 ? "Failed"
-                : "Complete"}
+                : status === "cancelled"
+                  ? "Stopped"
+                  : "Complete"}
           </span>
         </div>
       </div>

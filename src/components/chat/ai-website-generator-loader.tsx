@@ -55,7 +55,7 @@ export default function AIWebsiteGeneratorLoader({
 }: {
   setGenLoader?: (value: boolean) => void;
   onPopupClose?: () => void;
-  status?: "idle" | "processing" | "sending" | "success" | "error";
+  status?: "idle" | "processing" | "sending" | "success" | "error" | "cancelled";
   onComplete?: () => void;
 }) {
   const [currentStage, setCurrentStage] = useState(() =>

@@ -36,6 +36,7 @@ export default function ChatPage() {
     addEmployeeSuccessMessage,
     addEmployeeCancelMessage,
     handleToolAction,
+    handleToolCancel,
   } = useChatMessages();
 
   const scrollToBottom = () => {
@@ -103,6 +104,7 @@ export default function ChatPage() {
                       isUser
                       scrollToBottom={scrollToBottom}
                       onToolAction={handleToolAction}
+                      onToolCancel={handleToolCancel}
                     />
                   )}
                   {pair[1] && (
@@ -112,6 +114,7 @@ export default function ChatPage() {
                       isUser={false}
                       scrollToBottom={scrollToBottom}
                       onToolAction={handleToolAction}
+                      onToolCancel={handleToolCancel}
                     />
                   )}
                 </div>

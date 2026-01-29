@@ -41,6 +41,7 @@ interface ChatMessageProps {
   isUser: boolean;
   scrollToBottom?: () => void;
   onToolAction?: (messageId: string, data: { to: string; subject: string; body: string }) => void;
+  onToolCancel?: (messageId: string) => void;
 }
 
 export function ChatMessage({
@@ -49,6 +50,7 @@ export function ChatMessage({
   isUser,
   scrollToBottom,
   onToolAction,
+  onToolCancel,
 }: ChatMessageProps) {
   const [copied, setCopied] = useState(false);
   const [reaction, setReaction] = useState<{
@@ -254,6 +256,7 @@ export function ChatMessage({
                 onPopupClose={scrollToBottom}
                 toolData={message.toolData}
                 onSend={(data: { to: string; subject: string; body: string }) => onToolAction?.(message.id, data)}
+                onCancel={() => onToolCancel?.(message.id)}
               />
             </div>
           </div>

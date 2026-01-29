@@ -15,7 +15,7 @@ export interface Message {
   };
   toolData?: {
     target?: string;
-    status?: "idle" | "processing" | "sending" | "success" | "error";
+    status?: "idle" | "processing" | "sending" | "success" | "error" | "cancelled";
     title?: string;
     message?: string;
     to?: string;
@@ -488,6 +488,16 @@ export function useChatMessages() {
           },
         });
       }
+    },
+    handleToolCancel: (messageId: string) => {
+      const activeConvoId = ensureActiveConversation("");
+      if (!activeConvoId) return;
+
+      updateMessage(activeConvoId, messageId, {
+        toolData: {
+          status: "cancelled",
+        },
+      });
     }
   };
 }
