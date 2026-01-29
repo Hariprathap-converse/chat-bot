@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Check, Mail, MessageSquare, Smartphone, Zap, X } from "lucide-react";
+import { Check, Mail, MessageSquare, Smartphone, Zap, X, Send } from "lucide-react";
 
 interface ToolsLoaderProps {
   type: "email" | "sms" | "calendar" | null;
   target?: string;
   status?: "idle" | "processing" | "sending" | "success" | "error";
   onPopupClose?: () => void;
+  toolData?: any;
+  onSend?: (data: { to: string; subject: string; body: string }) => void;
 }
 
 export function ToolsLoader({
@@ -14,15 +16,24 @@ export function ToolsLoader({
   target,
   status = "processing",
   onPopupClose,
+  toolData,
+  onSend,
 }: ToolsLoaderProps) {
   const [internalStage, setInternalStage] = useState<
-    "scan" | "draft" | "fly" | "done" | "error"
+    "scan" | "edit" | "draft" | "fly" | "done" | "error"
   >(() => {
     if (status === "success") return "done";
     if (status === "error") return "error";
     if (status === "sending") return "draft";
     return "scan";
   });
+
+  const [formData, setFormData] = useState({
+    to: toolData?.to || target || "",
+    subject: toolData?.subject || "",
+    body: toolData?.body || "",
+  });
+
   const [elapsed, setElapsed] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(() => {
     // If loading from history as done/error, start closed
@@ -39,6 +50,15 @@ export function ToolsLoader({
     }
     return () => clearInterval(interval);
   }, [status]);
+
+  useEffect(() => {
+    if (status === "processing" && internalStage === "scan") {
+      const timer = setTimeout(() => {
+        setInternalStage("edit");
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [status, internalStage]);
 
   useEffect(() => {
     if ((status === "success" || status === "error")) {
@@ -60,7 +80,7 @@ export function ToolsLoader({
   }, [status, onPopupClose, isPopupOpen]);
 
   useEffect(() => {
-    if (status === "processing") {
+    if (status === "processing" && internalStage !== "edit") {
       setInternalStage("scan");
     }
     if (status === "sending") {
@@ -73,6 +93,12 @@ export function ToolsLoader({
   const LoaderIcon =
     type === "email" ? Mail : type === "sms" ? Smartphone : Zap;
 
+  const handleSend = () => {
+    if (onSend) {
+      onSend(formData);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -84,16 +110,15 @@ export function ToolsLoader({
     >
       <div
         className={cn(
-          "relative overflow-hidden bg-white  border border-slate-100 transition-all duration-300",
+          "relative overflow-hidden bg-white border border-slate-100 transition-all duration-300",
           isPopupOpen
-            ? "w-full max-w-sm rounded-2xl shadow-xl"
+            ? "w-full max-w-md rounded-2xl shadow-xl"
             : "w-full rounded-2xl my-2 shadow-md",
         )}
       >
-        {/* Refactored Header: White bg, Gradient Text */}
-        <div className="bg-white/80 backdrop-blur-sm px-5 py-2 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
+        {/* Header */}
+        <div className="bg-white/80 backdrop-blur-sm px-5 py-3 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-2.5">
-            {/* Icon with gradient background shape or color */}
             <div className="w-8 h-8 rounded-full bg-linear-to-br from-violet-500/10 to-indigo-500/10 flex items-center justify-center">
               <LoaderIcon className="w-4 h-4 text-indigo-600" />
             </div>
@@ -103,7 +128,6 @@ export function ToolsLoader({
             </span>
           </div>
 
-          {/* Status Indicators */}
           <div className="flex gap-1.5">
             <div
               className={cn(
@@ -141,7 +165,7 @@ export function ToolsLoader({
               ? "p-0 min-h-[50px]"
               : "min-h-[200px] p-5 flex flex-col justify-center relative",
             "bg-slate-50/30",
-            isPopupOpen && "!min-h-[200px]",
+            isPopupOpen && "min-h-[200px]!",
           )}
         >
           {/* STAGE 1: SCANNING */}
@@ -165,7 +189,54 @@ export function ToolsLoader({
             </div>
           )}
 
-          {/* STAGE 2: DRAFTING / SKELETON / FLY */}
+          {/* STAGE: EDITING */}
+          {internalStage === "edit" && status === "processing" && (
+            <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Recipient</label>
+                  <input
+                    type="text"
+                    value={formData.to}
+                    onChange={(e) => setFormData({ ...formData, to: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all font-semibold"
+                    placeholder="Recipient email or number"
+                  />
+                </div>
+                {type === "email" && (
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Subject</label>
+                    <input
+                      type="text"
+                      value={formData.subject}
+                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all font-semibold"
+                      placeholder="Email subject"
+                    />
+                  </div>
+                )}
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Message</label>
+                  <textarea
+                    rows={4}
+                    value={formData.body}
+                    onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+                    className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all resize-none min-h-[80px]"
+                    placeholder="Type your message here..."
+                  />
+                </div>
+              </div>
+              <button
+                onClick={handleSend}
+                className="w-full py-2.5 bg-linear-to-r from-violet-600 to-indigo-600 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+                Send Now
+              </button>
+            </div>
+          )}
+
+          {/* STAGE: DRAFTING / FLY (Sending) */}
           {(internalStage === "draft" || internalStage === "fly") && (
             <div
               className={cn(
@@ -186,7 +257,7 @@ export function ToolsLoader({
                     RECIPIENT
                   </div>
                   <div className="text-xs font-semibold text-slate-700 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 inline-block truncate max-w-full">
-                    {target}
+                    {formData.to || target}
                   </div>
                 </div>
               </div>
@@ -199,7 +270,7 @@ export function ToolsLoader({
             </div>
           )}
 
-          {/* STAGE 3: SUCCESS STATE */}
+          {/* STAGE: SUCCESS STATE */}
           {internalStage === "done" && (
             <div className="flex flex-col items-center justify-center h-full animate-scale-in py-2">
               <div className="relative mb-3">
@@ -221,13 +292,13 @@ export function ToolsLoader({
             </div>
           )}
 
-          {/* STAGE 4: ERROR STATE */}
-          {isPopupOpen && internalStage === "error" && (
+          {/* STAGE: ERROR STATE */}
+          {internalStage === "error" && (
             <div className="flex items-center justify-center animate-scale-in">
               <div
                 className={cn(
-                  isPopupOpen ? "min-h-[200px]" : "min-h-[100px]",
-                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 ",
+                  isPopupOpen ? "min-h-[200px]" : "min-h-[50px]",
+                  "p-5 w-full flex items-center justify-between gap-4",
                 )}
               >
                 <div className="flex items-center gap-3">
@@ -247,83 +318,33 @@ export function ToolsLoader({
               </div>
             </div>
           )}
-          {/* STAGE 4: ERROR STATE */}
-          {!isPopupOpen && internalStage === "error" && (
-            <div className="flex items-center justify-center animate-scale-in">
-              <div
-                className={cn(
-                  isPopupOpen ? "min-h-[200px]" : "min-h-[50px]",
-                  "bg-red-50/50  p-5 w-full flex items-center justify-between gap-4 ",
-                )}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex flex-col min-w-0 gap-0.5 text-left">
-                    <h2 className="text-base font-bold text-slate-800 leading-tight flex items-center gap-2">
-                      <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center shadow-sm shrink-0">
-                        <X className="w-3 h-3 text-white animate-[shake_0.5s_cubic-bezier(.36,.07,.19,.97)_both]" />
-                      </div>
-                      Failed to Send
-                    </h2>
-                    <p className="text-[11px] text-red-600/70 font-medium truncate mt-0.5">
-                      Action could not be completed
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Footer info */}
-        {!isPopupOpen && internalStage == "error" && (
-          <div className="bg-slate-50/50 px-5 py-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-            <span className="flex items-center gap-1.5">
-              <span
-                className={cn(
-                  "w-1.5 h-1.5 rounded-full",
-                  status === "success"
-                    ? "bg-green-500"
-                    : status === "error"
-                      ? "bg-red-500"
-                      : "bg-indigo-500 animate-pulse",
-                )}
-              />
-              {status === "error" ? "System Error" : "System Active"}
-            </span>
-            <span className="font-mono">
-              {status === "processing" || status === "sending"
-                ? `${elapsed.toFixed(1)}s`
-                : status === "error"
-                  ? "Failed"
-                  : "Complete"}
-            </span>
-          </div>
-        )}
-        {isPopupOpen && (
-          <div className="bg-slate-50/50 px-5 py-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-            <span className="flex items-center gap-1.5">
-              <span
-                className={cn(
-                  "w-1.5 h-1.5 rounded-full",
-                  status === "success"
-                    ? "bg-green-500"
-                    : status === "error"
-                      ? "bg-red-500"
-                      : "bg-indigo-500 animate-pulse",
-                )}
-              />
-              {status === "error" ? "System Error" : "System Active"}
-            </span>
-            <span className="font-mono">
-              {status === "processing" || status === "sending"
-                ? `${elapsed.toFixed(1)}s`
-                : status === "error"
-                  ? "Failed"
-                  : "Complete"}
-            </span>
-          </div>
-        )}
+        <div className="bg-slate-50/50 px-5 py-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+          <span className="flex items-center gap-1.5">
+            <span
+              className={cn(
+                "w-1.5 h-1.5 rounded-full",
+                status === "success"
+                  ? "bg-green-500"
+                  : status === "error"
+                    ? "bg-red-500"
+                    : "bg-indigo-500 animate-pulse",
+              )}
+            />
+            {status === "error" ? "System Error" : "System Active"}
+          </span>
+          <span className="font-mono">
+            {status === "processing" || status === "sending"
+              ? `${elapsed.toFixed(1)}s`
+              : status === "error"
+                ? "Failed"
+                : "Complete"}
+          </span>
+        </div>
       </div>
     </div>
   );
 }
+

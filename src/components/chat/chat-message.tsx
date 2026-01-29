@@ -40,6 +40,7 @@ interface ChatMessageProps {
   index: number;
   isUser: boolean;
   scrollToBottom?: () => void;
+  onToolAction?: (messageId: string, data: { to: string; subject: string; body: string }) => void;
 }
 
 export function ChatMessage({
@@ -47,6 +48,7 @@ export function ChatMessage({
   index,
   isUser,
   scrollToBottom,
+  onToolAction,
 }: ChatMessageProps) {
   const [copied, setCopied] = useState(false);
   const [reaction, setReaction] = useState<{
@@ -236,7 +238,7 @@ export function ChatMessage({
     );
   }
 
-  if (message.type === "email-tool" || message.type === "sms-tool") {
+  if (message.type === "email-tool" || message.type === "sms-tool" || message.type === "tool-loader") {
     return (
       <>
         <div className="flex w-full h-full justify-start mt-2 mb-2">
@@ -246,10 +248,12 @@ export function ChatMessage({
             </div>
             <div className="w-full max-w-[400px] relative">
               <ToolsLoader
-                type={message.type === "email-tool" ? "email" : "sms"}
+                type={message.type === "sms-tool" ? "sms" : "email"}
                 target={message.toolData?.target}
                 status={message.toolData?.status ?? "processing"}
                 onPopupClose={scrollToBottom}
+                toolData={message.toolData}
+                onSend={(data: { to: string; subject: string; body: string }) => onToolAction?.(message.id, data)}
               />
             </div>
           </div>

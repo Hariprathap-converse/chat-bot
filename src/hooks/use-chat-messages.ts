@@ -7,7 +7,7 @@ export interface Message {
   id: string;
   role: "user" | "bot";
   content: string;
-  type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader" | "table";
+  type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader" | "table" | "tool-loader";
   file?: {
     name: string;
     size?: number;
@@ -18,6 +18,9 @@ export interface Message {
     status?: "idle" | "processing" | "sending" | "success" | "error";
     title?: string;
     message?: string;
+    to?: string;
+    subject?: string;
+    body?: string;
   };
   tableData?: any;
 }
@@ -203,6 +206,7 @@ export function useChatMessages() {
     addMessageToConversation(conversationId, newUserMsg);
     setInput("");
 
+    /*
     const emailMatch = userText.match(
       /send\s+(?:an?\s+)?email\s+to\s+([^\s]+)\s+(?:with\s+)?subject\s+(.+?)\s+(?:message|body|saying|as|with)\s+(.+)/i
     );
@@ -246,6 +250,7 @@ export function useChatMessages() {
       addMessageToConversation(conversationId, toolMsg);
       return;
     }
+    */
 
     setBotTyping(true);
 
@@ -294,7 +299,27 @@ export function useChatMessages() {
         console.log('socket response', response);
         setBotTyping(false);
 
-        // 1. Handle Form Response
+        // 1. Handle Tool Response
+        if (response.type === "tool") {
+          const toolMsg: Message = {
+            id: (Date.now() + 1).toString(),
+            role: "bot",
+            content: "",
+            type: "tool-loader",
+            toolData: {
+              status: "processing",
+              to: response.text?.to,
+              subject: response.text?.subject,
+              body: response.text?.body,
+              target: response.text?.to, // for compatibility with old target prop
+            },
+          };
+          addMessageToConversation(conversationId, toolMsg);
+          socket.close();
+          return;
+        }
+
+        // 2. Handle Form Response
         if (response.type === "form") {
           setDynamicFormData(response);
           setShowEmployeeLoader(true);
@@ -407,6 +432,62 @@ export function useChatMessages() {
         },
       };
       addMessageToConversation(conversationId, botMsg);
+    },
+    handleToolAction: async (messageId: string, editedData: { to: string; subject: string; body: string }) => {
+      const activeConvoId = ensureActiveConversation("");
+      if (!activeConvoId) return;
+
+      try {
+        // 1. Set to sending state
+        updateMessage(activeConvoId, messageId, {
+          toolData: {
+            ...editedData,
+            status: "sending",
+            target: editedData.to,
+          },
+        });
+
+        // 2. API Call
+        const result = await apiClient("/auth/tools-send-email", {
+          method: "POST",
+          body: JSON.stringify({
+            recipient_email: editedData.to,
+            subject: editedData.subject,
+            body: editedData.body,
+          }),
+        });
+
+        // 3. Final State
+        if (!result.success) {
+          toast.error(result.message || "Failed to send email");
+          updateMessage(activeConvoId, messageId, {
+            toolData: {
+              ...editedData,
+              status: "error",
+              target: editedData.to,
+            },
+          });
+        } else {
+          toast.success(result.message || "Email sent successfully");
+          updateMessage(activeConvoId, messageId, {
+            toolData: {
+              ...editedData,
+              status: "success",
+              target: editedData.to,
+            },
+            content: `Email sent to ${editedData.to}`,
+          });
+        }
+      } catch (err: any) {
+        toast.error(err.message || "An error occurred");
+        updateMessage(activeConvoId, messageId, {
+          toolData: {
+            ...editedData,
+            status: "error",
+            target: editedData.to,
+          },
+        });
+      }
     }
   };
 }
