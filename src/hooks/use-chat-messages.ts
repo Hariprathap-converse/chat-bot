@@ -7,7 +7,7 @@ export interface Message {
   id: string;
   role: "user" | "bot";
   content: string;
-  type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader" | "table" | "tool-loader";
+  type?: "text" | "website-loader" | "email-tool" | "sms-tool" | "employee-loader" | "table" | "tool-loader" | "json";
   file?: {
     name: string;
     size?: number;
@@ -23,6 +23,7 @@ export interface Message {
     body?: string;
   };
   tableData?: any;
+  jsonData?: any;
   sentimentStars?: number;
 }
 
@@ -88,7 +89,7 @@ export function useChatMessages() {
               formData.append("file", pendingFile);
               response = await fetch(endpoint, {
                 method: "POST",
-                body: formData,       
+                body: formData,
               });
               setPendingFile(null); // Clear after sending
             } else {
@@ -120,8 +121,9 @@ export function useChatMessages() {
             const botMsg: Message = {
               id: (Date.now() + 2).toString(),
               role: "bot",
-              content: responseText,
-              type: "text",
+              content: data.type === "json" ? "Extracted invoice details:" : responseText,
+              type: data.type === "json" ? "json" : "text",
+              jsonData: data.type === "json" ? data.text : undefined,
               sentimentStars,
             };
             addMessageToConversation(conversationId, botMsg);
@@ -180,8 +182,9 @@ export function useChatMessages() {
             const botMsg: Message = {
               id: (Date.now() + 1).toString(),
               role: "bot",
-              content: content,
-              type: "text",
+              content: response.type === 'json' ? (typeof response.content === 'string' ? response.content : "Structured data response:") : content,
+              type: response.type === 'json' ? 'json' : "text",
+              jsonData: response.type === 'json' ? response.text : undefined,
             };
             addMessageToConversation(conversationId, botMsg);
             socket.close();
@@ -430,8 +433,9 @@ export function useChatMessages() {
             id: (Date.now() + 1).toString(),
             role: "bot",
             content: (typeof response.content === 'string' ? response.content : null) || "Generated structured data:",
-            type: "table",
-            tableData: tableData,
+            type: response.type === 'json' ? 'json' : "table",
+            tableData: response.type === 'json' ? undefined : tableData,
+            jsonData: response.type === 'json' ? response.text : undefined,
           };
           addMessageToConversation(conversationId, botMsg);
           socket.close();
