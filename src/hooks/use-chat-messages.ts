@@ -88,7 +88,7 @@ export function useChatMessages() {
               formData.append("file", pendingFile);
               response = await fetch(endpoint, {
                 method: "POST",
-                body: formData,
+                body: formData,       
               });
               setPendingFile(null); // Clear after sending
             } else {
@@ -111,10 +111,9 @@ export function useChatMessages() {
 
             let sentimentStars = undefined;
             if (type === "sentiment") {
-              const lowerText = responseText.toLowerCase();
-              if (lowerText.includes("positive")) sentimentStars = 5;
-              else if (lowerText.includes("negative")) sentimentStars = 0;
-              else if (lowerText.includes("neutral")) sentimentStars = 2.5;
+              if (responseText.includes("Result: Positive")) sentimentStars = 5;
+              else if (responseText.includes("Result: Negative")) sentimentStars = 0;
+              else if (responseText.includes("Result: Neutral")) sentimentStars = 2.5;
             }
 
             setBotTyping(false);
@@ -452,11 +451,19 @@ export function useChatMessages() {
           );
         }
 
+        let sentimentStars = undefined;
+        if (typeof content === 'string') {
+          if (content.includes("Result: Positive")) sentimentStars = 5;
+          else if (content.includes("Result: Negative")) sentimentStars = 0;
+          else if (content.includes("Result: Neutral")) sentimentStars = 2.5;
+        }
+
         const botMsg: Message = {
           id: (Date.now() + 1).toString(),
           role: "bot",
           content: content,
           type: "text",
+          sentimentStars,
         };
         addMessageToConversation(conversationId, botMsg);
         socket.close();
