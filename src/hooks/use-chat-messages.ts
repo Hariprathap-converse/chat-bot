@@ -410,14 +410,13 @@ export function useChatMessages() {
           return;
         }
 
-        // 2. Handle Form Response
         if (response.type === "form") {
           setDynamicFormData(response);
           setShowEmployeeLoader(true);
           setTimeout(() => {
             setShowEmployeeLoader(false);
             setEmployeeDetailsOpen(true);
-          }, 2000);
+          }, 1000);
           socket.close();
           return;
         }
