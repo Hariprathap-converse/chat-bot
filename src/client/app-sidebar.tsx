@@ -7,7 +7,9 @@ import {
   MessageCirclePlus,
   PieChart,
   Settings,
+  Sheet,
 } from "lucide-react";
+
 
 import {
   Sidebar,
@@ -141,7 +143,13 @@ const Navdata = {
       icon: Settings,
     },
     {
+      title: "Data Grid",
+      url: "/data-grid",
+      icon: Sheet,
+    },
+    {
       title: "Layout",
+
       url: "#",
       icon: LogOut,
     },
@@ -236,7 +244,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </span>
             </div>
             <div
+              onClick={() => router.push("/data-grid")}
+              className={cn(
+                open ? "" : "ml-2 max-w-[40px]",
+                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
+              )}
+            >
+              <Sheet className={cn("max-w-5 max-h-5 pl-px")} />
+              <span
+                className={cn(
+                  " transition-all duration-300 whitespace-nowrap overflow-hidden",
+                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                )}
+              >
+                Data Grid
+              </span>
+            </div>
+            <div
               onClick={async () => {
+
                 setLoading(true);
                 const Cookies = (await import("js-cookie")).default;
                 // localStorage.removeItem("token");
