@@ -69,14 +69,13 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import { TableConfig } from "./types";
+import { renderCell } from "./cell-renderers";
 
 interface DataGridProps {
-    config: {
-        columns: any[];
-        data: any[];
-        title?: string;
-    };
+    config: TableConfig;
 }
+
 
 export function DataGrid({ config }: DataGridProps) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -303,36 +302,7 @@ export function DataGrid({ config }: DataGridProps) {
                 },
                 cell: ({ row }) => {
                     const value = row.getValue(col.accessorKey);
-
-                    if (col.accessorKey === "trend") {
-                        const isPositive = String(value).startsWith("+");
-                        return (
-                            <Badge
-                                variant="outline"
-                                className={cn(
-                                    "font-semibold text-xs px-2 py-0.5",
-                                    isPositive
-                                        ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800"
-                                        : "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950 dark:text-rose-400 dark:border-rose-800"
-                                )}
-                            >
-                                {String(value)}
-                            </Badge>
-                        );
-                    }
-
-                    if (col.accessorKey === "user") {
-                        return (
-                            <div className="flex items-center gap-2">
-                                <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-[10px] font-semibold text-primary shrink-0">
-                                    {String(value).split(" ").map(n => n[0]).join("")}
-                                </div>
-                                <span className="font-normal text-foreground text-sm">{String(value)}</span>
-                            </div>
-                        );
-                    }
-
-                    return <span className="text-foreground/90 font-normal text-sm">{String(value)}</span>;
+                    return renderCell(value, col.cellType, col.cellConfig);
                 },
                 size: col.width || 150,
             })),
@@ -341,13 +311,13 @@ export function DataGrid({ config }: DataGridProps) {
                 id: "actions",
 
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center ">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-7 w-7 hover:bg-primary/10"
+                                    className="h-7 w-7  hover:bg-primary/10"
                                 >
                                     <WandSparkles className="h-4 w-4 text-primary" />
                                 </Button>
@@ -428,9 +398,9 @@ export function DataGrid({ config }: DataGridProps) {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
                         <Input
                             placeholder="Search..."
-                            value={(table.getColumn("user")?.getFilterValue() as string) ?? ""}
+                            value={(table.getColumn(config.options?.searchColumn || "employee")?.getFilterValue() as string) ?? ""}
                             onChange={(event) =>
-                                table.getColumn("user")?.setFilterValue(event.target.value)
+                                table.getColumn(config.options?.searchColumn || "employee")?.setFilterValue(event.target.value)
                             }
                             className="pl-9 h-8 w-48 bg-background/50 border-muted rounded-lg focus-visible:ring-1 focus-visible:ring-primary/20 text-sm"
                         />
@@ -544,16 +514,22 @@ export function DataGrid({ config }: DataGridProps) {
                                 <TableRow key={headerGroup.id} className="hover:bg-transparent border-b">
                                     {headerGroup.headers.map((header) => {
                                         const isPinned = header.column.getIsPinned();
+                                        const isLastLeftPinned = isPinned === 'left' && header.column.getIsLastColumn('left');
+                                        const isFirstRightPinned = isPinned === 'right' && header.column.getIsFirstColumn('right');
+
                                         return (
                                             <TableHead
                                                 key={header.id}
                                                 className={cn(
                                                     "h-10 px-4 font-medium text-xs text-muted-foreground",
-                                                    isPinned && "sticky bg-background z-40"
+                                                    isPinned && "sticky bg-background z-20",
+                                                    isLastLeftPinned && "shadow-[2px_0_4px_-1px_rgba(0,0,0,0.1)] clip-right",
+                                                    isFirstRightPinned && "shadow-[-2px_0_4px_-1px_rgba(0,0,0,0.1)] clip-left"
                                                 )}
                                                 style={{
                                                     width: header.getSize(),
                                                     left: isPinned === 'left' ? `${header.column.getStart('left')}px` : undefined,
+                                                    right: isPinned === 'right' ? `${header.column.getAfter('right')}px` : undefined,
                                                 }}
                                             >
                                                 {header.isPlaceholder
@@ -571,20 +547,26 @@ export function DataGrid({ config }: DataGridProps) {
                                     <TableRow
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
-                                        className="border-b last:border-0 hover:bg-primary/5 data-[state=selected]:bg-primary/10"
+                                        className="border-b last:border-0 hover:bg-primary/5 data-[state=selected]:bg-primary/10 group"
                                     >
                                         {row.getVisibleCells().map((cell) => {
                                             const isPinned = cell.column.getIsPinned();
+                                            const isLastLeftPinned = isPinned === 'left' && cell.column.getIsLastColumn('left');
+                                            const isFirstRightPinned = isPinned === 'right' && cell.column.getIsFirstColumn('right');
+
                                             return (
                                                 <TableCell
                                                     key={cell.id}
                                                     className={cn(
                                                         densityStyles[density],
-                                                        isPinned && "sticky bg-background hover:bg-primary/5 z-30"
+                                                        isPinned && "sticky bg-background group-hover:bg-muted/50  z-10 transition-colors",
+                                                        isLastLeftPinned && "shadow-[2px_0_4px_-1px_rgba(0,0,0,0.1)] min-w-12 min-h-12",
+                                                        isFirstRightPinned && "shadow-[-2px_0_4px_-1px_rgba(0,0,0,0.1)] p-3"
                                                     )}
                                                     style={{
                                                         width: cell.column.getSize(),
-                                                        left: isPinned === 'left' ? `${cell.column.getStart('left')}px` : undefined,
+                                                        // left: isPinned === 'left' ? `${cell.column.getStart('left')}px` : undefined,
+                                                        right: isPinned === 'right' ? `${cell.column.getAfter('right')}px` : undefined,
                                                     }}
                                                 >
                                                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
