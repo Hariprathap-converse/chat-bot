@@ -159,6 +159,8 @@ export function DataGrid({ config }: DataGridProps) {
                     const columnId = column.id;
                     const isSorted = column.getIsSorted();
 
+                    const [isWandOpen, setIsWandOpen] = React.useState(false);
+
                     return (
                         <div className="flex items-center justify-between gap-2 group">
                             <div className="flex items-center gap-1.5">
@@ -172,22 +174,33 @@ export function DataGrid({ config }: DataGridProps) {
                                         )}
                                     </div>
                                 )}
+                                {isPinned && (
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-4 w-4 p-0 hover:bg-muted ml-1"
+                                        onClick={() => handlePinColumn(columnId, false)}
+                                        title="Unpin column"
+                                    >
+                                        <PinOff className="h-3 w-3 text-muted-foreground" />
+                                    </Button>
+                                )}
                             </div>
-                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="flex items-center gap-1">
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-5 w-5 p-0 hover:bg-primary/10"
-                                    onClick={() => handleActionClick(`AI Action on ${col.header}`)}
+                                    className="h-7 w-7 opacity-0 group-hover:opacity-100 cursor-pointer hover:bg-primary/10 transition-opacity"
+                                    onClick={() => handleActionClick("AI Action from Header")}
                                 >
-                                    <WandSparkles className="h-3.5 w-3.5 text-primary" />
+                                    <WandSparkles className="h-4 w-4 text-primary" />
                                 </Button>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-5 w-5 p-0 hover:bg-muted"
+                                            className="h-5 w-5 cursor-pointer p-0 hover:bg-muted"
                                         >
                                             <MoreVertical className="h-3.5 w-3.5" />
                                         </Button>
@@ -195,44 +208,53 @@ export function DataGrid({ config }: DataGridProps) {
                                     <DropdownMenuContent align="start" className="w-48 rounded-lg bg-white dark:bg-zinc-900">
                                         <DropdownMenuItem
                                             onClick={() => column.toggleSorting(false)}
-                                            className="gap-2 text-sm"
+                                            className="gap-2 text-sm cursor-pointer"
                                         >
                                             <ArrowUp className="h-4 w-4" />
                                             <span>Ascending</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             onClick={() => column.toggleSorting(true)}
-                                            className="gap-2 text-sm"
+                                            className="gap-2 text-sm cursor-pointer "
                                         >
                                             <ArrowDown className="h-4 w-4" />
                                             <span>Descending</span>
                                         </DropdownMenuItem>
+                                        {isSorted && (
+                                            <DropdownMenuItem
+                                                onClick={() => column.clearSorting()}
+                                                className="gap-2 text-sm cursor-pointer"
+                                            >
+                                                <X className="h-4 w-4" />
+                                                <span>Clear Sorting</span>
+                                            </DropdownMenuItem>
+                                        )}
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem className="gap-2 text-sm">
+                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
                                             <FilterIcon className="h-4 w-4" />
                                             <span>Filter</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="gap-2 text-sm">
+                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
                                             <Maximize2 className="h-4 w-4" />
                                             <span>Autosize</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger className="gap-2 text-sm">
+                                            <DropdownMenuSubTrigger className="gap-2 text-sm cursor-pointer">
                                                 {isPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
                                                 <span>Pin Column</span>
                                             </DropdownMenuSubTrigger>
                                             <DropdownMenuSubContent className="bg-white dark:bg-zinc-900">
                                                 <DropdownMenuItem
                                                     onClick={() => handlePinColumn(columnId, 'left')}
-                                                    className="gap-2 text-sm"
+                                                    className="gap-2 text-sm cursor-pointer"
                                                 >
                                                     <Pin className="h-4 w-4" />
                                                     Pin to Left
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() => handlePinColumn(columnId, 'right')}
-                                                    className="gap-2 text-sm"
+                                                    className="gap-2 text-sm cursor-pointer"
                                                 >
                                                     <Pin className="h-4 w-4 rotate-180" />
                                                     Pin to Right
@@ -240,7 +262,7 @@ export function DataGrid({ config }: DataGridProps) {
                                                 {isPinned && (
                                                     <DropdownMenuItem
                                                         onClick={() => handlePinColumn(columnId, false)}
-                                                        className="gap-2 text-sm"
+                                                        className="gap-2 text-sm cursor-pointer"
                                                     >
                                                         <PinOff className="h-4 w-4" />
                                                         Unpin
@@ -248,28 +270,28 @@ export function DataGrid({ config }: DataGridProps) {
                                                 )}
                                             </DropdownMenuSubContent>
                                         </DropdownMenuSub>
-                                        <DropdownMenuItem className="gap-2 text-sm">
+                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
                                             <LayoutGrid className="h-4 w-4" />
                                             <span>Group By Column</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="gap-2 text-sm">
+                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
                                             <Columns className="h-4 w-4" />
                                             <span>Manage Columns</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="gap-2 text-sm">
+                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
                                             <RotateCcw className="h-4 w-4" />
                                             <span>Reset Columns</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem
                                             onClick={() => column.toggleVisibility(false)}
-                                            className="gap-2 text-sm"
+                                            className="gap-2 text-sm cursor-pointer"
                                         >
                                             <EyeOff className="h-4 w-4" />
                                             <span>Hide Column</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem className="gap-2 text-sm">
+                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
                                             <Sigma className="h-4 w-4" />
                                             <span>Aggregation Select</span>
                                         </DropdownMenuItem>
@@ -317,7 +339,7 @@ export function DataGrid({ config }: DataGridProps) {
             // Actions column at the end
             {
                 id: "actions",
-                
+
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center">
                         <DropdownMenu>
@@ -419,10 +441,56 @@ export function DataGrid({ config }: DataGridProps) {
                         Filter
                     </Button>
 
-                    <Button variant="outline" size="sm" className="h-8 gap-1.5 border-muted rounded-lg bg-background/50 hover:bg-muted text-xs">
-                        <ArrowUpAz className="h-3.5 w-3.5" />
-                        Sort
-                    </Button>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm" className="h-8 gap-1.5 border-muted rounded-lg bg-background/50 hover:bg-muted text-xs">
+                                <ArrowUpAz className="h-3.5 w-3.5" />
+                                Sort
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="rounded-lg w-44">
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    // Sort all sortable columns ascending
+                                    const firstSortableColumn = table.getAllColumns().find(col => col.getCanSort());
+                                    if (firstSortableColumn) {
+                                        firstSortableColumn.toggleSorting(false);
+                                    }
+                                }}
+                                className="gap-2 text-sm"
+                            >
+                                <ArrowUp className="h-4 w-4" />
+                                <span>Sort Ascending</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    // Sort all sortable columns descending
+                                    const firstSortableColumn = table.getAllColumns().find(col => col.getCanSort());
+                                    if (firstSortableColumn) {
+                                        firstSortableColumn.toggleSorting(true);
+                                    }
+                                }}
+                                className="gap-2 text-sm"
+                            >
+                                <ArrowDown className="h-4 w-4" />
+                                <span>Sort Descending</span>
+                            </DropdownMenuItem>
+                            {sorting.length > 0 && (
+                                <>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                        onClick={() => table.resetSorting()}
+                                        className="gap-2 text-sm"
+                                    >
+                                        <X className="h-4 w-4" />
+                                        <span>Clear All Sorting</span>
+                                    </DropdownMenuItem>
+                                </>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
