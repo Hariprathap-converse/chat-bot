@@ -220,7 +220,7 @@ export const renderProgressCell = (value: any, config?: CellTypeConfig) => {
     const percentage = (numValue / max) * 100;
 
     return (
-        <div className="flex items-center gap-2 w-full">
+        <div className="flex items-center gap-2 w-[80%]">
             <Progress value={percentage} className="h-2 flex-1" />
             {showPercentage && (
                 <span className="text-xs text-muted-foreground font-medium min-w-[3ch] tabular-nums">

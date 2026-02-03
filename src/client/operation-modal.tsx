@@ -95,10 +95,10 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
             {/* Overlay */}
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
-        />
+            />
 
             {/* Modal Content */}
-            <div className="relative z-10 w-full max-w-lg bg-background rounded-xl shadow-2xl border border-border p-6 animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative z-10 w-full max-w-lg bg-background rounded-xl shadow-2xl border border-border p-3  animate-in fade-in zoom-in-95 duration-200">
                 <button
                     onClick={() => { setInputText(''); onClose() }}
                     className="absolute cursor-pointer right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
@@ -106,9 +106,9 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                     <X className="w-5 h-5" />
                 </button>
 
-                <div className="space-y-6">
-                    <div className="space-y-2">
-                        <h2 className="text-xl font-semibold bg-[linear-gradient(90deg,#7468FC_1.11%,#ED799C_43.64%,#918FFF_99.05%)] bg-clip-text text-transparent capitalize">
+                <div className=" flex flex-col gap-[6px]">
+                    <div className="flex  flex-col gap-1">
+                        <h2 className="text-xl font-semibold text-[#7468FC]  capitalize">
                             {getTitle()}
                         </h2>
                         <p className="text-sm text-muted-foreground">
@@ -124,7 +124,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
                                 placeholder={getPlaceholder()}
-                                className="min-h-[150px] max-h-[400px] resize-none focus-visible:ring-accent"
+                                className="min-h-[150px] max-h-[400px] resize-none focus-visible:ring-0 placeholder:text-muted-foreground/50"
                             />
                         )}
 
@@ -192,12 +192,12 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                         <Button
                             onClick={handleSend}
                             disabled={!inputText.trim() && !selectedFile}
-                            className="bg-linear-to-r cursor-pointer font-normal  from-[#7468FC] via-[#ED799C] to-[#918FFF] hover:opacity-95 transition-opacity capitalize"
+                            className="bg-gradient-to-r from-[#4776E6] to-[#8E54E9] cursor-pointer font-normal text-white   hover:opacity-95 transition-opacity capitalize"
                         >
-
+                            <FaWandMagicSparkles className="max-h-4 " />
 
                             {type}
-                            <FaWandMagicSparkles className="max-h-4 " />
+
                         </Button>
                     </div>
                 </div>

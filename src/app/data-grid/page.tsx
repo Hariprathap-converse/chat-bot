@@ -29,8 +29,8 @@ export default function DataGridPage() {
             </div>
 
             {/* Main Content Area */}
-            <main className="flex flex-col w-full h-full pt-[60px] max-h-screen overflow-hidden items-center px-4 md:px-0">
-                <div className="w-full max-w-full sm:max-w-[95%] md:max-w-[90%] lg:max-w-[85%] xl:max-w-[80%] 2xl:max-w-[75%] flex flex-col h-[calc(100vh-100px)] py-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <main className="flex flex-col w-full h-full pt-[60px] max-h-screen overflow-hidden items-end px-4 mr-[2.5%] md:px-0">
+                <div className="w-full max-w-[93%] flex flex-col max-h-[calc(100vh-30px)] h-full py-4 pt-0  duration-700 ">
                     <DataGrid config={sampleTableData} />
                 </div>
             </main>

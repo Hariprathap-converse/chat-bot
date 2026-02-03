@@ -8,6 +8,7 @@ import {
   PieChart,
   Settings,
   Sheet,
+  TableOfContents,
 } from "lucide-react";
 
 
@@ -142,11 +143,7 @@ const Navdata = {
       url: "#",
       icon: Settings,
     },
-    {
-      title: "Data Grid",
-      url: "/data-grid",
-      icon: Sheet,
-    },
+
     {
       title: "Layout",
 
@@ -202,6 +199,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         >
           <div>
             <NavMain items={Navdata.navMain} />
+            <div
+              onClick={() => router.push("/data-grid")}
+              className={cn(
+                open ? "ml-1" : "ml-2 max-w-[40px]",
+                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
+              )}
+            >
+              <TableOfContents className={cn("max-w-5 max-h-5 pl-px")} />
+              <span
+                className={cn(
+                  " transition-all duration-300 whitespace-nowrap overflow-hidden",
+                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                )}
+              >
+                Data Grid
+              </span>
+            </div>
             <NavProjects projects={Navdata.projects} />
             <NavHistory />
           </div>
@@ -243,23 +257,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 Settings
               </span>
             </div>
-            <div
-              onClick={() => router.push("/data-grid")}
-              className={cn(
-                open ? "" : "ml-2 max-w-[40px]",
-                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
-              )}
-            >
-              <Sheet className={cn("max-w-5 max-h-5 pl-px")} />
-              <span
-                className={cn(
-                  " transition-all duration-300 whitespace-nowrap overflow-hidden",
-                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
-                )}
-              >
-                Data Grid
-              </span>
-            </div>
+
             <div
               onClick={async () => {
 
