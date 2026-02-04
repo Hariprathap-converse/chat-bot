@@ -31,6 +31,7 @@ export interface ColumnConfig {
     accessorKey: string;
     header: string;
     type?: 'number' | 'string' | 'date' | 'boolean';
+    defaultChartType?: 'bar' | 'line';
     width?: number;
     cellType?: CellType;
     cellConfig?: CellTypeConfig;

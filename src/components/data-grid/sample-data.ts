@@ -36,6 +36,7 @@ export const sampleTableData: TableConfig = {
             header: "Salary",
             width: 130,
             type: "number",
+            defaultChartType: "line",
             cellType: "currency",
             cellConfig: {
                 currency: "USD",
@@ -47,6 +48,7 @@ export const sampleTableData: TableConfig = {
             header: "Performance",
             width: 150,
             type: "number",
+            defaultChartType: "bar",
             cellType: "progress",
             cellConfig: {
                 max: 100,
