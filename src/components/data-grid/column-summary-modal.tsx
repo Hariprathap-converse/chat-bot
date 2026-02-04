@@ -5,6 +5,7 @@ import { X, ArrowDown01, ArrowUp10, Sigma, Divide, TrendingUp, Download, BarChar
 import { Button } from "@/components/ui/button";
 import { ColumnConfig } from "./types";
 import { cn } from "@/lib/utils";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface ColumnSummaryModalProps {
     isOpen: boolean;
@@ -23,6 +24,11 @@ type SummaryStats = {
 export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSummaryModalProps) {
     const [stats, setStats] = useState<SummaryStats | null>(null);
     const [chartType, setChartType] = useState<'bar' | 'line'>('bar');
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     // Initialize chart type from column config
     useEffect(() => {
@@ -58,7 +64,7 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
     }, [isOpen, column, data]);
 
     const chartData = useMemo(() => {
-        if (!isOpen || !column || !data.length) return [];
+        if (!isOpen || !column || !data.length) return { items: [], maxValue: 0, groupBy: '' };
 
         // Try to find a grouping column (Department, Region, etc.)
         const sampleRow = data[0];
@@ -66,7 +72,7 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
             ['department', 'region', 'category', 'status', 'position'].includes(key.toLowerCase())
         ) || Object.keys(sampleRow).find(key => typeof sampleRow[key] === 'string' && key !== 'id' && key !== column.accessorKey);
 
-        if (!groupBy) return [];
+        if (!groupBy) return { items: [], maxValue: 0, groupBy: '' };
 
         // Aggregate data
         const groups: Record<string, number> = {};
@@ -78,11 +84,17 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
             }
         });
 
+        const totalValue = Object.values(groups).reduce((acc, curr) => acc + curr, 0);
+
         // Convert to array and sort by value desc
         const sorted = Object.entries(groups)
-            .map(([label, value]) => ({ label, value }))
+            .map(([label, value]) => ({
+                label,
+                value,
+                percentage: totalValue > 0 ? (value / totalValue) * 100 : 0
+            }))
             .sort((a, b) => b.value - a.value)
-            .slice(0, 5); // Top 5
+            .slice(0, 10); // Top 10 for better visibility
 
         const maxValue = Math.max(...sorted.map(s => s.value));
 
@@ -90,6 +102,8 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
     }, [isOpen, column, data]);
 
     if (!isOpen || !column) return null;
+
+    if (!isMounted) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -155,7 +169,7 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Chart Section */}
                     {chartData.items && chartData.items.length > 0 && (
-                        <div className="bg-card rounded-xl p-5 pt-3 pl-3 border-none shadow-[0_6px_16px_0_rgba(0,0,0,0.08),0_3px_6px_-4px_rgba(0,0,0,0.12),0_9px_28px_8px_rgba(0,0,0,0.05)]">
+                        <div className="bg-card rounded-xl p-5 border-none shadow-[0_6px_16px_0_rgba(0,0,0,0.08),0_3px_6px_-4px_rgba(0,0,0,0.12),0_9px_28px_8px_rgba(0,0,0,0.05)]">
                             <div className="flex items-center justify-between mb-5">
                                 <h3 className="text-[16px] font-semibold text-foreground uppercase flex items-center gap-2">
                                     Distribution by {chartData.groupBy}
@@ -184,81 +198,70 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                                 </div>
                             </div>
 
-                            <div className="h-[200px] w-full relative flex items-end">
-                                {chartType === 'bar' ? (
-                                    <div className="space-y-4 w-full h-full overflow-y-auto pr-2">
-                                        {chartData.items.map((item, index) => (
-                                            <div key={index} className="flex flex-col gap-1.5">
-                                                <div className="flex justify-between text-xs text-muted-foreground">
-                                                    <span>{item.label}</span>
-                                                    <span>{item.value.toLocaleString()}</span>
-                                                </div>
-                                                <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                                                    <div
-                                                        className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-500 ease-out"
-                                                        style={{ width: `${item.percentage}%` }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="w-full h-full flex items-end justify-between px-2 gap-2 relative">
-                                        {/* Simple SVG Line Chart */}
-                                        <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
+                            <div className="h-[250px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    {chartType === 'bar' ? (
+                                        <BarChart data={chartData.items} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                                            <XAxis
+                                                dataKey="label"
+                                                axisLine={false}
+                                                tickLine={false}
+                                                tick={{ fill: '#64748B', fontSize: 10 }}
+                                                dy={10}
+                                            />
+                                            <YAxis
+                                                // itemType="number"
+                                                axisLine={false}
+                                                tickLine={false}
+                                                tick={{ fill: '#64748B', fontSize: 10 }}
+                                            />
+                                            <Tooltip
+                                                cursor={{ fill: '#F1F5F9' }}
+                                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                            />
+                                            <Bar
+                                                dataKey="value"
+                                                fill="#8B5CF6"
+                                                radius={[4, 4, 0, 0]}
+                                                barSize={32}
+                                            />
                                             <defs>
-                                                <linearGradient id="lineGradient" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.5" />
-                                                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                                                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stopColor="#3B82F6" />
+                                                    <stop offset="100%" stopColor="#60A5FA" />
                                                 </linearGradient>
                                             </defs>
-                                            <path
-                                                d={`M ${chartData.items.map((item, i) => {
-                                                    const x = (i / (chartData.items.length - 1)) * 100;
-                                                    const y = 100 - (item.percentage); // Flip Y for SVG
-                                                    return `${i === 0 ? 'M' : 'L'} ${x}% ${y}%`;
-                                                }).join(' ')}`}
-                                                fill="none"
-                                                stroke="#3b82f6"
-                                                strokeWidth="2"
-                                                vectorEffect="non-scaling-stroke"
+                                        </BarChart>
+                                    ) : (
+                                        <LineChart data={chartData.items} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                                            <XAxis
+                                                dataKey="label"
+                                                axisLine={false}
+                                                tickLine={false}
+                                                tick={{ fill: '#64748B', fontSize: 10 }}
+                                                dy={10}
                                             />
-                                            <path
-                                                d={`M 0 100 L ${chartData.items.map((item, i) => {
-                                                    const x = (i / (chartData.items.length - 1)) * 100;
-                                                    const y = 100 - (item.percentage);
-                                                    return `${x}% ${y}%`;
-                                                }).join(' ')} L 100 100 Z`}
-                                                fill="url(#lineGradient)"
-                                                stroke="none"
-                                                opacity="0.2"
+                                            <YAxis
+                                                axisLine={false}
+                                                tickLine={false}
+                                                tick={{ fill: '#64748B', fontSize: 10 }}
                                             />
-                                            {/* Dots */}
-                                            {chartData.items.map((item, i) => {
-                                                const x = (i / (chartData.items.length - 1)) * 100;
-                                                const y = 100 - (item.percentage); // Flip Y
-                                                return (
-                                                    <circle
-                                                        key={i}
-                                                        cx={`${x}%`}
-                                                        cy={`${y}%`}
-                                                        r="3"
-                                                        fill="#3b82f6"
-                                                        stroke="white"
-                                                        strokeWidth="1"
-                                                    />
-                                                );
-                                            })}
-                                        </svg>
-
-                                        {/* X Axis Labels for Line Chart */}
-                                        {chartData.items.map((item, i) => (
-                                            <div key={i} className="absolute bottom-[-20px] text-[10px] text-muted-foreground w-12 text-center -translate-x-1/2" style={{ left: `${(i / (chartData.items.length - 1)) * 100}%` }}>
-                                                {item.label.substring(0, 3)}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                            <Tooltip
+                                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                            />
+                                            <Line
+                                                type="monotone"
+                                                dataKey="value"
+                                                stroke="#8B5CF6"
+                                                strokeWidth={3}
+                                                dot={{ fill: '#8B5CF6', r: 4, strokeWidth: 2, stroke: '#fff' }}
+                                                activeDot={{ r: 6, strokeWidth: 0 }}
+                                            />
+                                        </LineChart>
+                                    )}
+                                </ResponsiveContainer>
                             </div>
                         </div>
                     )}
