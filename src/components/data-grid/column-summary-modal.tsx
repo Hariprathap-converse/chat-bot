@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { X, ArrowDown01, ArrowUp10, Sigma, Divide, TrendingUp, Download, BarChart2, Hash } from "lucide-react";
+import { X, ArrowDown01, ArrowUp10, Sigma, Divide, TrendingUp, Download, BarChart2, Hash, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ColumnConfig } from "./types";
 import { cn } from "@/lib/utils";
@@ -162,21 +162,21 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                             label="AVERAGE"
                             value={stats?.avg}
                             icon={<Divide className="w-5 h-5 text-emerald-500" />}
-                            subLabel="Mean Value"
+                            subLabel={`Average  ${column.header}`}
                             color="emerald"
                         />
                         <StatCard
                             label="MINIMUM"
                             value={stats?.min}
                             icon={<ArrowDown01 className="w-5 h-5 text-amber-500" />}
-                            subLabel="Lowest Entry"
+                            subLabel={`Lowest ${column.header}`}
                             color="amber"
                         />
                         <StatCard
                             label="MAXIMUM"
                             value={stats?.max}
                             icon={<ArrowUp10 className="w-5 h-5 text-purple-500" />}
-                            subLabel="Highest Entry"
+                            subLabel={`Highest ${column.header}`}
                             color="purple"
                         />
                     </div>
@@ -234,7 +234,7 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                                                 width={50}
                                             />
                                             <Tooltip
-                                                cursor={{ fill: '#F1F5F9' }}
+                                                cursor={{ fill: '#FFFFFF00' }}
                                                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                                                 formatter={(value: number) => [value.toLocaleString(), column.header]}
                                             />
@@ -282,35 +282,31 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                         </div>
 
 
-                        <div className=" lg:col-span-2 rounded-xl p-6 border bg-card border-blue-500/10 flex flex-col justify-between shadow-sm">
-                            <div>
-                                <h3 className="text-lg font-semibold text-foreground mb-4">
-                                    AI Analysis: &apos;{column.header}&apos;
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed text-sm">
-                                    The <strong>{column.header}</strong> data shows strong performance, with a total volume of <strong>{stats?.sum.toLocaleString()}</strong>.
-                                    The average value sits at <strong>{stats?.avg.toLocaleString()}</strong>, indicating a healthy baseline.
-                                    <br /><br />
-                                    Outliers range from a minimum of {stats?.min.toLocaleString()} to a peak of {stats?.max.toLocaleString()},
-                                    suggesting significant variance in this dataset that may warrant further investigation into the top performers.
-                                </p>
-                            </div>
+                        <div className="lg:col-span-2 rounded-xl p-6 border bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border-indigo-100 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                            {/* Decorative background elements */}
 
-                            <div className="mt-6 flex justify-end gap-3 pt-6 border-t border-border">
-                                <Button
-                                    className="bg-blue-600 hover:bg-blue-700 text-white border-0"
-                                    onClick={() => console.log("Exporting...")}
-                                >
-                                    <Download className="w-4 h-4 mr-2" />
-                                    EXPORT
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    className="border-border text-foreground hover:bg-muted"
-                                    onClick={onClose}
-                                >
-                                    CLOSE
-                                </Button>
+                            <div className="relative z-10">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="p-2">
+                                        <Sparkles className="w-4 h-4 text-indigo-600" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-800">
+                                        AI Analysis: {column.header}
+                                    </h3>
+                                </div>
+
+                                <div className="prose prose-sm prose-indigo max-w-none">
+                                    <p className="text-slate-600 leading-relaxed">
+                                        The <span className="font-semibold text-indigo-900 bg-indigo-50 px-1 py-0.5 rounded">{column.header}</span> data shows strong performance,
+                                        with a total volume of <span className="font-semibold text-slate-900">{stats?.sum.toLocaleString()}</span>.
+                                        The average value sits at <span className="font-semibold text-slate-900">{stats?.avg.toLocaleString()}</span>, indicating a healthy baseline.
+                                    </p>
+                                    <p className="text-slate-600 leading-relaxed mt-3">
+                                        Outliers range from a minimum of <span className="font-medium text-slate-700">{stats?.min.toLocaleString()}</span> to
+                                        a peak of <span className="font-medium text-slate-700">{stats?.max.toLocaleString()}</span>,
+                                        suggesting significant variance in this dataset that may warrant further investigation into the top performers.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -321,20 +317,42 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
 }
 
 function StatCard({ label, value, icon, subLabel, color }: { label: string, value: number | undefined, icon: React.ReactNode, subLabel: string, color: 'blue' | 'emerald' | 'amber' | 'purple' }) {
+    // const colorStyles = {
+    //     blue: "bg-blue-50/50 border-blue-100 hover:border-blue-200",
+    //     emerald: "bg-emerald-50/50 border-emerald-100 hover:border-emerald-200",
+    //     amber: "bg-amber-50/50 border-amber-100 hover:border-amber-200",
+    //     purple: "bg-purple-50/50 border-purple-100 hover:border-purple-200",
+    // };
 
+    // const iconBgStyles = {
+    //     blue: "bg-blue-100 text-blue-600",
+    //     emerald: "bg-emerald-100 text-emerald-600",
+    //     amber: "bg-amber-100 text-amber-600",
+    //     purple: "bg-purple-100 text-purple-600",
+    // };
 
     return (
-        <div className={cn("rounded-xl p-4 border-none transition-all hover:shadow-md shadow-sm bg-card  border-none",)}>
-            <div className="flex items-center gap-2 mb-3">
-                {icon}
-                <span className="text-xs font-bold uppercase tracking-wider opacity-70">{label}</span>
+        <div className={cn(
+            "rounded-[8px] p-3 border-none shadow-sm transition-all duration-200 ",
+        )}>
+            <div className="flex items-start gap-4 pr-4 ">
+                <div className={cn("p-2 rounded-lg",)}>
+
+                    <div className="[&>svg]:w-10 [&>svg]:h-10 [&>svg]:text-gray-400">
+                        {icon}
+                    </div>
+                </div>
+
+                <div className="space-y-1">
+                    <div className="text-2xl font-bold text-slate-800 tracking-tight">
+                        {value?.toLocaleString() ?? "-"}
+                    </div>
+                    <div className="text-sm font-normal text-slate-400">
+                        {subLabel}
+                    </div>
+                </div>
             </div>
-            <div className="text-2xl font-bold text-foreground mb-1">
-                {value?.toLocaleString() ?? "-"}
-            </div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wide">
-                {subLabel}
-            </div>
+
         </div>
     );
 }
