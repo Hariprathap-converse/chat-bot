@@ -30,6 +30,7 @@ export interface CellTypeConfig {
 export interface ColumnConfig {
     accessorKey: string;
     header: string;
+    type?: 'number' | 'string' | 'date' | 'boolean';
     width?: number;
     cellType?: CellType;
     cellConfig?: CellTypeConfig;

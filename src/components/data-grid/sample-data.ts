@@ -35,6 +35,7 @@ export const sampleTableData: TableConfig = {
             accessorKey: "salary",
             header: "Salary",
             width: 130,
+            type: "number",
             cellType: "currency",
             cellConfig: {
                 currency: "USD",
@@ -45,6 +46,7 @@ export const sampleTableData: TableConfig = {
             accessorKey: "performance",
             header: "Performance",
             width: 150,
+            type: "number",
             cellType: "progress",
             cellConfig: {
                 max: 100,
@@ -76,6 +78,7 @@ export const sampleTableData: TableConfig = {
             accessorKey: "projects",
             header: "Projects",
             width: 100,
+            type: "number",
             cellType: "number",
         },
     ],

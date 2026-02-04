@@ -54,13 +54,13 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
             {/* Overlay */}
             <div
                 className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
-                onClick={onClose}
+                onClick={() => { setResult(null); onClose() }}
             />
 
             {/* Modal Content */}
-            <div className="relative z-10 w-full max-w-lg bg-background rounded-xl shadow-2xl border border-border p-5 animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative z-10 w-full max-w-lg bg-card rounded-xl shadow-2xl border border-border p-5 animate-in fade-in zoom-in-95 duration-200">
                 <button
-                    onClick={onClose}
+                    onClick={() => { setResult(null); onClose() }}
                     className="absolute cursor-pointer right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
                 >
                     <X className="w-5 h-5" />
@@ -79,44 +79,55 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                     <div className="grid grid-cols-2 gap-3 mt-2">
                         <Button
                             variant="outline"
-                            className="h-20 flex flex-col gap-2 hover:border-[#7468FC] hover:bg-[#7468FC]/5 transition-all"
+                            className="h-20 flex flex-col gap-2 cursor-pointer border-none shadow-[0px_1px_4px_1px_#DDDDDD] bg-card hover:bg-card/5  group transition-all"
                             onClick={() => calculate("sum")}
                         >
-                            <Sigma className="w-6 h-6 text-[#7468FC]" />
-                            <span className="font-medium">Sum</span>
+                            <div className="group-hover:scale-105 duration-300 flex flex-col items-center gap-2 transition-all">
+                                <Sigma className="w-6 h-6 text-primary" />
+                                <span className="font-medium">Sum</span>
+                            </div>
                         </Button>
                         <Button
                             variant="outline"
-                            className="h-20 flex flex-col gap-2 hover:border-[#ED799C] hover:bg-[#ED799C]/5 transition-all"
+                            className="h-20 flex flex-col gap-2 cursor-pointer border-none shadow-[0px_1px_4px_1px_#DDDDDD] bg-card hover:bg-card group transition-all"
                             onClick={() => calculate("average")}
                         >
-                            <Divide className="w-6 h-6 text-[#ED799C]" />
-                            <span className="font-medium">Average</span>
+                            <div className="group-hover:scale-105 duration-300 flex flex-col items-center gap-2 transition-all">
+                                <Divide className="w-6 h-6 text-[#ED799C]" />
+                                <span className="font-medium">Average</span>
+                            </div>
                         </Button>
+
                         <Button
                             variant="outline"
-                            className="h-20 flex flex-col gap-2 hover:border-[#918FFF] hover:bg-[#918FFF]/5 transition-all"
+                            className="h-20 flex flex-col gap-2 cursor-pointer border-none shadow-[0px_1px_4px_1px_#DDDDDD] bg-card hover:bg-card group transition-all"
                             onClick={() => calculate("min")}
                         >
-                            <ArrowDown01 className="w-6 h-6 text-[#918FFF]" />
-                            <span className="font-medium">Minimum</span>
+                            <div className="group-hover:scale-105 duration-300 flex flex-col items-center gap-2 transition-all">
+                                <ArrowDown01 className="w-6 h-6 text-[#918FFF]" />
+                                <span className="font-medium">Minimum</span>
+                            </div>
                         </Button>
+
                         <Button
                             variant="outline"
-                            className="h-20 flex flex-col gap-2 hover:border-[#7468FC] hover:bg-[#7468FC]/5 transition-all"
+                            className="h-20 flex flex-col gap-2 cursor-pointer border-none shadow-[0px_1px_4px_1px_#DDDDDD] bg-card hover:bg-card group transition-all"
                             onClick={() => calculate("max")}
                         >
-                            <ArrowUp10 className="w-6 h-6 text-[#7468FC]" />
-                            <span className="font-medium">Maximum</span>
+                            <div className="group-hover:scale-105 duration-300 flex flex-col items-center gap-2 transition-all">
+                                <ArrowUp10 className="w-6 h-6 text-[#7468FC]" />
+                                <span className="font-medium">Maximum</span>
+                            </div>
                         </Button>
+
                     </div>
 
                     {result && (
-                        <div className="mt-4 p-4 rounded-lg bg-muted/50 border border-border flex items-center justify-between animate-in fade-in slide-in-from-top-2">
+                        <div className=" p-4 rounded-lg  border border-border flex items-center justify-between animate-in fade-in slide-in-from-top-2">
                             <span className="text-sm font-medium text-muted-foreground capitalize">
                                 Result ({result.type}):
                             </span>
-                            <span className="text-2xl font-bold bg-gradient-to-r from-[#7468FC] to-[#ED799C] bg-clip-text text-transparent">
+                            <span className="text-2xl font-bold text-[#7468FC]">
                                 {result.value.toLocaleString()}
                             </span>
                         </div>

@@ -176,14 +176,7 @@ export function DataGrid({ config }: DataGridProps) {
                     align="end"
                     className="w-40  bg-card rounded-[6px] border-none"
                   >
-                    {(col.cellType === 'number' || col.cellType === 'currency' || col.cellType === 'progress') && (
-                      <DropdownMenuItem
-                        onClick={() => setSummaryModal({ open: true, column: col })}
-                        className="text-sm cursor-pointer gap-2"
-                      >
-                        Summarize
-                      </DropdownMenuItem>
-                    )}
+
                     <DropdownMenuItem
                       onClick={() => handleActionClick("Option A", "header")}
                       className="text-sm cursor-pointer"
@@ -202,6 +195,14 @@ export function DataGrid({ config }: DataGridProps) {
                     >
                       Option C
                     </DropdownMenuItem>
+                    {col.type === 'number' && (
+                      <DropdownMenuItem
+                        onClick={() => setSummaryModal({ open: true, column: col })}
+                        className="text-sm cursor-pointer gap-2"
+                      >
+                        Summarize
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <span>{col.header}</span>
