@@ -101,9 +101,21 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
         return { items: sorted, maxValue, groupBy };
     }, [isOpen, column, data]);
 
+    // Helper for compact number formatting
+    const formatCompactNumber = (number: number) => {
+        return new Intl.NumberFormat('en-US', {
+            notation: "compact",
+            maximumFractionDigits: 1
+        }).format(number);
+    };
+
     if (!isOpen || !column) return null;
 
     if (!isMounted) return null;
+
+    // Calculate additional insights
+    const topCategory = chartData.items[0];
+    const dataSpread = (stats?.max || 0) - (stats?.min || 0);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -114,72 +126,74 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
             />
 
             {/* Modal Content */}
-            <div className="relative z-10 w-full max-w-4xl bg-[#F8FAFC] rounded-xl shadow-2xl border border-border p-6 animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative z-10 w-full max-w-5xl bg-[#F8FAFC] rounded-xl  border border-border p-6 pt-3 animate-in fade-in zoom-in-95 duration-200 overflow-hidden flex flex-col max-h-[90vh]">
 
                 {/* Header */}
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-6 flex-shrink-0">
                     <div>
-
-                        <h2 className="text-[20px] font-bold text-[#7468FC]  uppercase">
+                        <h2 className="text-[20px] font-bold text-[#7468FC]  flex items-center gap-2">
                             {column.header} Analysis
                         </h2>
+                        {/* <p className="text-muted-foreground text-sm">
+                            Deep dive into {data.length} records
+                        </p> */}
                     </div>
                     <Button
                         variant="ghost"
                         size="icon"
                         onClick={onClose}
-                        className="text-muted-foreground absolute top-2 right-4 hover:text-foreground hover:bg-muted rounded-full"
+                        className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-full"
                     >
                         <X className="min-w-6 min-h-6" />
                     </Button>
                 </div>
 
-                {/* Stats Row */}
-                <div className="grid grid-cols-4 gap-4 mb-8">
-                    <StatCard
-                        label="SUM"
-                        value={stats?.sum}
-                        icon={<Sigma className="w-5 h-5 text-blue-500" />}
-                        subLabel={`Total ${column.header}`}
-                        color="blue"
-                    />
-                    <StatCard
-                        label="AVERAGE"
-                        value={stats?.avg}
-                        icon={<Divide className="w-5 h-5 text-emerald-500" />}
-                        subLabel="Mean Value"
-                        color="emerald"
-                    />
-                    <StatCard
-                        label="MINIMUM"
-                        value={stats?.min}
-                        icon={<ArrowDown01 className="w-5 h-5 text-amber-500" />}
-                        subLabel="Lowest Entry"
-                        color="amber"
-                    />
-                    <StatCard
-                        label="MAXIMUM"
-                        value={stats?.max}
-                        icon={<ArrowUp10 className="w-5 h-5 text-purple-500" />}
-                        subLabel="Highest Entry"
-                        color="purple"
-                    />
-                </div>
+                <div className="overflow-y-auto flex-1 pr-2">
+                    {/* Stats Row */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <StatCard
+                            label="SUM"
+                            value={stats?.sum}
+                            icon={<Sigma className="w-5 h-5 text-blue-500" />}
+                            subLabel={`Total ${column.header}`}
+                            color="blue"
+                        />
+                        <StatCard
+                            label="AVERAGE"
+                            value={stats?.avg}
+                            icon={<Divide className="w-5 h-5 text-emerald-500" />}
+                            subLabel="Mean Value"
+                            color="emerald"
+                        />
+                        <StatCard
+                            label="MINIMUM"
+                            value={stats?.min}
+                            icon={<ArrowDown01 className="w-5 h-5 text-amber-500" />}
+                            subLabel="Lowest Entry"
+                            color="amber"
+                        />
+                        <StatCard
+                            label="MAXIMUM"
+                            value={stats?.max}
+                            icon={<ArrowUp10 className="w-5 h-5 text-purple-500" />}
+                            subLabel="Highest Entry"
+                            color="purple"
+                        />
+                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Chart Section */}
-                    {chartData.items && chartData.items.length > 0 && (
-                        <div className="bg-card rounded-xl p-5 border-none shadow-[0_6px_16px_0_rgba(0,0,0,0.08),0_3px_6px_-4px_rgba(0,0,0,0.12),0_9px_28px_8px_rgba(0,0,0,0.05)]">
-                            <div className="flex items-center justify-between mb-5">
-                                <h3 className="text-[16px] font-semibold text-foreground uppercase flex items-center gap-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-2 pl-px">
+                        {/* Chart Section - Takes up 2 columns */}
+                        <div className="lg:col-span-2 bg-white rounded-xl  border-none shadow-sm ">
+                            <div className="flex items-center justify-between mb-6 pt-2 pr-2">
+                                <h3 className="text-[16px] px-5  font-semibold text-foreground uppercase flex items-center gap-2">
                                     Distribution by {chartData.groupBy}
                                 </h3>
-                                <div className="flex gap-1 bg-muted p-1 rounded-lg">
+                                <div className="flex gap-1 bg-muted p-1 rounded-lg  ">
                                     <button
                                         onClick={() => setChartType('bar')}
                                         className={cn(
                                             "p-1.5 rounded-md transition-all",
-                                            chartType === 'bar' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                                            chartType === 'bar' ? "bg-white text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                                         )}
                                         title="Bar Chart"
                                     >
@@ -189,7 +203,7 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                                         onClick={() => setChartType('line')}
                                         className={cn(
                                             "p-1.5 rounded-md transition-all",
-                                            chartType === 'line' ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                                            chartType === 'line' ? "bg-white text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                                         )}
                                         title="Line Chart"
                                     >
@@ -198,58 +212,60 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                                 </div>
                             </div>
 
-                            <div className="h-[250px] w-full">
+                            <div className="h-[300px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                     {chartType === 'bar' ? (
-                                        <BarChart data={chartData.items} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                        <BarChart data={chartData.items} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
                                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                                             <XAxis
                                                 dataKey="label"
                                                 axisLine={false}
                                                 tickLine={false}
-                                                tick={{ fill: '#64748B', fontSize: 10 }}
+                                                tick={{ fill: '#64748B', fontSize: 11 }}
                                                 dy={10}
+                                                tickFormatter={(val) => val.length > 10 ? `${val.substring(0, 10)}...` : val}
                                             />
                                             <YAxis
-                                                // itemType="number"
+                                                // itemType="number" 
                                                 axisLine={false}
                                                 tickLine={false}
-                                                tick={{ fill: '#64748B', fontSize: 10 }}
+                                                tick={{ fill: '#64748B', fontSize: 11 }}
+                                                tickFormatter={formatCompactNumber}
+                                                width={50}
                                             />
                                             <Tooltip
                                                 cursor={{ fill: '#F1F5F9' }}
-                                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                                                formatter={(value: number) => [value.toLocaleString(), column.header]}
                                             />
                                             <Bar
                                                 dataKey="value"
                                                 fill="#8B5CF6"
                                                 radius={[4, 4, 0, 0]}
-                                                barSize={32}
+                                                barSize={40}
                                             />
-                                            <defs>
-                                                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                                                    <stop offset="0%" stopColor="#3B82F6" />
-                                                    <stop offset="100%" stopColor="#60A5FA" />
-                                                </linearGradient>
-                                            </defs>
                                         </BarChart>
                                     ) : (
-                                        <LineChart data={chartData.items} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                        <LineChart data={chartData.items} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
                                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                                             <XAxis
                                                 dataKey="label"
                                                 axisLine={false}
                                                 tickLine={false}
-                                                tick={{ fill: '#64748B', fontSize: 10 }}
+                                                tick={{ fill: '#64748B', fontSize: 11 }}
                                                 dy={10}
+                                                tickFormatter={(val) => val.length > 10 ? `${val.substring(0, 10)}...` : val}
                                             />
                                             <YAxis
                                                 axisLine={false}
                                                 tickLine={false}
-                                                tick={{ fill: '#64748B', fontSize: 10 }}
+                                                tick={{ fill: '#64748B', fontSize: 11 }}
+                                                tickFormatter={formatCompactNumber}
+                                                width={50}
                                             />
                                             <Tooltip
-                                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                                                formatter={(value: number) => [value.toLocaleString(), column.header]}
                                             />
                                             <Line
                                                 type="monotone"
@@ -264,38 +280,38 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                                 </ResponsiveContainer>
                             </div>
                         </div>
-                    )}
 
-                    {/* Analysis Section */}
-                    <div className="bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-xl p-6 border border-blue-500/10 flex flex-col justify-between shadow-sm">
-                        <div>
-                            <h3 className="text-lg font-semibold text-foreground mb-4">
-                                AI Analysis: &apos;{column.header}&apos;
-                            </h3>
-                            <p className="text-muted-foreground leading-relaxed text-sm">
-                                The <strong>{column.header}</strong> data shows strong performance, with a total volume of <strong>{stats?.sum.toLocaleString()}</strong>.
-                                The average value sits at <strong>{stats?.avg.toLocaleString()}</strong>, indicating a healthy baseline.
-                                <br /><br />
-                                Outliers range from a minimum of {stats?.min.toLocaleString()} to a peak of {stats?.max.toLocaleString()},
-                                suggesting significant variance in this dataset that may warrant further investigation into the top performers.
-                            </p>
-                        </div>
 
-                        <div className="mt-6 flex justify-end gap-3 pt-6 border-t border-border">
-                            <Button
-                                className="bg-blue-600 hover:bg-blue-700 text-white border-0"
-                                onClick={() => console.log("Exporting...")}
-                            >
-                                <Download className="w-4 h-4 mr-2" />
-                                EXPORT
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className="border-border text-foreground hover:bg-muted"
-                                onClick={onClose}
-                            >
-                                CLOSE
-                            </Button>
+                        <div className=" lg:col-span-2 rounded-xl p-6 border bg-card border-blue-500/10 flex flex-col justify-between shadow-sm">
+                            <div>
+                                <h3 className="text-lg font-semibold text-foreground mb-4">
+                                    AI Analysis: &apos;{column.header}&apos;
+                                </h3>
+                                <p className="text-muted-foreground leading-relaxed text-sm">
+                                    The <strong>{column.header}</strong> data shows strong performance, with a total volume of <strong>{stats?.sum.toLocaleString()}</strong>.
+                                    The average value sits at <strong>{stats?.avg.toLocaleString()}</strong>, indicating a healthy baseline.
+                                    <br /><br />
+                                    Outliers range from a minimum of {stats?.min.toLocaleString()} to a peak of {stats?.max.toLocaleString()},
+                                    suggesting significant variance in this dataset that may warrant further investigation into the top performers.
+                                </p>
+                            </div>
+
+                            <div className="mt-6 flex justify-end gap-3 pt-6 border-t border-border">
+                                <Button
+                                    className="bg-blue-600 hover:bg-blue-700 text-white border-0"
+                                    onClick={() => console.log("Exporting...")}
+                                >
+                                    <Download className="w-4 h-4 mr-2" />
+                                    EXPORT
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="border-border text-foreground hover:bg-muted"
+                                    onClick={onClose}
+                                >
+                                    CLOSE
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -308,7 +324,7 @@ function StatCard({ label, value, icon, subLabel, color }: { label: string, valu
 
 
     return (
-        <div className={cn("rounded-xl p-4 border-none transition-all hover:shadow-md shadow-[0_6px_16px_0_rgba(0,0,0,0.08),0_3px_6px_-4px_rgba(0,0,0,0.12),0_9px_28px_8px_rgba(0,0,0,0.05)] bg-card  border-none",)}>
+        <div className={cn("rounded-xl p-4 border-none transition-all hover:shadow-md shadow-sm bg-card  border-none",)}>
             <div className="flex items-center gap-2 mb-3">
                 {icon}
                 <span className="text-xs font-bold uppercase tracking-wider opacity-70">{label}</span>
