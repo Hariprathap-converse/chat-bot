@@ -52,6 +52,7 @@ import { cn } from "@/lib/utils";
 import { TableConfig } from "./types";
 import { renderCell } from "./cell-renderers";
 import { OperationModal } from "@/client/operation-modal";
+import { ColumnSummaryModal } from "./column-summary-modal";
 
 interface DataGridProps {
   config: TableConfig;
@@ -80,6 +81,10 @@ export function DataGrid({ config }: DataGridProps) {
     option: string;
     rowId: string;
   }>({ open: false, option: "", rowId: "" });
+  const [summaryModal, setSummaryModal] = React.useState<{
+    open: boolean;
+    column: any | null;
+  }>({ open: false, column: null });
 
   const handlePinColumn = React.useCallback(
     (columnId: string, position: "left" | "right" | false) => {
@@ -171,6 +176,14 @@ export function DataGrid({ config }: DataGridProps) {
                     align="end"
                     className="w-40  bg-card rounded-[6px] border-none"
                   >
+                    {(col.cellType === 'number' || col.cellType === 'currency' || col.cellType === 'progress') && (
+                      <DropdownMenuItem
+                        onClick={() => setSummaryModal({ open: true, column: col })}
+                        className="text-sm cursor-pointer gap-2"
+                      >
+                        Summarize
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem
                       onClick={() => handleActionClick("Option A", "header")}
                       className="text-sm cursor-pointer"
@@ -589,12 +602,12 @@ export function DataGrid({ config }: DataGridProps) {
                             "h-10 px-4 font-medium relative text-xs text-muted-foreground ",
                             isPinned && "sticky z-20",
                             isLastLeftPinned &&
-                              "shadow-[2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none  bg-background/95 clip-right",
+                            "shadow-[2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none  bg-background/95 clip-right",
                             isFirstRightPinned &&
-                              "shadow-[-2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none clip-left",
+                            "shadow-[-2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none clip-left",
                             !isLastLeftPinned &&
-                              !isFirstRightPinned &&
-                              "after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:h-1/2 after:w-[2px] after:bg-gray-200/40 after:content-['']",
+                            !isFirstRightPinned &&
+                            "after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:h-1/2 after:w-[2px] after:bg-gray-200/40 after:content-['']",
                           )}
                           style={{
                             width: header.getSize(),
@@ -611,9 +624,9 @@ export function DataGrid({ config }: DataGridProps) {
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                         </TableHead>
                       );
                     })}
@@ -781,6 +794,12 @@ export function DataGrid({ config }: DataGridProps) {
           isOpen={confirmDialog.open}
           onClose={() => setConfirmDialog({ ...confirmDialog, open: false })}
           type={"summarize"}
+        />
+        <ColumnSummaryModal
+          isOpen={summaryModal.open}
+          onClose={() => setSummaryModal({ ...summaryModal, open: false })}
+          column={summaryModal.column}
+          data={config.data}
         />
       </div>
     </>

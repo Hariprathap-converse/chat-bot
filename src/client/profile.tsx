@@ -6,8 +6,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { NavChatBot } from "@/Icons/global/home";
-import { History, LogOut, MessageCircleMore, User } from "lucide-react";
+import { History, LogOut, MessageCircleMore, User, Moon, Sun } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 import { useState } from "react";
 interface AccountData {
@@ -28,6 +29,7 @@ const Profile = () => {
     address: [],
   };
   const [loading, setLoading] = useState(false);
+  const { setTheme, theme } = useTheme();
 
   return (
     <Popover>
@@ -110,6 +112,22 @@ const Profile = () => {
               </span>
               History
             </Link>
+          </li>
+
+          <li className="cursor-pointer border-dashed border-gray-200 px-2  last:border-t last:pt-2">
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="w-full group flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground font-medium"
+            >
+              <span className="text-foreground font-medium group-hover:text-accent-foreground">
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </span>
+              Switch Theme
+            </button>
           </li>
 
           <li className="cursor-pointer border-dashed border-gray-200 px-2  last:border-t last:pt-2">
