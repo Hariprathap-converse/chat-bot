@@ -9,7 +9,8 @@ export function proxy(request: NextRequest) {
     "/login",
     "/signup",
     "/forgot-password",
-    "/reset-password",
+    "/verify-otp",
+    "/change-password",
   ];
   const isPublicRoute = publicRoutes.some((route) =>
     pathname.startsWith(route),
@@ -33,6 +34,7 @@ export const config = {
     "/login",
     "/signup",
     "/forgot-password",
-    "/reset-password",
+    "/verify-otp",
+    "/change-password",
   ],
 };

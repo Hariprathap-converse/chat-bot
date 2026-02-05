@@ -145,7 +145,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background:#F8FAFC;
+  --background: #f8fafc;
   /**/
   --foreground: hsla(0, 0%, 43%, 1);
   /**/
@@ -153,7 +153,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: hsla(229, 74%, 98%, 1);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #6F00FF;
+  --primary: #6f00ff;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -323,9 +323,9 @@
 }
 
 .dark {
-  --background: hsla(0, 0%, 0%, 0.9);
+  --background: hsla(0, 0%, 15%, 1);
   --foreground: hsla(0, 0%, 77%, 1);
-  --card: hsla(0, 0%, 15%, 1);
+  --card: hsla(0, 0%, 0%, 0.9);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
@@ -339,7 +339,7 @@
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input: hsla(0, 0%, 100%, 0.1);
+  --input:hsla(0, 0%, 0%, 0.9);
   --placeholder: hsla(0, 0%, 43%, 1);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -618,7 +618,6 @@ body {
 }
 
 @keyframes bounceOnce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -663,7 +662,6 @@ body {
 }
 
 @keyframes bounceColor {
-
   0%,
   50%,
   100% {
@@ -783,7 +781,6 @@ body {
 }
 
 @keyframes ping-slow {
-
   75%,
   100% {
     transform: scale(2);
@@ -793,17 +790,21 @@ body {
 
 .animate-scan {
   animation: scan-line 2s ease-in-out infinite;
-  background: linear-gradient(to bottom,
-      transparent,
-      hsl(var(--primary) / 0.5),
-      transparent);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    hsl(var(--primary) / 0.5),
+    transparent
+  );
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg,
-      transparent 25%,
-      rgba(255, 255, 255, 0.5) 50%,
-      transparent 75%);
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 75%
+  );
   background-size: 200% 100%;
   animation: shimmer-skeleton 2s infinite linear;
 }
@@ -817,7 +818,6 @@ body {
 }
 
 @keyframes pulse-fast {
-
   0%,
   100% {
     opacity: 1;

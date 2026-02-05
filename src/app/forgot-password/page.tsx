@@ -41,8 +41,8 @@ export default function ForgotPassword() {
     try {
       const { authService } = await import("@/services/auth");
       await authService.forgotPassword(data.email);
-      toast.success("Password reset link sent to your email");
-      router.push(`/reset-password?email=${encodeURIComponent(data.email)}`);
+      toast.success("OTP sent to your email");
+      router.push(`/verify-otp?email=${encodeURIComponent(data.email)}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to send reset link");
     } finally {

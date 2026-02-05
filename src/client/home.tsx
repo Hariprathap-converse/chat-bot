@@ -93,7 +93,7 @@ export default function DynamicHome() {
   }, []);
   const router = useRouter();
   return (
-    <div className="relative bg-background w-full max-h-screen  p-4 md:p-[87px] pb-0 md:pb-5 flex item-center justify-center">
+    <div className="relative bg-background w-full max-h-screen  p-4 md:p-[71px]  pb-0 md:pb-5 flex item-center justify-center">
       <div className="absolute right-3 top-1.5 z-10">
         <Profile />
       </div>
@@ -117,9 +117,9 @@ export default function DynamicHome() {
           </span>
         </div>
 
-        <div className="flex flex-col gap-[23px] w-full items-center">
+        <div className="flex flex-col px-4 gap-[23px] w-full items-center ">
           <div className="flex relative w-full h-auto p-0">
-            <div className="p-px rounded-[14px] w-full shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] dark:from-[hsla(245,100%,97%,0.1)] dark:to-[hsla(245,100%,94%,0.1)]">
+            <div className="p-px rounded-[14px] w-full shadow-[0px_10px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] dark:from-[hsla(245,100%,97%,0.1)] dark:to-[hsla(245,100%,94%,0.1)]">
               <Input
                 value={mainInput}
                 onChange={(e) => setMainInput(e.target.value)}
@@ -140,7 +140,7 @@ export default function DynamicHome() {
                 }
                 router.push("/chat");
               }}
-              className="absolute top-2.5 right-3 cursor-pointer p-2 rounded-2xl font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center"
+              className="absolute top-2.5 right-3 cursor-pointer p-2  rounded-2xl font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center"
             >
               {getIcon(data.search.buttonIcon)}
               <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
@@ -150,7 +150,7 @@ export default function DynamicHome() {
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="w-full border relative z-0 bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
+              className="w-full  shadow-[0px_0px_8px_0px_hsla(0,0%,0%,0.06)] relative z-0 bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
             >
               <div className="flex gap-3 items-center">
                 <span>{getIcon(section.icon)}</span>
@@ -167,7 +167,7 @@ export default function DynamicHome() {
                     onClick={() => setSelectedSection(item.key)}
                     className={cn(
                       selectedSection == item.key ? "border-hover-border" : "",
-                      "group bg-white dark:bg-card cursor-pointer w-[150px] md:w-[170px] border hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]",
+                      "group bg-white dark:bg-card cursor-pointer w-[150px] md:w-[170px]  shadow-[2px_1px_10px_0px_hsla(0,0%,0%,0.09)] hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]",
                     )}
                   >
                     <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[39%] left-[46%] bg-circle rounded-full"></div>
@@ -204,7 +204,7 @@ export default function DynamicHome() {
           ))}
 
           {selectedSection === null ? (
-            <div className="w-full border bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
+            <div className="w-full shadow-[0px_0px_4px_0px_hsla(0,0%,0%,0.06)] bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
               <div className="flex gap-3 items-center">
                 <span className="text-heading text-base font-medium tracking-normal">
                   Quick Operations
@@ -215,7 +215,7 @@ export default function DynamicHome() {
                 {data.footerSection[0].items.slice(0, 6).map((item, index) => (
                   <div
                     key={index}
-                    className="border group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
+                    className="shadow-[0px_0px_4px_1px_hsla(0,0%,0%,0.07)] group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
                     onClick={() => {
                       if (item.label === "Summarize") {
                         setOperationModal({ isOpen: true, type: "summarize" });

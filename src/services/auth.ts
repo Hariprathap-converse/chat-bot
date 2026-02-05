@@ -88,6 +88,32 @@ export const authService = {
     }
   },
 
+  async verifyResetOtp(email: string, otp: string): Promise<string> {
+    try {
+      const response = await fetch(
+        `${API_URL}/auth/verify-reset-otp?email=${encodeURIComponent(
+          email,
+        )}&otp=${encodeURIComponent(otp)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      const result: ApiResponse<null> = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.message || "Invalid OTP");
+      }
+
+      return result.message;
+    } catch (error: any) {
+      throw new Error(error.message || "Failed to verify OTP");
+    }
+  },
+
   async resetPassword(
     email: string,
     otp: string,

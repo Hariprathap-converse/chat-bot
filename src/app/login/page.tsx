@@ -257,7 +257,7 @@ group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
                 type="submit"
                 disabled={loading}
                 className={cn(
-                  " w-full mt-5 group capitalize text-base font-semibold h-[45px]   bg-primary  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-primary bg-primary hover:text-white hover:bg-primary cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
+                  " w-full mt-5 group capitalize text-base font-semibold h-[45px] disabled:!opacity-100   disabled:bg-primary  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-primary bg-primary hover:text-white hover:bg-primary cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
                 )}
               >
                 <p className="group-hover:scale-105 transition-all duration-300">
