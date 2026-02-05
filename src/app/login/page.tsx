@@ -26,6 +26,7 @@ export default function Login() {
   const { setOpen } = useSidebar();
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const {
     register,
@@ -133,7 +134,7 @@ export default function Login() {
                 )}
               </div>
 
-              <div className="w-full space-y-1">
+              <div className="w-full space-y-1 group">
                 <div className="grid gap-2  w-full relative ">
                   <span className="absolute top-[29%] left-3">
                     <svg
@@ -171,14 +172,57 @@ export default function Login() {
                   </span>
                   <Input
                     {...register("password")}
+                    type={showPassword ? "text" : "password"}
                     className=" p-0 h-[45px] !rounded-[12px] border-0 bg-white px-[21px] flex pl-11 items-center
                 placeholder:font-normal placeholder:text-sm placeholder:text-foreground
                 leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none
                 focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground  focus-visible:ring-offset-0  focus:placeholder:text-sub-title
                   !shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]"
                     placeholder="Enter your password"
-                    type="password"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-[30%] cursor-pointer text-gray-500 opacity-0 
+group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+                  >
+                    {showPassword ? (
+                      // Eye-off icon
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M17.94 17.94C16.18 19.23 14.15 20 12 20C7 20 2.73 16.11 1 12C1.62 10.61 2.48 9.36 3.53 8.29M9.9 4.24C10.59 4.08 11.29 4 12 4C17 4 21.27 7.89 23 12C22.36 13.43 21.5 14.7 20.44 15.78M1 1L23 23"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    ) : (
+                      // Eye icon
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="3"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    )}
+                  </button>
                 </div>
                 {errors.password && (
                   <p className="text-red-500 text-sm pt-1 px-2">
@@ -191,7 +235,7 @@ export default function Login() {
                 <div className=" group flex items-center gap-2 ">
                   <Checkbox
                     id="reminder"
-                    className="cursor-pointer border-0 ring-1  ring-accent group-hover:scale-105"
+                    className="cursor-pointer border-1 border-accent ring-0  ring-accent group-hover:scale-105"
                   />
                   <Label
                     htmlFor="reminder"
@@ -213,10 +257,12 @@ export default function Login() {
                 type="submit"
                 disabled={loading}
                 className={cn(
-                  " w-full mt-5 capitalize text-base font-semibold h-[45px]  hover:scale-[101%]  bg-sidebar-accent  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]"
+                  " w-full mt-5 group capitalize text-base font-semibold h-[45px]   bg-primary  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-primary bg-primary hover:text-white hover:bg-primary cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
                 )}
               >
-                {loading ? "Logging in..." : "Log In"}
+                <p className="group-hover:scale-105 transition-all duration-300">
+                  {loading ? "Logging in..." : "Log In"}
+                </p>
               </Button>
               <div className="text-sm text-sub-heading font-medium mt-4 flex gap-1">
                 Don't have an account ?

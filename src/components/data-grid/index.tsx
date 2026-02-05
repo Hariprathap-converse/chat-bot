@@ -154,7 +154,7 @@ export function DataGrid({ config }: DataGridProps) {
       ...config.columns.map((col) => ({
         id: col.accessorKey,
         accessorKey: col.accessorKey,
-        header: ({ column }) => {
+        header: ({ column }:any) => {
           const isPinned = column.getIsPinned();
           const columnId = column.id;
           const isSorted = column.getIsSorted();
@@ -337,7 +337,7 @@ export function DataGrid({ config }: DataGridProps) {
             </div>
           );
         },
-        cell: ({ row }) => {
+        cell: ({ row }:any) => {
           const value = row.getValue(col.accessorKey);
           return renderCell(value, col.cellType, col.cellConfig);
         },
@@ -581,7 +581,7 @@ export function DataGrid({ config }: DataGridProps) {
         <div className="flex-1 overflow-hidden flex flex-col   shadow-sm relative">
           <div className="flex-1 overflow-auto border bg-card rounded-[6px] rounded-b-[5px] max-w-full ">
             <Table className="max-h-full">
-              <TableHeader className="sticky top-0 z-50  bg-background/95">
+              <TableHeader className="sticky top-0 z-40  bg-background/95">
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
                     key={headerGroup.id}

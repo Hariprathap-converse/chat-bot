@@ -145,7 +145,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: hsla(229, 74%, 98%, 1);
+  --background:#F8FAFC;
   /**/
   --foreground: hsla(0, 0%, 43%, 1);
   /**/
@@ -153,7 +153,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: hsla(229, 74%, 98%, 1);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: hsla(245, 96%, 70%, 1);
+  --primary: #6F00FF;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);

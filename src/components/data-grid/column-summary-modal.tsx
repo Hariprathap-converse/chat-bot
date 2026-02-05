@@ -5,7 +5,7 @@ import { X, ArrowDown01, ArrowUp10, Sigma, Divide, TrendingUp, Download, BarChar
 import { Button } from "@/components/ui/button";
 import { ColumnConfig } from "./types";
 import { cn } from "@/lib/utils";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 
 interface ColumnSummaryModalProps {
     isOpen: boolean;
@@ -102,20 +102,18 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
     }, [isOpen, column, data]);
 
     // Helper for compact number formatting
-    const formatCompactNumber = (number: number) => {
+    const formatCompactNumber = (value: any) => {
+        if (typeof value !== 'number') return String(value);
         return new Intl.NumberFormat('en-US', {
             notation: "compact",
             maximumFractionDigits: 1
-        }).format(number);
+        }).format(value);
     };
 
     if (!isOpen || !column) return null;
 
     if (!isMounted) return null;
 
-    // Calculate additional insights
-    const topCategory = chartData.items[0];
-    const dataSpread = (stats?.max || 0) - (stats?.min || 0);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -150,7 +148,7 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
 
                 <div className="overflow-y-auto flex-1 pr-2">
                     {/* Stats Row */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 mb-6">
                         <StatCard
                             label="SUM"
                             value={stats?.sum}
@@ -183,7 +181,7 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
 
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-2 pl-px">
                         {/* Chart Section - Takes up 2 columns */}
-                        <div className="lg:col-span-2 bg-white rounded-xl  border-none shadow-sm ">
+                        <div className="lg:col-span-2 bg-white rounded-xl   border-none shadow-sm ">
                             <div className="flex items-center justify-between mb-6 pt-2 pr-2">
                                 <h3 className="text-[16px] px-5  font-semibold text-foreground uppercase flex items-center gap-2">
                                     Distribution by {chartData.groupBy}
@@ -243,10 +241,17 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                                                 fill="#8B5CF6"
                                                 radius={[4, 4, 0, 0]}
                                                 barSize={40}
-                                            />
+                                            >
+                                                <LabelList
+                                                    dataKey="value"
+                                                    position="top"
+                                                    formatter={formatCompactNumber}
+                                                    style={{ fill: '#64748B', fontSize: 11, fontWeight: 500 }}
+                                                />
+                                            </Bar>
                                         </BarChart>
                                     ) : (
-                                        <LineChart data={chartData.items} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
+                                        <LineChart data={chartData.items} margin={{ top: 10, right: 30, left: 5, bottom: 20 }} >
                                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                                             <XAxis
                                                 dataKey="label"
@@ -274,7 +279,15 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                                                 strokeWidth={3}
                                                 dot={{ fill: '#8B5CF6', r: 4, strokeWidth: 2, stroke: '#fff' }}
                                                 activeDot={{ r: 6, strokeWidth: 0 }}
-                                            />
+                                            >
+                                                <LabelList
+                                                    dataKey="value"
+                                                    position="insideBottomLeft"
+                                                    formatter={formatCompactNumber}
+                                                    zIndex={1}
+                                                    style={{ fill: '#64748B', fontSize: 11, fontWeight: 500 }}
+                                                />
+                                            </Line>
                                         </LineChart>
                                     )}
                                 </ResponsiveContainer>
@@ -282,13 +295,13 @@ export function ColumnSummaryModal({ isOpen, onClose, column, data }: ColumnSumm
                         </div>
 
 
-                        <div className="lg:col-span-2 rounded-xl p-6 border bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border-indigo-100 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                        <div className="lg:col-span-2 rounded-xl p-6 pt-4 border bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border-indigo-100 shadow-sm flex flex-col justify-between relative overflow-hidden group">
                             {/* Decorative background elements */}
 
                             <div className="relative z-10">
                                 <div className="flex items-center gap-2 mb-4">
                                     <div className="p-2">
-                                        <Sparkles className="w-4 h-4 text-indigo-600" />
+                                        <Sparkles className="w-6 h-6 text-indigo-600" />
                                     </div>
                                     <h3 className="text-lg font-bold text-slate-800">
                                         AI Analysis: {column.header}
@@ -333,17 +346,17 @@ function StatCard({ label, value, icon, subLabel, color }: { label: string, valu
 
     return (
         <div className={cn(
-            "rounded-[8px] p-3 border-none shadow-sm transition-all duration-200 ",
+            "rounded-[8px] p-3  border-none shadow-[0px_0px_2px_1px_rgba(0,0,0,0.1)] transition-all duration-200 ",
         )}>
-            <div className="flex items-start gap-4 pr-4 ">
-                <div className={cn("p-2 rounded-lg",)}>
+            <div className="flex items-start gap-4 pr-4 h-full  ">
+                <div className={cn("p-2 rounded-lg","bg-blue-100 h-full w-14 flex justify-center items-center text-blue-600 ")}>
 
-                    <div className="[&>svg]:w-10 [&>svg]:h-10 [&>svg]:text-gray-400">
+                    <div className="[&>svg]:w-6 [&>svg]:h-6 [&>svg]:text-blue-600">
                         {icon}
                     </div>
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-1  flex  flex-col justify-center items-center flex-1">
                     <div className="text-2xl font-bold text-slate-800 tracking-tight">
                         {value?.toLocaleString() ?? "-"}
                     </div>
