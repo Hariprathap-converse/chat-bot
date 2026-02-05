@@ -141,6 +141,14 @@
   --color-bot: var(--bot);
   --color-bot-foreground: var(--bot-text);
   --color-hover-border: var(--hover-border);
+
+  /* App Shadows Mapping */
+  --shadow-sm: var(--shadow-sm-val);
+  --shadow-md: var(--shadow-md-val);
+  --shadow-lg: var(--shadow-lg-val);
+  --shadow-card: var(--shadow-card-val);
+  --shadow-operation: var(--shadow-operation-val);
+  --shadow-bot: var(--shadow-bot-val);
 }
 
 :root {
@@ -320,6 +328,14 @@
   --bot: hsla(245, 100%, 97%, 1);
   --bot-text: hsla(0, 0%, 33%, 1);
   --hover-border: hsla(245, 96%, 70%, 0.3);
+
+  /* Shadows */
+  --shadow-sm-val: 0px 0px 4px 0px hsla(0, 0%, 0%, 0.06);
+  --shadow-md-val: 0px 0px 8px 0px hsla(0, 0%, 0%, 0.06);
+  --shadow-lg-val: 0px 10px 10px 0px hsla(0, 0%, 0%, 0.06);
+  --shadow-card-val: 2px 1px 10px 0px hsla(0, 0%, 0%, 0.09);
+  --shadow-operation-val: 0px 0px 4px 1px hsla(0, 0%, 0%, 0.07);
+  --shadow-bot-val: 0px 0px 4px 0px hsla(245, 96%, 70%, 0.12);
 }
 
 .dark {
@@ -339,7 +355,7 @@
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input:hsla(0, 0%, 0%, 0.9);
+  --input: hsla(0, 0%, 0%, 0.9);
   --placeholder: hsla(0, 0%, 43%, 1);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
@@ -518,6 +534,15 @@
   --input-feildBorder: hsla(220, 5%, 22%, 1);
   --calender-IconfillColor: hsla(0, 0%, 43%, 1);
   --input-value: hsla(0, 0%, 98%, 1);
+
+  /* Shadows */
+  --shadow-sm-val: 0px 0px 4px 0px rgba(120, 130, 255, 0.15);
+  --shadow-md-val: 0px 0px 8px 0px rgba(120, 130, 255, 0.2);
+  --shadow-lg-val: 0px 2px 10px 0px rgba(120, 130, 255, 0.25);
+  --shadow-card-val: 2px 1px 10px 0px rgba(120, 130, 255, 0.25);
+  --shadow-operation-val: 0px 0px 4px 1px rgba(120, 130, 255, 0.25);
+  --shadow-bot-val: 0px 0px 4px 0px rgba(120, 130, 255, 0.25);
+
 }
 
 @layer utilities {
@@ -618,6 +643,7 @@ body {
 }
 
 @keyframes bounceOnce {
+
   0%,
   100% {
     transform: translateY(0);
@@ -662,6 +688,7 @@ body {
 }
 
 @keyframes bounceColor {
+
   0%,
   50%,
   100% {
@@ -781,6 +808,7 @@ body {
 }
 
 @keyframes ping-slow {
+
   75%,
   100% {
     transform: scale(2);
@@ -790,21 +818,17 @@ body {
 
 .animate-scan {
   animation: scan-line 2s ease-in-out infinite;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    hsl(var(--primary) / 0.5),
-    transparent
-  );
+  background: linear-gradient(to bottom,
+      transparent,
+      hsl(var(--primary) / 0.5),
+      transparent);
 }
 
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 25%,
-    rgba(255, 255, 255, 0.5) 50%,
-    transparent 75%
-  );
+  background: linear-gradient(90deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.5) 50%,
+      transparent 75%);
   background-size: 200% 100%;
   animation: shimmer-skeleton 2s infinite linear;
 }
@@ -818,6 +842,7 @@ body {
 }
 
 @keyframes pulse-fast {
+
   0%,
   100% {
     opacity: 1;

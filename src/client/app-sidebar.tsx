@@ -163,7 +163,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
       collapsible="icon"
-      className="absolute min-h-[80%]  max-h-[calc(100vh-40px)] shadow-[0px_0px_10px_0px_hsla(212,72%,59%,0.25)] rounded-2xl"
+      className="absolute min-h-[80%]  max-h-[calc(100vh-40px)] shadow-lg rounded-2xl"
       {...props}
     >
       <SidebarHeader
@@ -227,7 +227,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               }}
               className={cn(
                 open ? "" : "ml-2 max-w-[40px]  ",
-                " flex  items-center  rounded-[4px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm text-white font-medium p-2 pr-0  gap-2  shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
+                " flex  items-center  rounded-[4px]  border-[1px] border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm text-white font-medium p-2 pr-0  gap-2  shadow-sm",
               )}
             >
               <MessageCirclePlus className="max-w-5 max-h-5 " />

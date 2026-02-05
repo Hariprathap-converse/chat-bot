@@ -119,7 +119,7 @@ export default function DynamicHome() {
 
         <div className="flex flex-col px-4 gap-[23px] w-full items-center ">
           <div className="flex relative w-full h-auto p-0">
-            <div className="p-px rounded-[14px] w-full shadow-[0px_10px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] dark:from-[hsla(245,100%,97%,0.1)] dark:to-[hsla(245,100%,94%,0.1)]">
+            <div className="p-px rounded-[14px] w-full shadow-lg bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] dark:from-[hsla(245,100%,97%,0.1)] dark:to-[hsla(245,100%,94%,0.1)]">
               <Input
                 value={mainInput}
                 onChange={(e) => setMainInput(e.target.value)}
@@ -150,7 +150,7 @@ export default function DynamicHome() {
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="w-full  shadow-[0px_0px_8px_0px_hsla(0,0%,0%,0.06)] relative z-0 bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
+              className="w-full  shadow-md relative z-0 bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
             >
               <div className="flex gap-3 items-center">
                 <span>{getIcon(section.icon)}</span>
@@ -167,7 +167,7 @@ export default function DynamicHome() {
                     onClick={() => setSelectedSection(item.key)}
                     className={cn(
                       selectedSection == item.key ? "border-hover-border" : "",
-                      "group bg-white dark:bg-card cursor-pointer w-[150px] md:w-[170px]  shadow-[2px_1px_10px_0px_hsla(0,0%,0%,0.09)] hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]",
+                      "group bg-white dark:bg-card cursor-pointer w-[150px] md:w-[170px]  shadow-card hover:border-hover-border rounded-2xl flex flex-col gap-2 items-center justify-center relative h-[150px]",
                     )}
                   >
                     <div className="max-h-[40px] h-full w-full max-w-[40px] absolute top-[39%] left-[46%] bg-circle rounded-full"></div>
@@ -204,7 +204,7 @@ export default function DynamicHome() {
           ))}
 
           {selectedSection === null ? (
-            <div className="w-full shadow-[0px_0px_4px_0px_hsla(0,0%,0%,0.06)] bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
+            <div className="w-full shadow-sm bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
               <div className="flex gap-3 items-center">
                 <span className="text-heading text-base font-medium tracking-normal">
                   Quick Operations
@@ -215,7 +215,7 @@ export default function DynamicHome() {
                 {data.footerSection[0].items.slice(0, 6).map((item, index) => (
                   <div
                     key={index}
-                    className="shadow-[0px_0px_4px_1px_hsla(0,0%,0%,0.07)] group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
+                    className="shadow-operation group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
                     onClick={() => {
                       if (item.label === "Summarize") {
                         setOperationModal({ isOpen: true, type: "summarize" });

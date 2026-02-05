@@ -439,7 +439,7 @@ export function DataGrid({ config }: DataGridProps) {
       <div className="w-full max-h-full flex flex-col overflow-hidden">
         {/* Header - Attached to Table */}
 
-        <div className="flex items-center justify-between gap-4 py-4 px-0 bg-transparent dark:bg-zinc-900/50 backdrop-blur-md border-none rounded-b-[10px] shadow-none">
+        <div className="flex items-center justify-between gap-4 py-4 px-0 bg-transparent dark:bg-transparent backdrop-blur-md border-none rounded-b-[10px] shadow-none">
           <div className="flex items-center justify-between w-full gap-2">
             <div className="relative group ">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />

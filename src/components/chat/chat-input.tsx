@@ -27,7 +27,7 @@ export function ChatInput({
 
   return (
     <div className="flex relative p-0  w-full overflow-hidden">
-      <div className="p-px rounded-[14px] w-full min-w-0 flex items-center shadow-[0px_2px_10px_0px_hsla(0,0%,0%,0.06)] bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] dark:from-[hsla(245,100%,97%,0.1)] dark:to-[hsla(245,100%,94%,0.1)]">
+      <div className="p-px rounded-[14px] w-full min-w-0 flex items-center shadow-sm bg-linear-to-b from-[hsla(245,100%,97%,1)] to-[hsla(245,100%,94%,1)] dark:from-[hsla(245,100%,97%,0.1)] dark:to-[hsla(245,100%,94%,0.1)]">
         <Textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}

@@ -295,7 +295,7 @@ export function ChatMessage({
           <div className="w-5 h-5 relative top-[9px] right-px rounded-full flex items-center justify-center">
             <NavChatBot />
           </div>
-          <div className="relative w-full max-w-fit font-medium bg-bot text-bot-foreground relative z-10 ring-1 ring-accent !rounded-[8px] !rounded-tl-none px-4 py-2 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)]">
+          <div className="relative w-full max-w-fit font-medium bg-bot text-bot-foreground relative z-10 ring-1 ring-accent !rounded-[8px] !rounded-tl-none px-4 py-2 shadow-bot">
             <div className="prose prose-sm dark:prose-invert max-w-none">
               {/* <ReactMarkdown
                 components={{
@@ -388,7 +388,7 @@ export function ChatMessage({
             {/* Bot message tail */}
             <div>
               <span className="absolute -left-[6px] -top-[7px] !z-50 -translate-x-full w-[2px] h-[14px] bg-accent rotate-[88deg]"></span>
-              <span className="absolute -left-px -top-[1px] -translate-x-full w-[12px] h-[14px] z-50 shadow-[0_0_4px_0_hsla(245,96%,70%,0.12)] bg-bot [clip-path:polygon(100%_0,0_0,0_100%)] rotate-90"></span>
+              <span className="absolute -left-px -top-[1px] -translate-x-full w-[12px] h-[14px] z-50 shadow-bot bg-bot [clip-path:polygon(100%_0,0_0,0_100%)] rotate-90"></span>
               <span className="absolute -left-[6px] -top-[2px] z-50 -translate-x-full w-[1px] h-[18px] bg-accent rotate-[130deg]"></span>
             </div>
           </div>
