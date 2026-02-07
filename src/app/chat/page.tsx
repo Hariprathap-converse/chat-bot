@@ -15,6 +15,7 @@ import {
 } from "@/components/chat/chat-modals";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { BotTypingLoader } from "@/components/chat/dot-loader";
+import ModelSelection from "@/components/chat/model-selection";
 
 export default function ChatPage() {
   const { data } = useOpsBot();
@@ -64,6 +65,10 @@ export default function ChatPage() {
   return (
     <div className="bg-background relative min-h-screen w-full pb-0 pr-1 flex flex-col item-center justify-center">
       {/* Header - Profile */}
+      <div className="absolute right-20 top-3">
+        <ModelSelection />
+      </div>
+
       <div className="absolute right-3 top-1.5">
         <Profile />
       </div>

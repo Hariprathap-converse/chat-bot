@@ -54,7 +54,7 @@ export default function ForgotPassword() {
     <div className="min-h-screen grid bg-white items-center grid-cols-1 lg:grid-cols-2 w-full">
       <div className="hidden lg:block h-full w-full pl-2">
         <img
-          src="/backgroundImage.png"
+          src="/backgroundImage.png" 
           alt="Image"
           className="object-fit w-full h-[940px]"
         />

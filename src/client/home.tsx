@@ -94,6 +94,7 @@ export default function DynamicHome() {
   const router = useRouter();
   return (
     <div className="relative bg-background w-full max-h-screen  p-4 md:p-[71px]  pb-0 md:pb-5 flex item-center justify-center">
+      
       <div className="absolute right-3 top-1.5 z-10">
         <Profile />
       </div>

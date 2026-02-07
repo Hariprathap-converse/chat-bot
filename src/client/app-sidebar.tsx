@@ -11,7 +11,6 @@ import {
   TableOfContents,
 } from "lucide-react";
 
-
 import {
   Sidebar,
   SidebarContent,
@@ -36,25 +35,6 @@ import { SettingsPopup } from "./settings-popup";
 
 const Navdata = {
   navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: BiCategory,
-      items: [
-        {
-          title: "Dashboard 1",
-          url: "#",
-        },
-        {
-          title: "Dashboard 2",
-          url: "#",
-        },
-        {
-          title: "Dashboard 3",
-          url: "#",
-        },
-      ],
-    },
     {
       title: "Documentation",
       url: "#",
@@ -198,6 +178,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           )}
         >
           <div>
+            <div
+              onClick={() => router.push("/")}
+              className={cn(
+                open ? "ml-1" : "ml-2 max-w-[40px]",
+                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
+              )}
+            >
+              <BiCategory className={cn("w-5 h-5 pl-px")} />
+              <span
+                className={cn(
+                  " transition-all duration-300 whitespace-nowrap overflow-hidden",
+                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                )}
+              >
+                Dashboard
+              </span>
+            </div>
             <NavMain items={Navdata.navMain} />
             <div
               onClick={() => router.push("/data-grid")}
@@ -260,7 +257,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
             <div
               onClick={async () => {
-
                 setLoading(true);
                 const Cookies = (await import("js-cookie")).default;
                 // localStorage.removeItem("token");
