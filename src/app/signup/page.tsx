@@ -13,6 +13,8 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { FormInput } from "@/components/ui/form-input";
 
+import { AuthCarousel } from "@/components/auth/auth-carousel";
+
 const signupSchema = z.object({
   first_name: z.string().min(1, { message: "First name is required" }),
   last_name: z.string().min(1, { message: "Last name is required" }),
@@ -59,13 +61,9 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen grid bg-white items-center grid-cols-1 lg:grid-cols-2 w-full">
-      <div className="hidden lg:block h-full w-full pl-2">
-        <img
-          src="/backgroundImage.png"
-          alt="Image"
-          className="object-fit w-full h-[940px] "
-        />
+    <div className="min-h-screen grid bg-background items-center grid-cols-1 lg:grid-cols-[1.2fr_1fr] w-full">
+      <div className="hidden lg:block h-full w-full p-0">
+        <AuthCarousel />
       </div>
       <div className="w-full h-full flex items-center justify-center p-4">
         <Card className="w-full max-w-[590px] h-auto py-10 backdrop-blur-[40px] bg-white rounded-[55px] border-0 shadow-none ring-3 px-6 sm:px-10 ring-white">

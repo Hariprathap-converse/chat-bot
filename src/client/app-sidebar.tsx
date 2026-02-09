@@ -34,54 +34,54 @@ import Link from "next/link";
 import { SettingsPopup } from "./settings-popup";
 
 const Navdata = {
-  navMain: [
-    {
-      title: "Documentation",
-      url: "#",
-      icon: LuMessageCircleMore,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: BsStars,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
+  // navMain: [
+  //   {
+  //     title: "Documentation",
+  //     url: "#",
+  //     icon: LuMessageCircleMore,
+  //     items: [
+  //       {
+  //         title: "Introduction",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Get Started",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Tutorials",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Changelog",
+  //         url: "#",
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     title: "Settings",
+  //     url: "#",
+  //     icon: BsStars,
+  //     items: [
+  //       {
+  //         title: "General",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Team",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Billing",
+  //         url: "#",
+  //       },
+  //       {
+  //         title: "Limits",
+  //         url: "#",
+  //       },
+  //     ],
+  //   },
+  // ],
   projects: [
     {
       name: "Design Engineering",
@@ -177,41 +177,43 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             "flex h-full flex-col overflow-hidden w-full justify-between pb-4 ",
           )}
         >
-          <div>
-            <div
-              onClick={() => router.push("/")}
-              className={cn(
-                open ? "ml-1" : "ml-2 max-w-[40px]",
-                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
-              )}
-            >
-              <BiCategory className={cn("w-5 h-5 pl-px")} />
-              <span
+          <div className="flex flex-col gap-1">
+            <div>
+              <div
+                onClick={() => router.push("/")}
                 className={cn(
-                  " transition-all duration-300 whitespace-nowrap overflow-hidden",
-                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                  open ? "ml-px" : "ml-2 max-w-[40px]",
+                  " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-transparent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
                 )}
               >
-                Dashboard
-              </span>
-            </div>
-            <NavMain items={Navdata.navMain} />
-            <div
-              onClick={() => router.push("/data-grid")}
-              className={cn(
-                open ? "ml-1" : "ml-2 max-w-[40px]",
-                " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-sidebar-accent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
-              )}
-            >
-              <TableOfContents className={cn("max-w-5 max-h-5 pl-px")} />
-              <span
+                <BiCategory className={cn("w-5 h-5 pl-px")} />
+                <span
+                  className={cn(
+                    " transition-all duration-300 whitespace-nowrap overflow-hidden",
+                    open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                  )}
+                >
+                  Dashboard
+                </span>
+              </div>
+              {/* <NavMain items={Navdata.navMain} /> */}
+              <div
+                onClick={() => router.push("/data-grid")}
                 className={cn(
-                  " transition-all duration-300 whitespace-nowrap overflow-hidden",
-                  open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                  open ? "ml-px" : "ml-2 max-w-[40px]",
+                  " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-transparent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
                 )}
               >
-                Data Grid
-              </span>
+                <TableOfContents className={cn("max-w-5 max-h-5 pl-px")} />
+                <span
+                  className={cn(
+                    " transition-all duration-300 whitespace-nowrap overflow-hidden",
+                    open ? "opacity-100 max-w-xs " : "opacity-0 max-w-0 ",
+                  )}
+                >
+                  Data Grid
+                </span>
+              </div>
             </div>
             <NavProjects projects={Navdata.projects} />
             <NavHistory />

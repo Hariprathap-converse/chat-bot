@@ -15,6 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 
+import { AuthCarousel } from "@/components/auth/auth-carousel";
+
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z.string().min(1, { message: "Password is required" }),
@@ -63,15 +65,11 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen grid bg-white items-center grid-cols-1 lg:grid-cols-2 w-full ">
-      <div className="hidden lg:block h-full w-full pl-2">
-        <img
-          src="/backgroundImage.png"
-          alt="Image"
-          className="object-cover w-full h-[940px] "
-        />
+    <div className="min-h-screen grid bg-white items-center grid-cols-1 lg:grid-cols-[1.3fr_1fr] w-full ">
+      <div className="hidden lg:block relative z-10 h-full w-full p-6 pr-0 pl-5">
+        <AuthCarousel />
       </div>
-      <div className="w-full h-full flex items-center justify-center p-4">
+      <div className="w-full h-full flex relative z-50 items-center justify-center p-0">
         <Card className="w-full max-w-[590px] h-auto py-10 backdrop-blur-[40px] bg-white rounded-[55px] border-0 shadow-none ring-3 px-6 sm:px-10 ring-white">
           <CardHeader>
             <div className="flex flex-col items-center justify-center gap-5">
@@ -262,7 +260,9 @@ export default function Login() {
                   </Label>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Link href={"/forgot-password"}>
+                  <Link
+                    href={`/forgot-password?email=${encodeURIComponent(watch("email") || "")}`}
+                  >
                     <Label className="text-dark-circle hover:scale-[101%] cursor-pointer ">
                       Forgot password ?
                     </Label>

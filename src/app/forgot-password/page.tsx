@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -20,6 +21,8 @@ const forgotPasswordSchema = z.object({
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPassword() {
+  const params = useSearchParams();
+  const email: string | null | undefined = params.get("email");
   const { setOpen } = useSidebar();
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
@@ -30,6 +33,9 @@ export default function ForgotPassword() {
     formState: { errors },
   } = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: email ?? undefined,
+    },
   });
 
   useEffect(() => {
@@ -54,7 +60,7 @@ export default function ForgotPassword() {
     <div className="min-h-screen grid bg-white items-center grid-cols-1 lg:grid-cols-2 w-full">
       <div className="hidden lg:block h-full w-full pl-2">
         <img
-          src="/backgroundImage.png" 
+          src="/backgroundImage.png"
           alt="Image"
           className="object-fit w-full h-[940px]"
         />
@@ -129,12 +135,12 @@ export default function ForgotPassword() {
                 onClick={handleSubmit(onSubmit)}
                 disabled={loading}
                 className={cn(
-                  "w-full mt-5 capitalize text-base font-semibold h-[45px] hover:scale-[101%] bg-sidebar-accent active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center rounded-[10px]! border border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer text-white shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
+                  "w-full mt-3 mb-2 capitalize text-base font-semibold h-[45px] hover:scale-[101%] bg-sidebar-accent active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center rounded-[10px]! border border-[hsla(245,96%,70%,1)] bg-[linear-gradient(91.96deg,rgba(116,104,252,0.7)_-16.64%,rgba(116,104,252,0.8)_117.28%)] hover:text-white hover:bg-sidebar-accent cursor-pointer text-white shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
                 )}
               >
                 {loading ? "Sending..." : "Send Reset Link"}
               </Button>
-              <div className="text-sm text-sub-heading font-medium mt-4 flex gap-1">
+              <div className="text-sm text-sub-heading font-medium mt-0 flex gap-1">
                 Remember your password?
                 <Link
                   href={"/login"}
