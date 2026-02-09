@@ -6,7 +6,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { NavChatBot } from "@/Icons/global/home";
-import { History, LogOut, MessageCircleMore, User, Moon, Sun } from "lucide-react";
+import {
+  History,
+  LogOut,
+  MessageCircleMore,
+  User,
+  Moon,
+  Sun,
+} from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 
@@ -56,7 +63,11 @@ const Profile = () => {
         </div>
       </PopoverTrigger>
 
-      <PopoverContent className="w-60  p-0 z-[999]" align="end">
+      <PopoverContent
+        autoFocus={false}
+        className="w-60  p-0 z-[999]"
+        align="end"
+      >
         <div className="flex items-center gap-3 p-2 rounded-t-md">
           <div className="flex items-center p-2 gap-3 w-full rounded-[4px]">
             <Avatar className="h-10 w-10 drop-shadow p-[1px] bg-muted rounded-full">
@@ -102,7 +113,7 @@ const Profile = () => {
             </Link>
           </li>
 
-          <li className="cursor-pointer border-dashed border-gray-200 px-2  last:border-t last:pt-2">
+          {/* <li className="cursor-pointer border-dashed border-gray-200 px-2  last:border-t last:pt-2">
             <Link
               className="group flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground   font-medium"
               href="/history"
@@ -112,12 +123,13 @@ const Profile = () => {
               </span>
               History
             </Link>
-          </li>
+          </li> */}
 
-          <li className="cursor-pointer border-dashed border-gray-200 px-2  last:border-t last:pt-2">
+          <li className="cursor-pointer border-dashed border-gray-200 px-2 pb-2 last:border-t last:pt-2">
             <button
+              autoFocus={false}
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-full group flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground font-medium"
+              className="w-full group focus-visible:ring-0 focus-visible:ring-transparent outline-0 focus:ring-0  flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground font-medium"
             >
               <span className="text-foreground font-medium group-hover:text-accent-foreground">
                 {theme === "dark" ? (
@@ -130,7 +142,7 @@ const Profile = () => {
             </button>
           </li>
 
-          <li className="cursor-pointer border-dashed border-gray-200 px-2  last:border-t last:pt-2">
+          <li className="cursor-pointer border-dashed  px-2  last:border-t last:pt-2 ">
             <button
               onClick={async () => {
                 const Cookies = (await import("js-cookie")).default;
@@ -140,7 +152,7 @@ const Profile = () => {
                 Cookies.remove("refresh_token");
                 window.location.href = "/login";
               }}
-              className="w-full group flex items-center gap-2 rounded-md py-2 px-3 text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground  font-medium "
+              className="w-full group cursor-pointer flex items-center gap-2 rounded-md py-2 px-3 pl-[14px] text-sm capitalize transition duration-200 hover:text-accent-foreground text-foreground  font-medium "
             >
               <span className="text-foreground  group-hover:text-accent-foreground font-medium">
                 <LogOut className="h-5 w-5 text-foreground  group-hover:text-accent-foreground" />

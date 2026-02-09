@@ -33,7 +33,7 @@ export function ChatInput({
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           className={cn(
-            "p-0 min-h-14 max-h-[400px] rounded-[14px] resize-none border-0 bg-white dark:bg-input px-[21px] pr-[72px] flex items-center outline-none overflow-auto",
+            "p-0 min-h-14 max-h-[400px] rounded-[14px] resize-none border-0 bg-white dark:bg-chat-input  px-[21px] pr-[72px] flex items-center outline-none overflow-auto",
             value.length > 0 ? "py-4" : "pt-4",
             "placeholder:font-normal placeholder:text-base placeholder:text-foreground dark:placeholder:text-placeholder",
             "leading-[150%] tracking-normal font-normal !text-base text-heading dark:text-foreground",

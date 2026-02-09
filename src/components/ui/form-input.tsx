@@ -21,7 +21,7 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
           <Input
             ref={ref}
             className={cn(
-              "p-0 h-[45px] rounded-[12px]! border-0 bg-white px-[21px] flex items-center placeholder:font-normal placeholder:text-sm placeholder:text-foreground leading-[150%] tracking-normal font-normal text-sm! text-heading outline-none focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground focus:ring-offset-0 focus-visible:ring-offset-0 focus:placeholder:text-sub-title shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]!",
+              "p-0 h-[45px] rounded-[8px]! border-0 bg-white px-[21px] flex items-center placeholder:font-normal placeholder:text-sm placeholder:text-foreground leading-[150%] tracking-normal font-normal text-sm! text-heading outline-none focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground focus:ring-offset-0 focus-visible:ring-offset-0 focus:placeholder:text-sub-title shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]!",
               icon ? "pl-11" : "",
               error ? "ring-1 ring-red-500 focus-visible:ring-red-500" : "",
               className,

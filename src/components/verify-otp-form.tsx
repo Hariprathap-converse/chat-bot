@@ -92,7 +92,7 @@ export default function VerifyOtpForm() {
                                 <div className="grid gap-2 w-full relative">
                                     <Input
                                         {...register("otp")}
-                                        className="p-0 h-[45px] rounded-[12px]! border-0 bg-white px-[21px] flex items-center
+                                        className="p-0 h-[45px] rounded-[8px]! border-0 bg-white px-[21px] flex items-center
                 placeholder:font-normal placeholder:text-sm placeholder:text-foreground
                 leading-[150%] tracking-normal font-normal text-sm! text-heading outline-none
                 focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground focus:ring-offset-0 focus-visible:ring-offset-0 focus:placeholder:text-sub-title

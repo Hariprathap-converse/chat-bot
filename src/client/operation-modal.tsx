@@ -98,7 +98,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
             />
 
             {/* Modal Content */}
-            <div className="relative z-10 w-full max-w-lg bg-background rounded-xl shadow-2xl border border-border p-3  animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative z-10 w-full max-w-lg bg-card rounded-xl shadow-2xl border border-border p-3  animate-in fade-in zoom-in-95 duration-200">
                 <button
                     onClick={() => { setInputText(''); onClose() }}
                     className="absolute cursor-pointer right-4 top-4 text-muted-foreground hover:text-foreground transition-colors"
@@ -124,7 +124,7 @@ export function OperationModal({ isOpen, onClose, type }: OperationModalProps) {
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
                                 placeholder={getPlaceholder()}
-                                className="min-h-[150px] max-h-[400px] resize-none focus-visible:ring-0 placeholder:text-muted-foreground/50"
+                                className="min-h-[150px] max-h-[400px] dark:bg-background! resize-none focus-visible:ring-0 placeholder:text-muted-foreground/50"
                             />
                         )}
 

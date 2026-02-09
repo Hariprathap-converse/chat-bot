@@ -94,7 +94,6 @@ export default function DynamicHome() {
   const router = useRouter();
   return (
     <div className="relative bg-background w-full max-h-screen  p-4 md:p-[71px]  pb-0 md:pb-5 flex item-center justify-center">
-      
       <div className="absolute right-3 top-1.5 z-10">
         <Profile />
       </div>
@@ -151,7 +150,7 @@ export default function DynamicHome() {
           {data.sections.map((section, idx) => (
             <div
               key={idx}
-              className="w-full  shadow-md relative z-0 bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
+              className="w-full  shadow-md relative z-0 bg-white dark:bg-home-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[25px] pt-3"
             >
               <div className="flex gap-3 items-center">
                 <span>{getIcon(section.icon)}</span>
@@ -186,13 +185,13 @@ export default function DynamicHome() {
                     <span
                       className={cn(
                         selectedSection == item.key &&
-                        "scale-[130%] origin-bottom ",
+                          "scale-[130%] origin-bottom ",
                         "relative bottom-2 group-hover:scale-[130%] origin-bottom transition-all duration-800 h-[50px] z-50",
                       )}
                     >
                       {getIcon(
                         item.icon,
-                        "h-[55px] w-[55px] text-heading group-hover:text-foreground stroke-[0.7px] group-hover:stroke-[1px]",
+                        "h-[55px] w-[55px] text-heading  group-hover:text-foreground stroke-[0.7px] group-hover:stroke-[1px]",
                       )}
                     </span>
                     <span className="text-foreground absolute bottom-[18%] group-hover:pt-2 transition-all duration-300 z-50 text-[12px]! font-medium text-start">
@@ -205,7 +204,7 @@ export default function DynamicHome() {
           ))}
 
           {selectedSection === null ? (
-            <div className="w-full shadow-sm bg-white dark:bg-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
+            <div className="w-full shadow-sm bg-white dark:bg-home-card rounded-2xl flex flex-col gap-[18px] p-[22px] pb-[23px] pt-3">
               <div className="flex gap-3 items-center">
                 <span className="text-heading text-base font-medium tracking-normal">
                   Quick Operations
@@ -216,7 +215,7 @@ export default function DynamicHome() {
                 {data.footerSection[0].items.slice(0, 6).map((item, index) => (
                   <div
                     key={index}
-                    className="shadow-operation group rounded-[7px] hover:border-hover-border hover:bg-background cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
+                    className="shadow-operation group rounded-[7px] hover:border-hover-border hover:bg-black! dark:bg-sub-card cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
                     onClick={() => {
                       if (item.label === "Summarize") {
                         setOperationModal({ isOpen: true, type: "summarize" });
@@ -256,13 +255,25 @@ export default function DynamicHome() {
                         key={index}
                         onClick={() => {
                           if (item.label === "Summarize") {
-                            setOperationModal({ isOpen: true, type: "summarize" });
+                            setOperationModal({
+                              isOpen: true,
+                              type: "summarize",
+                            });
                           } else if (item.label === "Document Extract") {
-                            setOperationModal({ isOpen: true, type: "extract" });
+                            setOperationModal({
+                              isOpen: true,
+                              type: "extract",
+                            });
                           } else if (item.label === "Classify") {
-                            setOperationModal({ isOpen: true, type: "classify" });
+                            setOperationModal({
+                              isOpen: true,
+                              type: "classify",
+                            });
                           } else if (item.label === "Analyze Sentiment") {
-                            setOperationModal({ isOpen: true, type: "sentiment" });
+                            setOperationModal({
+                              isOpen: true,
+                              type: "sentiment",
+                            });
                           } else {
                             localStorage.setItem("pendingDraft", item.label);
                             router.push(`/chat`);
@@ -289,7 +300,9 @@ export default function DynamicHome() {
       </main>
       <OperationModal
         isOpen={operationModal.isOpen}
-        onClose={() => setOperationModal(prev => ({ ...prev, isOpen: false }))}
+        onClose={() =>
+          setOperationModal((prev) => ({ ...prev, isOpen: false }))
+        }
         type={operationModal.type}
       />
     </div>

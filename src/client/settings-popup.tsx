@@ -128,7 +128,7 @@ export function SettingsPopup({ open, onOpenChange }: SettingsPopupProps) {
           <div className="flex-1 overflow-y-auto p-6 bg-white dark:bg-zinc-950">
             <TabsContent
               value="personal-details"
-              className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-6 pt-4 pr-3 shadow-none"
+              className="mt-0 h-full min-h-[370px] border border-gray-100 dark:border-border rounded-[6px] p-6 pt-4 pr-3 shadow-none"
             >
               <PersonalDetailsTab />
             </TabsContent>
@@ -137,7 +137,7 @@ export function SettingsPopup({ open, onOpenChange }: SettingsPopupProps) {
                         </TabsContent> */}
             <TabsContent
               value="theme"
-              className="mt-0 h-full min-h-[370px] border border-gray-100 rounded-[6px] p-8 py-5 shadow-none"
+              className="mt-0 h-full min-h-[370px] border border-gray-100 dark:border-border rounded-[6px] p-8 py-5 shadow-none"
             >
               <ThemeTab />
             </TabsContent>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,17 +25,20 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function Login() {
   const { setOpen } = useSidebar();
   const router = useRouter();
-  const [loading, setLoading] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [hasTyped, setHasTyped] = useState(false);
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
-
+  const passwordValue = watch("password");
+  const passwordField = register("password");
   useEffect(() => {
     setOpen(false);
   }, []);
@@ -65,7 +68,7 @@ export default function Login() {
         <img
           src="/backgroundImage.png"
           alt="Image"
-          className="object-fit w-full h-[940px] "
+          className="object-cover w-full h-[940px] "
         />
       </div>
       <div className="w-full h-full flex items-center justify-center p-4">
@@ -119,7 +122,7 @@ export default function Login() {
                   </span>
                   <Input
                     {...register("email")}
-                    className=" p-0 h-[45px] !rounded-[12px] border-0 bg-white px-[21px] flex pl-11 items-center
+                    className=" p-0 h-[45px] !rounded-[8px] border-0 bg-white px-[21px] flex pl-11 items-center
                 placeholder:font-normal placeholder:text-sm placeholder:text-foreground
                 leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none
                 focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground focus:ring-offset-0    focus-visible:ring-offset-0  focus:placeholder:text-sub-title
@@ -171,20 +174,34 @@ export default function Login() {
                     </svg>
                   </span>
                   <Input
-                    {...register("password")}
+                    {...passwordField}
                     type={showPassword ? "text" : "password"}
-                    className=" p-0 h-[45px] !rounded-[12px] border-0 bg-white px-[21px] flex pl-11 items-center
-                placeholder:font-normal placeholder:text-sm placeholder:text-foreground
-                leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none
-                focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground  focus-visible:ring-offset-0  focus:placeholder:text-sub-title
-                  !shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]"
+                    onChange={(e) => {
+                      passwordField.onChange(e);
+                      if (e.target.value.length > 0) {
+                        setHasTyped(true);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      passwordField.onBlur(e);
+                      if (!passwordValue) {
+                        setHasTyped(false);
+                      }
+                    }}
+                    className={cn(
+                      " p-0 h-[45px] !rounded-[8px] border-0 bg-white px-[21px] flex pl-11 items-center placeholder:font-normal placeholder:text-sm placeholder:text-foreground leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground  focus-visible:ring-offset-0  focus:placeholder:text-sub-title !shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]",
+                    )}
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-[30%] cursor-pointer text-gray-500 opacity-0 
-group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity"
+                    className={cn(
+                      "absolute right-4 top-[30%] cursor-pointer text-gray-500  transition-opacity",
+                      hasTyped || passwordValue
+                        ? "opacity-100"
+                        : "opacity-0 pointer-events-none",
+                    )}
                   >
                     {showPassword ? (
                       // Eye-off icon
