@@ -5,6 +5,7 @@ export interface Conversation {
     id: string;
     title: string;
     date: string;
+    isBookmarked?: boolean;
 }
 
 export const initialConversations: Conversation[] = [

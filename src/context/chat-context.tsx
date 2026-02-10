@@ -19,6 +19,7 @@ interface ChatContextType {
     selectConversation: (id: string) => void;
     updateConversationTitle: (id: string, title: string) => void;
     deleteConversation: (id: string) => void;
+    toggleBookmark: (id: string) => void;
     addMessageToConversation: (
         conversationId: string,
         message: Message
@@ -244,6 +245,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const toggleBookmark = (id: string) => {
+        setConversations((prev) =>
+            prev.map((c) => (c.id === id ? { ...c, isBookmarked: !c.isBookmarked } : c))
+        );
+    };
+
     return (
         <ChatContext.Provider
             value={{
@@ -259,6 +266,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
                 updateMessage,
                 ensureActiveConversation,
                 deleteConversation,
+                toggleBookmark,
                 pendingFile,
                 setPendingFile,
             }}

@@ -1035,24 +1035,24 @@ export const Teams = ({ color = "#42526E" }) => (
   </svg>
 );
 
-export const NavTrigger = ({ color = "#42526E" }) => (
+export const NavTrigger = ({ color = "#B5AAFD" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="21"
     height="17"
     viewBox="0 0 21 17"
-    style={{ width: 24, height: 17 }}
+    style={{ width: 24, height: 18 }}
     fill="none"
   >
     <path
-      className=" group-hover/header:stroke-primary"
+      className=" group-hover/header:stroke-[#B5AAFD]"
       d="M2.0498 3.04101C2.0498 2.76492 2.19068 2.50013 2.44143 2.30491C2.69218 2.10968 3.03227 2 3.38689 2H16.7577C17.1123 2 17.4524 2.10968 17.7032 2.30491C17.9539 2.50013 18.0948 2.76492 18.0948 3.04101V13.4511C18.0948 13.7272 17.9539 13.992 17.7032 14.1872C17.4524 14.3825 17.1123 14.4921 16.7577 14.4921H3.38689C3.03227 14.4921 2.69218 14.3825 2.44143 14.1872C2.19068 13.992 2.0498 13.7272 2.0498 13.4511V3.04101Z"
       stroke={color}
       strokeWidth="1.5"
       strokeLinejoin="round"
     />
     <path
-      className=" group-hover/header:stroke-primary"
+      className=" group-hover/header:stroke-[#B5AAFD]"
       d="M13.6379 2V14.4921M6.50684 6.85806L8.28961 8.24607L6.50684 9.63409M10.9638 2H16.3121M10.9638 14.4921H16.3121"
       stroke={color}
       strokeWidth="1.5"

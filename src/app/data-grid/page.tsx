@@ -20,12 +20,6 @@ export default function DataGridPage() {
       <div className="absolute right-3 top-1.5 z-50">
         <Profile />
       </div>
-      <div className="absolute left-5 top-4 z-50">
-        <SidebarTrigger
-          onClick={() => setOpen(true)}
-          className="cursor-pointer"
-        ></SidebarTrigger>
-      </div>
 
       {/* Sidebar */}
       <div className="absolute left-5 rounded-2xl top-5 z-50">

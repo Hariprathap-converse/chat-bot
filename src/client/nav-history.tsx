@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/sidebar";
 import React, { useState, useRef, useEffect } from "react";
 import { Conversation, useChat } from "@/context/chat-context";
-import { ChevronRight, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  Bookmark,
+  ChevronRight,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -25,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function NavHistory() {
   const {
@@ -33,9 +40,10 @@ export function NavHistory() {
     activeConversationId,
     deleteConversation,
     updateConversationTitle,
+    toggleBookmark,
   } = useChat();
   const [isOpen, setIsOpen] = useState(true);
-  const { isMobile } = useSidebar();
+  const { isMobile, setOpen } = useSidebar();
 
   // Renaming state
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -53,6 +61,11 @@ export function NavHistory() {
   }, [editingId]);
 
   if (conversations.length === 0) return null;
+
+  const handleChatSelect = (id: string) => {
+    selectConversation(id);
+    setOpen(false);
+  };
 
   const startRename = (id: string, currentTitle: string) => {
     setEditingId(id);
@@ -103,17 +116,17 @@ export function NavHistory() {
           >
             <CollapsibleTrigger>
               Chats
-              <ChevronRight className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:rotate-270 rotate-90" />
+              <ChevronRight className="ml-auto transition-transform duration-300 group-data-[state=open]/collapsible:-rotate-90 rotate-90" />
             </CollapsibleTrigger>
           </SidebarGroupLabel>
           <CollapsibleContent className="max-h-[310px] overflow-y-auto pr-1">
-            <SidebarMenu className="gap-[4px] hover:bg-transparent cursor-pointer">
+            <SidebarMenu className="gap-[4px] pl-2 hover:bg-transparent cursor-pointer">
               {conversations.map((item) => (
                 <SidebarMenuItem key={item.id}>
                   <SidebarMenuButton
-                    onClick={() => selectConversation(item.id)}
+                    onClick={() => handleChatSelect(item.id)}
                     isActive={activeConversationId === item.id}
-                    className="w-full rounded-[4px] hover:bg-transparent  hover:font-medium cursor-pointer "
+                    className="w-full rounded-[4px] hover:bg-transparent   hover:font-medium cursor-pointer data-[active=true]:bg-transparent "
                   >
                     {editingId === item.id ? (
                       <input
@@ -147,7 +160,7 @@ export function NavHistory() {
                         align={isMobile ? "end" : "start"}
                       >
                         <DropdownMenuItem
-                          className="group cursor-pointer "
+                          className="group cursor-pointer gap-0"
                           onClick={() => startRename(item.id, item.title)}
                         >
                           <Pencil className="text-foreground mr-2 h-4 w-4 group-hover:text-accent-foreground" />
@@ -156,7 +169,23 @@ export function NavHistory() {
                           </span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="group cursor-pointer"
+                          className="group cursor-pointer gap-0"
+                          onClick={() => toggleBookmark(item.id)}
+                        >
+                          <Bookmark
+                            className={cn(
+                              item.isBookmarked
+                                ? "fill-primary stroke-primary"
+                                : "text-foreground ",
+                              "mr-2 h-4 w-4 group-hover:text-accent-foreground",
+                            )}
+                          />
+                          <span className="text-foreground group-hover:text-accent-foreground">
+                            {item.isBookmarked ? "Unbookmark" : "Bookmark"}
+                          </span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="group cursor-pointer gap-0"
                           onClick={() => handleDeleteClick(item.id)}
                         >
                           <Trash2 className="text-foreground mr-2 h-4 w-4 group-hover:text-accent-foreground" />

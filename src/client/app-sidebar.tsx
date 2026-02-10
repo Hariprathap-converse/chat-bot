@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Loader2,
   LogOut,
@@ -18,10 +18,10 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { NavMain } from "./nav-main";
 import { NavChatBot } from "@/Icons/global/home";
 import { NavProjects } from "@/client/nav-projects";
 import { NavHistory } from "@/client/nav-history";
+import { NavBookmarks } from "@/client/nav-bookmarks";
 import { useChat } from "@/context/chat-context";
 
 import { cn } from "@/lib/utils";
@@ -32,6 +32,7 @@ import { MdOutlineWbIncandescent } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { SettingsPopup } from "./settings-popup";
+import { NavTrigger } from "./dynamic-form/icons/dynamic-form/all-dynamic-form-icons";
 
 const Navdata = {
   // navMain: [
@@ -140,6 +141,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { createNewChat } = useChat();
 
+  const [showTrigger, setShowTrigger] = useState(false);
+
+  useEffect(() => {
+    let timer: any;
+
+    if (open) {
+      timer = setTimeout(() => {
+        setShowTrigger(true);
+      }, 0);
+    } else {
+      setShowTrigger(false);
+    }
+
+    return () => clearTimeout(timer);
+  }, [open]);
   return (
     <Sidebar
       collapsible="icon"
@@ -149,14 +165,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader
         className={cn(
           !open
-            ? "flex flex-col-reverse  transition-all !duration-500 "
+            ? "flex flex-col-reverse  transition-all duration-500! "
             : "grid grid-cols-[1fr_auto] w-full transition-all duration-0 pr-5  px-5 ",
           "rounded-2xl pt-5 cursor-pointer items-center gap-4 mb-1  ",
         )}
       >
         <Link
           href={"/"}
-          className="pl-1 flex gap-2 items-center transition-all duration-300"
+          className="pl-1 flex gap-2 items-center transition-all duration-1000"
         >
           <NavChatBot />
           {open && (
@@ -166,7 +182,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           )}
         </Link>
 
-        <SidebarTrigger className="cursor-pointer"></SidebarTrigger>
+        {!open && (
+          <SidebarTrigger
+            className={cn(
+              "transform hover:bg-transparent duration-500 cursor-pointer group/header",
+              open ? "rotate-180" : "rotate-0",
+            )}
+          ></SidebarTrigger>
+        )}
+
+        {open && (
+          <SidebarTrigger
+            className={cn(
+              "transform hover:bg-transparent duration-500  cursor-pointer group/header transition-opacity",
+              open ? "rotate-180" : "rotate-0",
+              showTrigger ? "opacity-100" : "opacity-0",
+            )}
+          />
+        )}
       </SidebarHeader>
       <SidebarContent
         className={cn(open ? "px-3" : "mx-auto !p-0", "rounded-2xl ")}
@@ -180,7 +213,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <div className="flex flex-col gap-1">
             <div>
               <div
-                onClick={() => router.push("/")}
+                onClick={() => {
+                  router.push("/");
+                  setOpen(false);
+                }}
                 className={cn(
                   open ? "ml-px" : "ml-2 max-w-[40px]",
                   " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-transparent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
@@ -198,7 +234,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </div>
               {/* <NavMain items={Navdata.navMain} /> */}
               <div
-                onClick={() => router.push("/data-grid")}
+                onClick={() => {
+                  router.push("/data-grid");
+                  setOpen(false);
+                }}
                 className={cn(
                   open ? "ml-px" : "ml-2 max-w-[40px]",
                   " flex  items-center rounded-[4px] hover:text-sidebar-accent-foreground hover:bg-transparent cursor-pointer w-full justify-start text-sm font-medium p-2 pr-0 gap-2 ",
@@ -215,6 +254,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </span>
               </div>
             </div>
+            <NavBookmarks />
             <NavProjects projects={Navdata.projects} />
             <NavHistory />
           </div>
@@ -223,6 +263,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               onClick={() => {
                 createNewChat();
                 router.push("/chat");
+                setOpen(false);
               }}
               className={cn(
                 open ? "" : "ml-2 max-w-[40px]  ",

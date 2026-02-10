@@ -24,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { NavTrigger } from "@/client/dynamic-form/icons/dynamic-form/all-dynamic-form-icons";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -266,7 +267,8 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <span>
+      <NavTrigger />
+      {/* <span>
         <svg
           width="15"
           height="10"
@@ -278,7 +280,7 @@ function SidebarTrigger({
           <rect y="4" width="15" height="1.5" rx="0.5" fill="#B5AAFD" />
           <rect width="15" height="1.5" rx="0.5" fill="#B5AAFD" />
         </svg>
-      </span>
+      </span> */}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

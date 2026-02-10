@@ -255,3 +255,4 @@ export const NavChatBot = ({ className }: { className?: string }) => (
     </defs>
   </svg>
 );
+

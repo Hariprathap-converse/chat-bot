@@ -27,6 +27,7 @@ import { AppSidebar } from "./app-sidebar";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { OperationModal, OperationType } from "./operation-modal";
+import ModelSelection from "@/components/chat/model-selection";
 
 export const SendIcon = () => (
   <svg
@@ -94,6 +95,9 @@ export default function DynamicHome() {
   const router = useRouter();
   return (
     <div className="relative bg-background w-full max-h-screen  p-4 md:p-[71px]  pb-0 md:pb-5 flex item-center justify-center">
+      <div className="absolute right-20 top-3">
+        <ModelSelection />
+      </div>
       <div className="absolute right-3 top-1.5 z-10">
         <Profile />
       </div>
@@ -140,10 +144,10 @@ export default function DynamicHome() {
                 }
                 router.push("/chat");
               }}
-              className="absolute top-2.5 right-3 cursor-pointer p-2  rounded-2xl font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center"
+              // className="absolute top-2.5 right-3 cursor-pointer p-2  rounded-2xl font-semibold text-white bg-linear-to-r from-[#7468FC] via-[#ED799C] to-[#918FFF] active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 border border-white/30 flex items-center"
+              className="absolute top-2.5 right-3 cursor-pointer p-2   rounded-2xl bg-gradient-to-r from-[#4776E6] to-[#8E54E9]  font-normal text-white   hover:opacity-95 transition-opacity capitalize"
             >
               {getIcon(data.search.buttonIcon)}
-              <span className="absolute inset-0 rounded-2xl pointer-events-none bg-white/20 opacity-40 mix-blend-overlay"></span>
             </button>
           </div>
 

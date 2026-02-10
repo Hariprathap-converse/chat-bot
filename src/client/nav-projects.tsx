@@ -139,7 +139,7 @@ export function NavProjects({
   }[];
 }) {
   const { open, isMobile } = useSidebar();
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   const visibleProjects = collapsed ? projects.slice(0, 3) : projects;
 
@@ -165,7 +165,7 @@ export function NavProjects({
             <ChevronRight
               size={16}
               className={`transition-transform duration-300 group-hover:text-sub-heading ${
-                !collapsed ? "rotate-90" : "rotate-270"
+                !collapsed ? "rotate-90" : "-rotate-90"
               }`}
             />
           </button>

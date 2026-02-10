@@ -65,12 +65,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen grid bg-white items-center grid-cols-1 lg:grid-cols-[1.3fr_1fr] w-full ">
+    <div className="min-h-screen grid bg-white dark:bg-card items-center grid-cols-1 lg:grid-cols-[1.3fr_1fr] w-full ">
       <div className="hidden lg:block relative z-10 h-full w-full p-6 pr-0 pl-5">
         <AuthCarousel />
       </div>
       <div className="w-full h-full flex relative z-50 items-center justify-center p-0">
-        <Card className="w-full max-w-[590px] h-auto py-10 backdrop-blur-[40px] bg-white rounded-[55px] border-0 shadow-none ring-3 px-6 sm:px-10 ring-white">
+        <Card className="w-full max-w-[590px] h-auto py-10 backdrop-blur-[40px] bg-white dark:bg-card rounded-[55px] border-0 shadow-none ring-3 px-6 sm:px-10 ring-white dark:ring-card">
           <CardHeader>
             <div className="flex flex-col items-center justify-center gap-5">
               <span className="pl-1 flex gap-2 items-center justify-center transition-all duration-300">
@@ -120,7 +120,7 @@ export default function Login() {
                   </span>
                   <Input
                     {...register("email")}
-                    className=" p-0 h-[45px] !rounded-[8px] border-0 bg-white px-[21px] flex pl-11 items-center
+                    className=" p-0 h-[45px] !rounded-[8px] border-0 bg-white dark:bg-chat-input px-[21px] flex pl-11 items-center
                 placeholder:font-normal placeholder:text-sm placeholder:text-foreground
                 leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none
                 focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground focus:ring-offset-0    focus-visible:ring-offset-0  focus:placeholder:text-sub-title
@@ -187,7 +187,7 @@ export default function Login() {
                       }
                     }}
                     className={cn(
-                      " p-0 h-[45px] !rounded-[8px] border-0 bg-white px-[21px] flex pl-11 items-center placeholder:font-normal placeholder:text-sm placeholder:text-foreground leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground  focus-visible:ring-offset-0  focus:placeholder:text-sub-title !shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]",
+                      " p-0 h-[45px] !rounded-[8px] border-0 bg-white  dark:bg-chat-input px-[21px] flex pl-11 items-center placeholder:font-normal placeholder:text-sm placeholder:text-foreground leading-[150%] tracking-normal font-normal !text-sm text-heading outline-none focus:ring-1 focus:ring-accent-foreground focus-visible:ring-1 focus-visible:ring-accent-foreground  focus-visible:ring-offset-0  focus:placeholder:text-sub-title !shadow-[1px_1px_4px_1px_hsla(245,96%,70%,0.2)]",
                     )}
                     placeholder="Enter your password"
                   />
@@ -274,7 +274,7 @@ export default function Login() {
                 type="submit"
                 disabled={loading}
                 className={cn(
-                  " w-full mt-5 group capitalize text-base font-semibold h-[45px] disabled:!opacity-100   disabled:bg-primary  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-primary bg-primary hover:text-white hover:bg-primary cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)]",
+                  " w-full mt-5 group capitalize text-base font-semibold h-[45px] disabled:!opacity-100   disabled:bg-primary  active:translate-y-0.5 backdrop-blur-xl transition-all duration-200 flex items-center !rounded-[10px]  border-[1px] border-primary bg-primary hover:text-white hover:bg-primary cursor-pointer  text-white   shadow-[0px_2px_10px_0px_hsla(245,100%,90%,1)] dark:shadow-none ",
                 )}
               >
                 <p className="group-hover:scale-105 transition-all duration-300">
