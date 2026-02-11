@@ -53,7 +53,6 @@ export function CartBanner() {
                   alt={item.title}
                   fill
                   className="object-cover"
-                  unoptimized
                 />
               </div>
             ))}
@@ -89,10 +88,10 @@ export function CartBanner() {
   return (
     <div className="w-full bg-white dark:bg-card border rounded-xl shadow-lg flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b flex items-center justify-between bg-muted/30 rounded-t-xl">
+      <div className="p-4 py-2 border-b flex items-center justify-between bg-muted/30 rounded-t-xl">
         <div className="flex items-center gap-2">
           <ShoppingCart className="w-4 h-4 text-primary" />
-          <span className="font-semibold">Your Cart</span>
+          <span className="font-semibold">Cart</span>
           <span className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full font-medium">
             {totalItems} items
           </span>
@@ -102,6 +101,7 @@ export function CartBanner() {
           variant="ghost"
           size="icon"
           onClick={() => setCartExpanded(false)}
+          className="hover:bg-transparent cursor-pointer"
         >
           <ChevronUp className="w-4 h-4" />
         </Button>
@@ -110,14 +110,13 @@ export function CartBanner() {
       {/* Body */}
       <div className="p-4 flex flex-col gap-4 max-h-[300px] overflow-y-auto">
         {cart.map((item) => (
-          <div key={item.id} className="flex gap-3 items-center">
+          <div key={item.id} className="flex gap-3 items-center relative">
             <div className="relative w-16 h-16 bg-muted rounded-lg overflow-hidden shrink-0 border">
               <Image
                 src={item.thumbnail}
                 alt={item.title}
                 fill
                 className="object-cover"
-                unoptimized
               />
             </div>
 
@@ -125,19 +124,28 @@ export function CartBanner() {
               <h4 className="font-medium text-sm">{item.title}</h4>
               <p className="text-xs text-muted-foreground">{item.brand}</p>
 
-              <div className="flex items-center justify-between mt-2">
+              <div className="flex items-center justify-between ">
                 <span className="font-bold text-sm">${item.price}</span>
-
-                <div className="flex items-center gap-2 bg-muted rounded-full px-2 py-0.5">
-                  <button onClick={() => updateQuantity(item.id, -1)}>-</button>
-                  <span className="text-xs">{item.quantity}</span>
-                  <button onClick={() => updateQuantity(item.id, 1)}>+</button>
-                </div>
               </div>
             </div>
 
+            <div className="flex items-center gap-2 bg-muted rounded-full px-2 py-0.5">
+              <button
+                className="cursor-pointer"
+                onClick={() => updateQuantity(item.id, -1)}
+              >
+                -
+              </button>
+              <span className="text-xs">{item.quantity}</span>
+              <button
+                className="cursor-pointer"
+                onClick={() => updateQuantity(item.id, 1)}
+              >
+                +
+              </button>
+            </div>
             <button onClick={() => removeFromCart(item.id)}>
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4 cursor-pointer" />
             </button>
           </div>
         ))}

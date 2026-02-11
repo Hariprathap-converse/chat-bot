@@ -157,7 +157,6 @@ export function ProductCard({ product }: ProductCardProps) {
           alt={product.title}
           fill
           className="object-contain group-hover:scale-105 pr-3 transition-transform duration-300"
-          unoptimized
         />
 
         {!expanded && (
@@ -167,7 +166,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </Button>
             <Button
               size="sm"
-              className="bg-background text-foreground hover:bg-background hover:text-foreground cursor-pointer"
+              className="bg-app-white text-foreground hover:bg-background hover:text-foreground cursor-pointer"
               onClick={handleAddToCart}
             >
               <ShoppingCart className="w-3 h-3 mr-1" />
@@ -196,7 +195,6 @@ export function ProductCard({ product }: ProductCardProps) {
                   alt="thumbnail"
                   fill
                   className="object-cover"
-                  unoptimized
                 />
               </button>
             ))}

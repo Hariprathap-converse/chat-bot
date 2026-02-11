@@ -78,7 +78,7 @@ export function CheckoutModal() {
                                         <div key={item.id} className="flex justify-between text-sm">
                                             <div className="flex items-center gap-2">
                                                 <div className="relative w-8 h-8 rounded border overflow-hidden shrink-0">
-                                                    <Image src={item.thumbnail} alt={item.title} fill className="object-cover" unoptimized />
+                                                    <Image src={item.thumbnail} alt={item.title} fill className="object-cover"  />
                                                 </div>
                                                 <span className="line-clamp-1 max-w-[180px]">{item.title}</span>
                                                 <span className="text-muted-foreground">x{item.quantity}</span>

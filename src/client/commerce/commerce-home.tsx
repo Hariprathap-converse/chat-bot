@@ -17,7 +17,6 @@ import { ProductCarousel } from "./product-carousel";
 import { ShoppingCart } from "lucide-react";
 
 export default function CommerceHome() {
-  const { setOpen } = useSidebar();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -68,16 +67,14 @@ export default function CommerceHome() {
       </div>
       {/* Cart Icon */}
       <div
-        className="absolute  right-6 top-1.5  cursor-pointer p-2 hover:bg-muted/50 rounded-full transition"
+        className="absolute  right-18 top-3 z-50   p-2 hover:bg-muted/50 rounded-full transition cursor-pointer!"
         onClick={() => {
-          // Toggle cart drawer - to be implemented with store
           const { useCommerceStore } = require("@/lib/commerce-store");
           const store = useCommerceStore.getState();
           store.setCartSheetOpen(true);
         }}
       >
-        <ShoppingCart className="h-5 w-5 text-foreground" />
-        {/* Badge count will be connected to store later */}
+        <ShoppingCart className="h-5 w-5 text-foreground cursor-pointer" />
         <CartBadge />
       </div>
 
@@ -113,7 +110,7 @@ export default function CommerceHome() {
                       index={idx}
                       isUser={false}
                     />
-                    {/* Inject Carousel visually 'inside' the flow by reducing gap and aligning */}
+
                     {showCarousel && idx === grouped.length - 1 && (
                       <div className="ml-10 -mt-2">
                         <ProductCarousel />
@@ -130,7 +127,7 @@ export default function CommerceHome() {
         </div>
 
         {/* Floating Collapsed Cart Banner */}
-        {cart.length > 0 && isCartOpen && (
+        {cart.length > 0  && (
           <div className="absolute bottom-[90px] left-1/2 -translate-x-1/2 w-full max-w-[500px] z-50 px-0">
             <CartBanner />
           </div>
@@ -147,8 +144,6 @@ export default function CommerceHome() {
           />
         </div>
       </main>
-
-      {/* Overlays */}
       <ProductDetailSheet />
       <CheckoutModal />
       <CartSheet />
@@ -165,7 +160,7 @@ function CartBadge() {
   if (count === 0) return null;
 
   return (
-    <span className="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center animate-in zoom-in">
+    <span className="absolute cursor-pointer top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center animate-in zoom-in">
       {count}
     </span>
   );

@@ -10,6 +10,5 @@ interface CommerceChatMessageProps {
 }
 
 export function CommerceChatMessage(props: CommerceChatMessageProps) {
-    // Wrapper to allow for future commerce-specific message styling overrides
     return <ChatMessage {...props} />;
 }
