@@ -128,7 +128,7 @@ export default function CommerceHome() {
 
         {/* Floating Collapsed Cart Banner */}
         {cart.length > 0 && (
-          <div className="absolute bottom-[90px] right-2  w-fit h-full max-h-[500px] z-50 px-0">
+          <div className="absolute bottom-[90px] right-4  w-fit h-full max-h-[500px] z-[60]! px-0">
             <CartBanner />
           </div>
         )}
@@ -151,7 +151,7 @@ export default function CommerceHome() {
   );
 }
 
-function CartBadge() {
+export function CartBadge() {
   const { useCommerceStore } = require("@/lib/commerce-store");
   const cart = useCommerceStore((state: any) => state.cart);
   const count =

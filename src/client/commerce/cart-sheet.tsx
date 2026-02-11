@@ -90,7 +90,7 @@ export function CartSheet() {
                       <div className="flex items-center gap-3 bg-muted/50 border rounded-full px-2 py-0.5">
                         <button
                           onClick={() => updateQuantity(item.id, -1)}
-                          className="w-6 h-6 flex items-center justify-center hover:bg-background rounded-full transition text-muted-foreground hover:text-foreground"
+                          className="w-6 h-6 cursor-pointer flex items-center justify-center hover:bg-background rounded-full transition text-muted-foreground hover:text-foreground"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
@@ -99,7 +99,7 @@ export function CartSheet() {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.id, 1)}
-                          className="w-6 h-6 flex items-center justify-center hover:bg-background rounded-full transition text-muted-foreground hover:text-foreground"
+                          className="w-6 h-6 cursor-pointer flex items-center justify-center hover:bg-background rounded-full transition text-muted-foreground hover:text-foreground"
                         >
                           <Plus className="w-3 h-3" />
                         </button>
@@ -121,7 +121,7 @@ export function CartSheet() {
 
         {/* Footer */}
         {cart.length > 0 && (
-          <div className="p-4 border-t bg-muted/5 space-y-4 shadow-[0_-5px_10px_rgba(0,0,0,0.03)] pb-8">
+          <div className="p-4 border-t bg-muted/5 space-y-4 shadow-[0_-5px_10px_rgba(0,0,0,0.03)] pb-4">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>

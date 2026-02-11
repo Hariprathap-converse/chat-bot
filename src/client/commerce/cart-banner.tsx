@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { CartBadge } from "./commerce-home";
 
 export function CartBanner() {
   const cart = useCommerceStore((s) => s.cart);
@@ -34,23 +35,33 @@ export function CartBanner() {
 
   if (variant === "collapsed") {
     return (
-      <div className="w-full bg-white dark:bg-card border rounded-xl shadow-sm p-3 flex flex-col items-center justify-between">
+      <div
+        onMouseEnter={() => {
+          const { useCommerceStore } = require("@/lib/commerce-store");
+          const store = useCommerceStore.getState();
+          store.setCartSheetOpen(true);
+        }}
+        className="w-full bg-white dark:bg-card border rounded-xl shadow-sm p-2 px-1 flex flex-col items-center justify-between"
+      >
         <div className="flex items-center flex-col gap-3">
-          <div className="bg-primary/10 p-2 rounded-lg">
-            <ShoppingCart className="w-5 h-5 text-primary" />
-          </div>
-
-          <div className="flex flex-col">
-            <span className="font-semibold text-sm">Cart</span>
-            <span className="text-xs text-muted-foreground">
-              {totalItems} items
-            </span>
+          <div
+            className="relative p-1 hover:bg-muted/50 mb-2  rounded-full transition cursor-pointer!"
+            onClick={() => {
+              const { useCommerceStore } = require("@/lib/commerce-store");
+              const store = useCommerceStore.getState();
+              store.setCartSheetOpen(true);
+            }}
+          >
+            <div className="bg-primary/10 p-2 rounded-lg">
+              <ShoppingCart className="w-5 h-5 text-primary" />
+            </div>
+            <CartBadge />
           </div>
         </div>
 
-        <div className="flex items-center flex-col gap-4">
+        <div className="flex items-center flex-col gap-4 py-1 pb-1.5">
           <div className="flex flex-col -space-x-2">
-            {cart.slice(0, 3).map((item) => (
+            {cart.slice(0, 5).map((item) => (
               <div
                 key={item.id}
                 className="relative w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-white"
@@ -65,7 +76,7 @@ export function CartBanner() {
             ))}
           </div>
 
-          <div className="flex items-center flex-col gap-2">
+          {/* <div className="flex items-center flex-col gap-2">
             <span className="font-bold text-sm">${subtotal.toFixed(2)}</span>
 
             <Button
@@ -77,14 +88,14 @@ export function CartBanner() {
               <ChevronLeft className="w-4 h-4" />
             </Button>
 
-            {/* <Button
+            <Button
               size="sm"
               onClick={() => setCheckoutOpen(true)}
               className="rounded-full h-8 px-4 text-xs font-medium"
             >
               Checkout
-            </Button> */}
-          </div>
+            </Button>
+          </div> */}
         </div>
       </div>
     );
