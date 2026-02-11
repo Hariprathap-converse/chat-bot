@@ -533,6 +533,7 @@ export default function AppSidebar({
               alt="Sidebar Logo"
               width={navSettings.header.width[1]}
               height={navSettings.header.width[0]}
+              
             />
           )}
           {navSettings.isNavOpen &&

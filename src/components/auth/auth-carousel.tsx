@@ -94,6 +94,7 @@ export function AuthCarousel() {
               transform: index === currentIndex ? "scale(1.1)" : "scale(1)",
             }}
             priority={index === 0}
+            unoptimized
           />
           {/* Balanced gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent z-10" />

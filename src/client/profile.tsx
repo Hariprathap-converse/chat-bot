@@ -13,6 +13,7 @@ import {
   User,
   Moon,
   Sun,
+  ShoppingCart,
 } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
@@ -40,28 +41,30 @@ const Profile = () => {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <div className="flex cursor-pointer flex-row-reverse items-center gap-2 rounded-md px-2 py-1 hover:bg-muted/50 transition">
-          <Avatar className="h-10 w-10 drop-shadow p-[1px] bg-muted rounded-full">
-            {displayUser.profileImage ? (
-              <AvatarImage
-                className="rounded-full"
-                src={displayUser.profileImage}
-                alt={displayUser.name}
-              />
-            ) : (
-              <AvatarFallback
-                className="    bg-gradient-to-r from-violet-600 to-violet-500 
-               hover:from-violet-700 hover:to-violet-600 
-               text-white shadow-sm hover:shadow-md 
-               transition-all duration-200"
-              >
-                <User className="h-5 w-5" />
-              </AvatarFallback>
-            )}
-          </Avatar>
-        </div>
-      </PopoverTrigger>
+      <div className="flex items-center gap-2">
+        <PopoverTrigger asChild>
+          <div className="flex cursor-pointer flex-row-reverse items-center gap-2 rounded-md px-2 py-1 hover:bg-muted/50 transition">
+            <Avatar className="h-10 w-10 drop-shadow p-[1px] bg-muted rounded-full">
+              {displayUser.profileImage ? (
+                <AvatarImage
+                  className="rounded-full"
+                  src={displayUser.profileImage}
+                  alt={displayUser.name}
+                />
+              ) : (
+                <AvatarFallback
+                  className="    bg-gradient-to-r from-violet-600 to-violet-500 
+                   hover:from-violet-700 hover:to-violet-600 
+                   text-white shadow-sm hover:shadow-md 
+                   transition-all duration-200"
+                >
+                  <User className="h-5 w-5" />
+                </AvatarFallback>
+              )}
+            </Avatar>
+          </div>
+        </PopoverTrigger>
+      </div>
 
       <PopoverContent
         autoFocus={false}
@@ -167,3 +170,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
