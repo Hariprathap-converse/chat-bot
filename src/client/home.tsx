@@ -219,7 +219,7 @@ export default function DynamicHome() {
                 {data.footerSection[0].items.slice(0, 6).map((item, index) => (
                   <div
                     key={index}
-                    className="shadow-operation group rounded-[7px] hover:border-hover-border hover:bg-black! dark:bg-sub-card cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
+                    className="shadow-operation group rounded-[7px] hover:border-hover-border group-hover:bg-background dark:hover:bg-black! dark:bg-sub-card cursor-pointer w-full p-[7px] px-3 flex gap-2 items-center"
                     onClick={() => {
                       if (item.label === "Summarize") {
                         setOperationModal({ isOpen: true, type: "summarize" });

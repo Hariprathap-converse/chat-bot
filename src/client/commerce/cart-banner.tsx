@@ -1,7 +1,14 @@
 "use client";
 
 import { useCommerceStore } from "@/lib/commerce-store";
-import { ChevronDown, ChevronUp, ShoppingCart, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  ShoppingCart,
+  Trash2,
+} from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
@@ -27,8 +34,8 @@ export function CartBanner() {
 
   if (variant === "collapsed") {
     return (
-      <div className="w-full bg-white dark:bg-card border rounded-xl shadow-sm p-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="w-full bg-white dark:bg-card border rounded-xl shadow-sm p-3 flex flex-col items-center justify-between">
+        <div className="flex items-center flex-col gap-3">
           <div className="bg-primary/10 p-2 rounded-lg">
             <ShoppingCart className="w-5 h-5 text-primary" />
           </div>
@@ -41,8 +48,8 @@ export function CartBanner() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex -space-x-2">
+        <div className="flex items-center flex-col gap-4">
+          <div className="flex flex-col -space-x-2">
             {cart.slice(0, 3).map((item) => (
               <div
                 key={item.id}
@@ -58,7 +65,7 @@ export function CartBanner() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center flex-col gap-2">
             <span className="font-bold text-sm">${subtotal.toFixed(2)}</span>
 
             <Button
@@ -67,16 +74,16 @@ export function CartBanner() {
               onClick={() => setCartExpanded(true)}
               className="h-8 w-8 p-0"
             >
-              <ChevronDown className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" />
             </Button>
 
-            <Button
+            {/* <Button
               size="sm"
               onClick={() => setCheckoutOpen(true)}
               className="rounded-full h-8 px-4 text-xs font-medium"
             >
               Checkout
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
@@ -86,7 +93,7 @@ export function CartBanner() {
   /* ---------------- EXPANDED ---------------- */
 
   return (
-    <div className="w-full bg-white dark:bg-card border rounded-xl shadow-lg flex flex-col">
+    <div className="w-full bg-white dark:bg-card border  rounded-xl shadow-lg flex flex-col">
       {/* Header */}
       <div className="p-4 py-2 border-b flex items-center justify-between bg-muted/30 rounded-t-xl">
         <div className="flex items-center gap-2">
@@ -103,7 +110,7 @@ export function CartBanner() {
           onClick={() => setCartExpanded(false)}
           className="hover:bg-transparent cursor-pointer"
         >
-          <ChevronUp className="w-4 h-4" />
+          <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
 
