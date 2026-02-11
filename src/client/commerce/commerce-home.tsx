@@ -127,7 +127,7 @@ export default function CommerceHome() {
         </div>
 
         {/* Floating Collapsed Cart Banner */}
-        {cart.length > 0  && (
+        {cart.length > 0 && (
           <div className="absolute bottom-[90px] left-1/2 -translate-x-1/2 w-full max-w-[500px] z-50 px-0">
             <CartBanner />
           </div>

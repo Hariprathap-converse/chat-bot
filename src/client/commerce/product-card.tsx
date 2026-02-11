@@ -166,7 +166,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </Button>
             <Button
               size="sm"
-              className="bg-app-white text-foreground hover:bg-background hover:text-foreground cursor-pointer"
+              className="bg-background text-foreground hover:bg-background hover:text-foreground cursor-pointer"
               onClick={handleAddToCart}
             >
               <ShoppingCart className="w-3 h-3 mr-1" />
