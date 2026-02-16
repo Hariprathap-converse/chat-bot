@@ -13,7 +13,7 @@ import {
   EmployeeDetailsModal,
   SkeletonLoaderModal,
 } from "@/components/chat/chat-modals";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import {  useSidebar } from "@/components/ui/sidebar";
 import { BotTypingLoader } from "@/components/chat/dot-loader";
 import ModelSelection from "@/components/chat/model-selection";
 
@@ -71,12 +71,6 @@ export default function ChatPage() {
 
       <div className="absolute right-3 top-1.5">
         <Profile />
-      </div>
-      <div className="absolute left-5 top-4">
-        <SidebarTrigger
-          onClick={() => setOpen(true)}
-          className="cursor-pointer"
-        ></SidebarTrigger>
       </div>
 
       {/* Sidebar */}

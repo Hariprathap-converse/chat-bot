@@ -4,7 +4,6 @@ import { AppSidebar } from "@/client/app-sidebar";
 import Profile from "@/client/profile";
 import { useChatMessages } from "@/hooks/use-chat-messages";
 import { ChatInput } from "@/components/chat/chat-input";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { BotTypingLoader } from "@/components/chat/dot-loader";
 import ModelSelection from "@/components/chat/model-selection";
 import { CommerceChatMessage } from "./commerce-chat-message";
@@ -14,7 +13,7 @@ import { CheckoutModal } from "./checkout-modal";
 import { CartSheet } from "./cart-sheet";
 import { useCommerceStore } from "@/lib/commerce-store";
 import { ProductCarousel } from "./product-carousel";
-import { ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 
 export default function CommerceHome() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -68,14 +67,14 @@ export default function CommerceHome() {
       {/* Cart Icon */}
       <div
         className="absolute  right-18 top-3 z-50   p-2 hover:bg-muted/50 rounded-full transition cursor-pointer!"
-        onClick={() => {
-          const { useCommerceStore } = require("@/lib/commerce-store");
-          const store = useCommerceStore.getState();
-          store.setCartSheetOpen(true);
-        }}
+        // onClick={() => {
+        //   const { useCommerceStore } = require("@/lib/commerce-store");
+        //   const store = useCommerceStore.getState();
+        //   store.setCartSheetOpen(true);
+        // }}
       >
-        <ShoppingCart className="h-5 w-5 text-foreground cursor-pointer" />
-        <CartBadge />
+        <Heart className="h-5 w-5 text-foreground cursor-pointer" />
+        {/* <CartBadge /> */}
       </div>
 
       {/* Sidebar */}
@@ -92,7 +91,7 @@ export default function CommerceHome() {
           <div className="w-full max-w-full sm:max-w-[90%] md:max-w-[78%] lg:max-w-[80%] xl:max-w-[74%] xl:mx-auto md:mr-[calc(100%-90%)] 2xl:max-w-[57%] flex flex-col h-full sm:mx-auto gap-5 pb-24 px-2 md:px-0">
             {/* Welcome Message */}
             {messages.length === 0 && (
-              <div className="text-center mt-20 text-muted-foreground">
+              <div className="text-center text-muted-foreground">
                 <h2 className="text-2xl font-bold mb-2">Agentic Commerce</h2>
                 <p>Ask me to find products for you!</p>
               </div>

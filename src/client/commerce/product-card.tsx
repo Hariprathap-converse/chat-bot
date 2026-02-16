@@ -138,7 +138,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div
       className={cn(
-        "group relative flex flex-col bg-card rounded-xl border hover:z-[60] shadow-sm transition-all duration-500 hover:shadow-md overflow-hidden shrink-0",
+        "group relative flex flex-col bg-card  border-none hover:z-[60] shadow-sm transition-all duration-500 rounded-[9px] hover:shadow-md overflow-hidden shrink-0",
         expanded ? "w-[420px]" : "w-[200px] h-fit cursor-pointer",
       )}
       onClick={() => setExpanded(!expanded)}
@@ -148,7 +148,7 @@ export function ProductCard({ product }: ProductCardProps) {
         className={cn(
           "relative w-full  flex items-start justify-end  overflow-hidden",
           expanded
-            ? "h-[260px] transition-all  duration-700 my-2"
+            ? "h-[260px] transition-all  duration-700 my-1 "
             : "h-[150px]",
         )}
       >
@@ -175,7 +175,7 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         )}
         {expanded && (
-          <div className="flex gap-2 overflow-auto flex-col p-2 hide-scrollbar">
+          <div className="flex gap-2  overflow-auto flex-col p-2 hide-scrollbar">
             {product.images.map((img, idx) => (
               <button
                 key={idx}
@@ -186,7 +186,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 className={cn(
                   "relative w-16 h-16 rounded-md border-2  cursor-pointer overflow-hidden shrink-0 focus-visible:ring-0 outline-0 focus:ring-0",
                   selectedImage === img
-                    ? "border-none shadow-[0_0_2px_2px_rgba(0,0,0,0.1)]"
+                    ? "border-none shadow-[0_0_2px_1px_rgba(0,0,0,0.1)]"
                     : "border-transparent",
                 )}
               >
@@ -206,16 +206,28 @@ export function ProductCard({ product }: ProductCardProps) {
       <div
         className={cn(
           expanded
-            ? "flex  flex-1 justify-between p-2 pt-1 gap-1"
+            ? "flex  flex-1 justify-between p-4 pt-1 pb-1 gap-1"
             : "flex-col  flex-1 justify-between p-2 pt-1 gap-1",
         )}
       >
         <div>
-          <h3 className="font-semibold text-base line-clamp-1">
+          <h3
+            className={cn(
+              expanded
+                ? "font-semibold text-base "
+                : "font-medium text-[14px] ",
+              "text-foreground line-clamp-1",
+            )}
+          >
             {product.title}
           </h3>
 
-          <p className="text-sm text-muted-foreground font-medium capitalize">
+          <p
+            className={cn(
+              expanded ? "text-sm  font-medium " : "text-[13px]  font-normal ",
+              "text-muted-foreground text-muted-foreground capitalize",
+            )}
+          >
             {product.brand || product.category}
           </p>
         </div>
@@ -223,7 +235,7 @@ export function ProductCard({ product }: ProductCardProps) {
           className={cn(
             expanded
               ? "flex flex-col "
-              : "flex items-end flex-row-reverse justify-between",
+              : "flex items-center flex-row-reverse justify-between",
           )}
         >
           <div className="flex items-center gap-1 justify-end">
@@ -231,16 +243,31 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-xs font-semibold">{product.rating}</span>
           </div>
           <div className="flex gap-2 items-center ">
-            <span className="text-lg font-bold">${product.price}</span>
+            <span className="text-lg font-semibold">${product.price}</span>
             {product.discountPercentage > 0 && (
-              <span className="text-xs text-muted-foreground line-through">
-                ($
-                {(
-                  product.price *
-                  (1 + product.discountPercentage / 100)
-                ).toFixed(2)}
-                )
-              </span>
+              <>
+                <span
+                  className={cn(
+                    !expanded && "hidden",
+                    "text-[12px] text-gray-400 line-through decoration-gray-500",
+                  )}
+                >
+                  ($
+                  {(
+                    product.price *
+                    (1 + product.discountPercentage / 100)
+                  ).toFixed(2)}
+                  )
+                </span>
+                <span
+                  className={cn(
+                    expanded && "hidden",
+                    "text-xs font-medium text-green-500",
+                  )}
+                >
+                  {product.discountPercentage}%
+                </span>
+              </>
             )}
           </div>
         </div>
@@ -281,7 +308,7 @@ export function ProductCard({ product }: ProductCardProps) {
       )} */}
 
       {expanded && (
-        <div className="border-t animate-in fade-in">
+        <div className="animate-in   fade-in">
           {/* Thumbnails */}
 
           <div className="p-3 text-sm text-muted-foreground">

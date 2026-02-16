@@ -3,7 +3,7 @@
 import { AppSidebar } from "@/client/app-sidebar";
 import Profile from "@/client/profile";
 import { DataGrid } from "@/components/data-grid";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import {  useSidebar } from "@/components/ui/sidebar";
 
 import { sampleTableData } from "@/components/data-grid/sample-data";
 import ModelSelection from "@/components/chat/model-selection";
