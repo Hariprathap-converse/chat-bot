@@ -154,7 +154,7 @@ export function DataGrid({ config }: DataGridProps) {
       ...config.columns.map((col) => ({
         id: col.accessorKey,
         accessorKey: col.accessorKey,
-        header: ({ column }:any) => {
+        header: ({ column }: any) => {
           const isPinned = column.getIsPinned();
           const columnId = column.id;
           const isSorted = column.getIsSorted();
@@ -270,74 +270,14 @@ export function DataGrid({ config }: DataGridProps) {
                       <FilterIcon className="h-4 w-4" />
                       <span>Filter</span>
                     </DropdownMenuItem>
-                    {/* <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
-                                            <Maximize2 className="h-4 w-4" />
-                                            <span>Autosize</span>
-                                        </DropdownMenuItem> */}
-                    {/* <DropdownMenuSeparator /> */}
-                    {/* <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger className="gap-2 text-sm cursor-pointer">
-                                                {isPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
-                                                <span>Pin Column</span>
-                                            </DropdownMenuSubTrigger>
-                                            <DropdownMenuSubContent className="bg-card dark:bg-zinc-900">
-                                                <DropdownMenuItem
-                                                    onClick={() => handlePinColumn(columnId, 'left')}
-                                                    className="gap-2 text-sm cursor-pointer"
-                                                >
-                                                    <Pin className="h-4 w-4" />
-                                                    Pin to Left
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() => handlePinColumn(columnId, 'right')}
-                                                    className="gap-2 text-sm cursor-pointer"
-                                                >
-                                                    <Pin className="h-4 w-4 rotate-180" />
-                                                    Pin to Right
-                                                </DropdownMenuItem>
-                                                {isPinned && (
-                                                    <DropdownMenuItem
-                                                        onClick={() => handlePinColumn(columnId, false)}
-                                                        className="gap-2 text-sm cursor-pointer"
-                                                    >
-                                                        <PinOff className="h-4 w-4" />
-                                                        Unpin
-                                                    </DropdownMenuItem>
-                                                )}
-                                            </DropdownMenuSubContent>
-                                        </DropdownMenuSub>
-                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
-                                            <LayoutGrid className="h-4 w-4" />
-                                            <span>Group By Column</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
-                                            <Columns className="h-4 w-4" />
-                                            <span>Manage Columns</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
-                                            <RotateCcw className="h-4 w-4" />
-                                            <span>Reset Columns</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem
-                                            onClick={() => column.toggleVisibility(false)}
-                                            className="gap-2 text-sm cursor-pointer"
-                                        >
-                                            <EyeOff className="h-4 w-4" />
-                                            <span>Hide Column</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
-                                            <Sigma className="h-4 w-4" />
-                                            <span>Aggregation Select</span>
-                                        </DropdownMenuItem> */}
+
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             </div>
           );
         },
-        cell: ({ row }:any) => {
+        cell: ({ row }: any) => {
           const value = row.getValue(col.accessorKey);
           return renderCell(value, col.cellType, col.cellConfig);
         },
@@ -760,36 +700,6 @@ export function DataGrid({ config }: DataGridProps) {
             </div>
           </div>
         </div>
-        {/* 
-        {selectedCount > 0 && (
-          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <div className="flex items-center gap-3 py-2 px-4 bg-zinc-900 text-white rounded-xl shadow-xl border border-white/10">
-              <div className="flex items-center gap-2">
-                <Badge className="bg-primary text-white hover:bg-primary text-xs px-2">
-                  {selectedCount}
-                </Badge>
-                <span className="text-xs font-medium">Selected</span>
-              </div>
-              <div className="h-4 w-px bg-card/20" />
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 gap-1.5 hover:bg-card/10 text-xs px-2"
-              >
-                <Download className="h-3.5 w-3.5" />
-                Export
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 hover:bg-card/10"
-                onClick={() => table.resetRowSelection()}
-              >
-                <X className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </div>
-        )} */}
 
         <OperationModal
           isOpen={confirmDialog.open}
@@ -800,6 +710,7 @@ export function DataGrid({ config }: DataGridProps) {
           isOpen={summaryModal.open}
           onClose={() => setSummaryModal({ ...summaryModal, open: false })}
           column={summaryModal.column}
+          config={config}
           data={config.data}
         />
       </div>

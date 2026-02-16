@@ -14,7 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ColumnConfig } from "./types";
+import { ColumnConfig, TableConfig } from "./types";
 import { cn } from "@/lib/utils";
 import {
   BarChart,
@@ -34,6 +34,7 @@ interface ColumnSummaryModalProps {
   isOpen: boolean;
   onClose: () => void;
   column: ColumnConfig | null;
+  config: TableConfig;
   data: Record<string, any>[];
 }
 
@@ -48,100 +49,122 @@ export function ColumnSummaryModal({
   isOpen,
   onClose,
   column,
+  config,
   data,
 }: ColumnSummaryModalProps) {
   const [stats, setStats] = useState<SummaryStats | null>(null);
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
+  const [chartItems, setChartItems] = useState<any[]>([]);
+  const [groupByColumn, setGroupByColumn] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   const { theme } = useTheme();
   const isDark = theme === "dark";
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Initialize chart type from column config
+  // Reset state when modal opens
   useEffect(() => {
-    if (column?.defaultChartType) {
-      setChartType(column.defaultChartType);
+    if (isOpen) {
+      setStats(null);
+      setChartItems([]);
+      setGroupByColumn("");
+      setIsLoading(false);
+      setError(null);
     }
-  }, [column]);
+  }, [isOpen, column]);
 
-  // Calculate stats automatically when modal opens or column/data changes
+  // Fetch analytics when modal opens and column is available
   useEffect(() => {
-    if (!isOpen || !column || !data.length) return;
+    // If we have manual data passed in prop (length > 0) AND no config.tableName, maybe fall back to client side?
+    // But requirement is to call API.
+    if (!isOpen || !column || !config) return;
 
-    const values = data
-      .map((row) => row[column.accessorKey])
-      .filter((val) => typeof val === "number");
+    const fetchAnalytics = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        // 1. Call LLM to get chart config
+        const llmPayload = {
+          table_name: config.tableName || "unknown_table",
+          table_description: config.tableDescription || "",
+          selected_column: {
+            name: column.accessorKey,
+            description: column.description || "",
+            data_type: "number",
+          },
+          existing_columns:
+            config.columns?.map((c) => ({
+              name: c.accessorKey,
+              type: c.type || "string",
+              description: c.description || "",
+            })) || [],
+        };
+        console.log("llmPayload", llmPayload);
+        const llmRes = await fetch("http://localhost:5001/chat-analytics", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(llmPayload),
+        });
 
-    if (values.length === 0) {
-      setStats({ sum: 0, avg: 0, min: 0, max: 0 });
-      return;
-    }
+        if (!llmRes.ok) throw new Error("Failed to get analysis from LLM");
+        const llmData = await llmRes.json();
 
-    const sum = values.reduce((acc, curr) => acc + curr, 0);
-    const avg = sum / values.length;
-    const min = Math.min(...values);
-    const max = Math.max(...values);
+        // 2. Call Backend Analytics with LLM config
+        const analyticsPayload = {
+          table_name: config.tableName || "unknown_table",
+          chart: llmData.chart,
+        };
 
-    setStats({
-      sum,
-      avg: parseFloat(avg.toFixed(2)),
-      min,
-      max,
-    });
-  }, [isOpen, column, data]);
+        const analyticsRes = await fetch(
+          "http://localhost:8001/analytics/analytics",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(analyticsPayload),
+          },
+        );
 
-  const chartData = useMemo(() => {
-    if (!isOpen || !column || !data.length)
-      return { items: [], maxValue: 0, groupBy: "" };
+        if (!analyticsRes.ok) throw new Error("Failed to get analytics data");
+        const analyticsData = await analyticsRes.json();
 
-    // Try to find a grouping column (Department, Region, etc.)
-    const sampleRow = data[0];
-    const groupBy =
-      Object.keys(sampleRow).find((key) =>
-        ["department", "region", "category", "status", "position"].includes(
-          key.toLowerCase(),
-        ),
-      ) ||
-      Object.keys(sampleRow).find(
-        (key) =>
-          typeof sampleRow[key] === "string" &&
-          key !== "id" &&
-          key !== column.accessorKey,
-      );
+        // 3. Process Response
+        if (analyticsData.summary) {
+          setStats({
+            sum: analyticsData.summary.sum_value,
+            avg: parseFloat(analyticsData.summary.avg_value.toFixed(2)),
+            min: analyticsData.summary.min_value,
+            max: analyticsData.summary.max_value,
+          });
+        }
 
-    if (!groupBy) return { items: [], maxValue: 0, groupBy: "" };
+        if (analyticsData.grouped) {
+          const items = analyticsData.grouped
+            .map((item: any) => ({
+              label: String(item.x),
+              value: item.sum_value,
+            }))
+            .sort((a: any, b: any) => b.value - a.value)
+            .slice(0, 10);
 
-    // Aggregate data
-    const groups: Record<string, number> = {};
-    data.forEach((row) => {
-      const groupKey = String(row[groupBy] || "Unknown");
-      const val = row[column.accessorKey];
-      if (typeof val === "number") {
-        groups[groupKey] = (groups[groupKey] || 0) + val;
+          setChartItems(items);
+          setGroupByColumn(analyticsData.chart?.x || "Group");
+          setChartType(analyticsData.chart?.type || "bar");
+        }
+      } catch (err: any) {
+        console.error("Analytics Error:", err);
+        setError(err.message || "Failed to load analytics");
+        // Fallback or empty state handled by UI
+      } finally {
+        setIsLoading(false);
       }
-    });
+    };
 
-    const totalValue = Object.values(groups).reduce(
-      (acc, curr) => acc + curr,
-      0,
-    );
-
-    // Convert to array and sort by value desc
-    const sorted = Object.entries(groups)
-      .map(([label, value]) => ({
-        label,
-        value,
-        percentage: totalValue > 0 ? (value / totalValue) * 100 : 0,
-      }))
-      .sort((a, b) => b.value - a.value)
-      .slice(0, 10); // Top 10 for better visibility
-
-    const maxValue = Math.max(...sorted.map((s) => s.value));
-
-    return { items: sorted, maxValue, groupBy };
-  }, [isOpen, column, data]);
+    fetchAnalytics();
+  }, [isOpen, column, config]);
 
   // Helper for compact number formatting
   const formatCompactNumber = (value: any) => {
@@ -153,7 +176,6 @@ export function ColumnSummaryModal({
   };
 
   if (!isOpen || !column) return null;
-
   if (!isMounted) return null;
 
   return (
@@ -165,16 +187,13 @@ export function ColumnSummaryModal({
       />
 
       {/* Modal Content */}
-      <div className="relative z-10 w-full max-w-5xl bg-[#F8FAFC] dark:bg-background rounded-xl  border border-border p-6 pt-3 animate-in fade-in zoom-in-95 duration-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative z-10 w-full max-w-5xl bg-[#F8FAFC] dark:bg-background rounded-xl border border-border p-6 pt-3 animate-in fade-in zoom-in-95 duration-200 overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between mb-6 flex-shrink-0">
           <div>
-            <h2 className="text-[20px] font-bold text-[#7468FC]  flex items-center gap-2">
+            <h2 className="text-[20px] font-bold text-[#7468FC] flex items-center gap-2">
               {column.header} Analysis
             </h2>
-            {/* <p className="text-muted-foreground text-sm">
-                            Deep dive into {data.length} records
-                        </p> */}
           </div>
           <Button
             variant="ghost"
@@ -187,276 +206,274 @@ export function ColumnSummaryModal({
         </div>
 
         <div className="overflow-y-auto flex-1 pr-2">
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 mb-6">
-            <StatCard
-              label="SUM"
-              value={stats?.sum}
-              icon={<Sigma className="w-5 h-5 text-blue-500" />}
-              subLabel={`Total ${column.header}`}
-              color="blue"
-            />
-            <StatCard
-              label="AVERAGE"
-              value={stats?.avg}
-              icon={<Divide className="w-5 h-5 text-emerald-500" />}
-              subLabel={`Average  ${column.header}`}
-              color="emerald"
-            />
-            <StatCard
-              label="MINIMUM"
-              value={stats?.min}
-              icon={<ArrowDown01 className="w-5 h-5 text-amber-500" />}
-              subLabel={`Lowest ${column.header}`}
-              color="amber"
-            />
-            <StatCard
-              label="MAXIMUM"
-              value={stats?.max}
-              icon={<ArrowUp10 className="w-5 h-5 text-purple-500" />}
-              subLabel={`Highest ${column.header}`}
-              color="purple"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-2 pl-px">
-            {/* Chart Section - Takes up 2 columns */}
-            <div className="lg:col-span-2 bg-white dark:bg-card  rounded-xl   border-none shadow-sm ">
-              <div className="flex items-center justify-between mb-6 pt-2 pr-2">
-                <h3 className="text-[16px] px-5  font-semibold text-foreground uppercase flex items-center gap-2">
-                  Distribution by {chartData.groupBy}
-                </h3>
-                <div className="flex gap-1 bg-muted p-1 rounded-lg  ">
-                  <button
-                    onClick={() => setChartType("bar")}
-                    className={cn(
-                      "p-1.5 rounded-md transition-all cursor-pointer",
-                      chartType === "bar"
-                        ? "bg-app-white text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                    title="Bar Chart"
-                  >
-                    <BarChart2 className="w-4 h-4 rotate-90" />
-                  </button>
-                  <button
-                    onClick={() => setChartType("line")}
-                    className={cn(
-                      "p-1.5 rounded-md transition-all cursor-pointer",
-                      chartType === "line"
-                        ? "bg-app-white text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                    title="Line Chart"
-                  >
-                    <TrendingUp className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  {chartType === "bar" ? (
-                    <BarChart
-                      data={chartData.items}
-                      margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
-                    >
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        vertical={false}
-                        stroke={isDark ? "#334155" : "#E2E8F0"}
-                      />
-
-                      <XAxis
-                        dataKey="label"
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: isDark ? "#94A3B8" : "#64748B",
-                          fontSize: 11,
-                        }}
-                        dy={10}
-                        tickFormatter={(val) =>
-                          val.length > 10 ? `${val.substring(0, 10)}...` : val
-                        }
-                      />
-
-                      <YAxis
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: isDark ? "#94A3B8" : "#64748B",
-                          fontSize: 11,
-                        }}
-                        tickFormatter={formatCompactNumber}
-                        width={50}
-                      />
-
-                      <Tooltip
-                        cursor={{ fill: "transparent" }}
-                        contentStyle={{
-                          borderRadius: "8px",
-                          border: "none",
-                          backgroundColor: isDark ? "#020817" : "#ffffff",
-                          color: isDark ? "#e2e8f0" : "#0f172a",
-                          boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
-                        }}
-                        formatter={(value: number) => [
-                          value.toLocaleString(),
-                          column.header,
-                        ]}
-                      />
-
-                      <Bar
-                        dataKey="value"
-                        fill="#8B5CF6"
-                        radius={[4, 4, 0, 0]}
-                        barSize={40}
-                      >
-                        <LabelList
-                          dataKey="value"
-                          position="top"
-                          formatter={formatCompactNumber}
-                          style={{
-                            fill: isDark ? "#94A3B8" : "#64748B",
-                            fontSize: 11,
-                            fontWeight: 500,
-                          }}
-                        />
-                      </Bar>
-                    </BarChart>
-                  ) : (
-                    <LineChart
-                      data={chartData.items}
-                      margin={{ top: 10, right: 30, left: 5, bottom: 20 }}
-                    >
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        vertical={false}
-                        stroke={isDark ? "#334155" : "#E2E8F0"}
-                      />
-
-                      <XAxis
-                        dataKey="label"
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: isDark ? "#94A3B8" : "#64748B",
-                          fontSize: 11,
-                        }}
-                        dy={10}
-                        tickFormatter={(val) =>
-                          val.length > 10 ? `${val.substring(0, 10)}...` : val
-                        }
-                      />
-
-                      <YAxis
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{
-                          fill: isDark ? "#94A3B8" : "#64748B",
-                          fontSize: 11,
-                        }}
-                        tickFormatter={formatCompactNumber}
-                        width={50}
-                      />
-
-                      <Tooltip
-                        contentStyle={{
-                          borderRadius: "8px",
-                          border: "none",
-                          backgroundColor: isDark ? "#020817" : "#ffffff",
-                          color: isDark ? "#e2e8f0" : "#0f172a",
-                          boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
-                        }}
-                        formatter={(value: number) => [
-                          value.toLocaleString(),
-                          column.header,
-                        ]}
-                      />
-
-                      <Line
-                        type="monotone"
-                        dataKey="value"
-                        stroke="#8B5CF6"
-                        strokeWidth={3}
-                        dot={{
-                          fill: "#8B5CF6",
-                          r: 4,
-                          strokeWidth: 2,
-                          stroke: isDark ? "#020817" : "#ffffff",
-                        }}
-                        activeDot={{ r: 6, strokeWidth: 0 }}
-                      >
-                        <LabelList
-                          dataKey="value"
-                          position="insideBottomLeft"
-                          formatter={formatCompactNumber}
-                          style={{
-                            fill: isDark ? "#94A3B8" : "#64748B",
-                            fontSize: 11,
-                            fontWeight: 500,
-                          }}
-                        />
-                      </Line>
-                    </LineChart>
-                  )}
-                </ResponsiveContainer>
+          {isLoading ? (
+            <div className="flex h-64 items-center justify-center">
+              <div className="flex flex-col items-center gap-2">
+                <Sparkles className="h-8 w-8 animate-pulse text-primary" />
+                <p className="text-muted-foreground">
+                  Generating Smart Analysis...
+                </p>
               </div>
             </div>
+          ) : error ? (
+            <div className="flex h-64 items-center justify-center text-destructive">
+              <p>Error: {error}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onClose}
+                className="mt-4"
+              >
+                Close
+              </Button>
+            </div>
+          ) : (
+            <>
+              {/* Stats Row */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 mb-6">
+                <StatCard
+                  label="SUM"
+                  value={stats?.sum}
+                  icon={<Sigma className="w-5 h-5 text-blue-500" />}
+                  subLabel={`Total ${column.header}`}
+                  color="blue"
+                />
+                <StatCard
+                  label="AVERAGE"
+                  value={stats?.avg}
+                  icon={<Divide className="w-5 h-5 text-emerald-500" />}
+                  subLabel={`Average ${column.header}`}
+                  color="emerald"
+                />
+                <StatCard
+                  label="MINIMUM"
+                  value={stats?.min}
+                  icon={<ArrowDown01 className="w-5 h-5 text-amber-500" />}
+                  subLabel={`Lowest ${column.header}`}
+                  color="amber"
+                />
+                <StatCard
+                  label="MAXIMUM"
+                  value={stats?.max}
+                  icon={<ArrowUp10 className="w-5 h-5 text-purple-500" />}
+                  subLabel={`Highest ${column.header}`}
+                  color="purple"
+                />
+              </div>
 
-            <div
-              className="lg:col-span-2 rounded-xl p-6 pt-4 border shadow-sm flex flex-col justify-between relative overflow-hidden group
-  bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border-indigo-100
-  dark:from-indigo-950/40 dark:to-purple-950/30 dark:border-indigo-900/40"
-            >
-              <div className="relative z-10">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-2">
-                    <Sparkles className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-2 pl-px">
+                {/* Chart Section */}
+                <div className="lg:col-span-2 bg-white dark:bg-card rounded-xl border-none shadow-sm h-[360px] flex flex-col">
+                  <div className="flex items-center justify-between mb-2 pt-2 pr-2 shrink-0">
+                    <h3 className="text-[16px] px-5 font-semibold text-foreground uppercase flex items-center gap-2">
+                      Distribution by {groupByColumn}
+                    </h3>
+                    <div className="flex gap-1 bg-muted p-1 rounded-lg">
+                      <button
+                        onClick={() => setChartType("bar")}
+                        className={cn(
+                          "p-1.5 rounded-md transition-all cursor-pointer",
+                          chartType === "bar"
+                            ? "bg-app-white text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                        title="Bar Chart"
+                      >
+                        <BarChart2 className="w-4 h-4 rotate-90" />
+                      </button>
+                      <button
+                        onClick={() => setChartType("line")}
+                        className={cn(
+                          "p-1.5 rounded-md transition-all cursor-pointer",
+                          chartType === "line"
+                            ? "bg-app-white text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground",
+                        )}
+                        title="Line Chart"
+                      >
+                        <TrendingUp className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
 
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-300">
-                    AI Analysis: {column.header}
-                  </h3>
+                  <div className="flex-1 min-h-0 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      {chartType === "bar" ? (
+                        <BarChart
+                          data={chartItems}
+                          margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
+                        >
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            vertical={false}
+                            stroke={isDark ? "#334155" : "#E2E8F0"}
+                          />
+                          <XAxis
+                            dataKey="label"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{
+                              fill: isDark ? "#94A3B8" : "#64748B",
+                              fontSize: 11,
+                            }}
+                            dy={10}
+                            tickFormatter={(val) =>
+                              val.length > 10
+                                ? `${val.substring(0, 10)}...`
+                                : val
+                            }
+                          />
+                          <YAxis
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{
+                              fill: isDark ? "#94A3B8" : "#64748B",
+                              fontSize: 11,
+                            }}
+                            tickFormatter={formatCompactNumber}
+                            width={50}
+                          />
+                          <Tooltip
+                            cursor={{ fill: "transparent" }}
+                            contentStyle={{
+                              borderRadius: "8px",
+                              border: "none",
+                              backgroundColor: isDark ? "#020817" : "#ffffff",
+                              color: isDark ? "#e2e8f0" : "#0f172a",
+                              boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
+                            }}
+                            formatter={(value: number) => [
+                              value.toLocaleString(),
+                              column.header,
+                            ]}
+                          />
+                          <Bar
+                            dataKey="value"
+                            fill="#8B5CF6"
+                            radius={[4, 4, 0, 0]}
+                            barSize={40}
+                          >
+                            <LabelList
+                              dataKey="value"
+                              position="top"
+                              formatter={formatCompactNumber}
+                              style={{
+                                fill: isDark ? "#94A3B8" : "#64748B",
+                                fontSize: 11,
+                                fontWeight: 500,
+                              }}
+                            />
+                          </Bar>
+                        </BarChart>
+                      ) : (
+                        <LineChart
+                          data={chartItems}
+                          margin={{ top: 10, right: 30, left: 5, bottom: 20 }}
+                        >
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            vertical={false}
+                            stroke={isDark ? "#334155" : "#E2E8F0"}
+                          />
+                          <XAxis
+                            dataKey="label"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{
+                              fill: isDark ? "#94A3B8" : "#64748B",
+                              fontSize: 11,
+                            }}
+                            dy={10}
+                            tickFormatter={(val) =>
+                              val.length > 10
+                                ? `${val.substring(0, 10)}...`
+                                : val
+                            }
+                          />
+                          <YAxis
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{
+                              fill: isDark ? "#94A3B8" : "#64748B",
+                              fontSize: 11,
+                            }}
+                            tickFormatter={formatCompactNumber}
+                            width={50}
+                          />
+                          <Tooltip
+                            contentStyle={{
+                              borderRadius: "8px",
+                              border: "none",
+                              backgroundColor: isDark ? "#020817" : "#ffffff",
+                              color: isDark ? "#e2e8f0" : "#0f172a",
+                              boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
+                            }}
+                            formatter={(value: number) => [
+                              value.toLocaleString(),
+                              column.header,
+                            ]}
+                          />
+                          <Line
+                            type="monotone"
+                            dataKey="value"
+                            stroke="#8B5CF6"
+                            strokeWidth={3}
+                            dot={{
+                              fill: "#8B5CF6",
+                              r: 4,
+                              strokeWidth: 2,
+                              stroke: isDark ? "#020817" : "#ffffff",
+                            }}
+                            activeDot={{ r: 6, strokeWidth: 0 }}
+                          >
+                            <LabelList
+                              dataKey="value"
+                              position="insideBottomLeft"
+                              formatter={formatCompactNumber}
+                              style={{
+                                fill: isDark ? "#94A3B8" : "#64748B",
+                                fontSize: 11,
+                                fontWeight: 500,
+                              }}
+                            />
+                          </Line>
+                        </LineChart>
+                      )}
+                    </ResponsiveContainer>
+                  </div>
                 </div>
 
-                <div className="prose prose-sm max-w-none dark:prose-invert">
-                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-                    The{" "}
-                    <span
-                      className="font-semibold text-indigo-900 bg-indigo-50 px-1 py-0.5 rounded
-          dark:text-indigo-300 dark:bg-indigo-900/40"
-                    >
-                      {column.header}
-                    </span>{" "}
-                    data shows strong performance, with a total volume of{" "}
-                    <span className="font-semibold text-slate-900 dark:text-slate-100">
-                      {stats?.sum.toLocaleString()}
-                    </span>
-                    . The average value sits at{" "}
-                    <span className="font-semibold text-slate-900 dark:text-slate-100">
-                      {stats?.avg.toLocaleString()}
-                    </span>
-                    , indicating a healthy baseline.
-                  </p>
-
-                  <p className="text-slate-600 dark:text-slate-300 leading-relaxed mt-3">
-                    Outliers range from a minimum of{" "}
-                    <span className="font-medium text-slate-700 dark:text-slate-300">
-                      {stats?.min.toLocaleString()}
-                    </span>{" "}
-                    to a peak of{" "}
-                    <span className="font-medium text-slate-700 dark:text-slate-300">
-                      {stats?.max.toLocaleString()}
-                    </span>
-                    , suggesting significant variance in this dataset that may
-                    warrant further investigation into the top performers.
-                  </p>
+                <div
+                  className="lg:col-span-2 rounded-xl p-6 pt-4 border shadow-sm flex flex-col justify-between relative overflow-hidden group
+                    bg-gradient-to-br from-indigo-50/50 to-purple-50/50 border-indigo-100
+                    dark:from-indigo-950/40 dark:to-purple-950/30 dark:border-indigo-900/40"
+                >
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="p-2">
+                        <Sparkles className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                      </div>
+                      <h3 className="text-lg font-bold text-slate-800 dark:text-slate-300">
+                        AI Analysis: {column.header}
+                      </h3>
+                    </div>
+                    <div className="prose prose-sm max-w-none dark:prose-invert">
+                      <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        Analysis generated for <strong>{column.header}</strong>{" "}
+                        based on {groupByColumn}.
+                      </p>
+                      <p className="text-slate-600 dark:text-slate-300 leading-relaxed mt-2">
+                        Total value is{" "}
+                        <strong>{stats?.sum?.toLocaleString()}</strong> with an
+                        average of{" "}
+                        <strong>{stats?.avg?.toLocaleString()}</strong>.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -476,20 +493,6 @@ function StatCard({
   subLabel: string;
   color: "blue" | "emerald" | "amber" | "purple";
 }) {
-  // const colorStyles = {
-  //     blue: "bg-blue-50/50 border-blue-100 hover:border-blue-200",
-  //     emerald: "bg-emerald-50/50 border-emerald-100 hover:border-emerald-200",
-  //     amber: "bg-amber-50/50 border-amber-100 hover:border-amber-200",
-  //     purple: "bg-purple-50/50 border-purple-100 hover:border-purple-200",
-  // };
-
-  // const iconBgStyles = {
-  //     blue: "bg-blue-100 text-blue-600",
-  //     emerald: "bg-emerald-100 text-emerald-600",
-  //     amber: "bg-amber-100 text-amber-600",
-  //     purple: "bg-purple-100 text-purple-600",
-  // };
-
   return (
     <div
       className={cn(
