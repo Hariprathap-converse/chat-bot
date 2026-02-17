@@ -77,6 +77,7 @@ export function ColumnSummaryModal({
     }
   }, [isOpen, column]);
   const MODEL_URL = process.env.NEXT_PUBLIC_MODEL_URL;
+  const HRMS_API_URL = process.env.NEXT_PUBLIC__HRMS_API_URL;
 
   // Fetch analytics when modal opens and column is available
   useEffect(() => {
@@ -96,15 +97,19 @@ export function ColumnSummaryModal({
             name: column.accessorKey,
             description: column.description || "",
             data_type: "number",
+            is_separated: column.isSeparated,
+            parent_table: column.parentTable || null,
           },
           existing_columns:
             config.columns?.map((c) => ({
               name: c.accessorKey,
               type: c.type || "string",
               description: c.description || "",
+              is_separated: c.isSeparated,
+              parent_table: c.parentTable || null,
             })) || [],
         };
-        const llmRes = await fetch(`${MODEL_URL}/chat-analytics`, {
+        const llmRes = await fetch(`${MODEL_URL}/employee-analytics`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(llmPayload),
@@ -119,11 +124,14 @@ export function ColumnSummaryModal({
           chart: llmData.chart,
         };
 
-        const analyticsRes = await fetch(`${MODEL_URL}/analytics/analytics`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(analyticsPayload),
-        });
+        const analyticsRes = await fetch(
+          `${HRMS_API_URL}/analytics/analytics`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(analyticsPayload),
+          },
+        );
 
         if (!analyticsRes.ok) throw new Error("Failed to get analytics data");
         const analyticsData = await analyticsRes.json();
@@ -184,7 +192,12 @@ export function ColumnSummaryModal({
       />
 
       {/* Modal Content */}
-      <div className="relative z-10 w-full max-w-5xl bg-[#F8FAFC] dark:bg-background rounded-xl border border-border p-6 pt-3 animate-in fade-in zoom-in-95 duration-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div
+        className={cn(
+          isLoading && " min-w-[300px] w-full max-w-[400px]",
+          "relative z-10 w-full max-w-5xl bg-[#F8FAFC] dark:bg-background rounded-xl border border-border p-6 pt-3 animate-in fade-in zoom-in-95 duration-200 overflow-hidden flex flex-col max-h-[90vh]",
+        )}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6 flex-shrink-0">
           <div>
@@ -205,11 +218,20 @@ export function ColumnSummaryModal({
         <div className="overflow-y-auto flex-1 pr-2">
           {isLoading ? (
             <div className="flex h-64 items-center justify-center">
-              <div className="flex flex-col items-center gap-2">
-                <Sparkles className="h-8 w-8 animate-pulse text-primary" />
-                <p className="text-muted-foreground">
-                  Generating Smart Analysis...
-                </p>
+              <div className="flex flex-col items-center gap-3">
+                {/* Animated loader */}
+                <div className="relative flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
+                  <Sparkles className="absolute h-5 w-5 text-primary animate-pulse" />
+                </div>
+
+                {/* Text */}
+                <div className="text-center">
+                  <p className="font-medium">Generating Smart Analysis</p>
+                  <p className="text-sm text-muted-foreground">
+                    Please wait while we process your data...
+                  </p>
+                </div>
               </div>
             </div>
           ) : error ? (

@@ -32,7 +32,7 @@ export interface Message {
       | "cancelled";
     title?: string;
     message?: string;
-    to?: string;
+    recipient?: string;
     subject?: string;
     body?: string;
   };
@@ -339,66 +339,7 @@ export function useChatMessages() {
     addMessageToConversation(conversationId, newUserMsg);
     setInput("");
 
-    /*
-    const emailMatch = userText.match(
-      /send\s+(?:an?\s+)?email\s+to\s+([^\s]+)\s+(?:with\s+)?subject\s+(.+?)\s+(?:message|body|saying|as|with)\s+(.+)/i
-    );
-
-    const smsMatch = userText.match(
-      /(?:send|sending)\s+(?:a|an)?\s*sms\s+to\s+([^\s]+)\s+as\s+(.+)/i
-    );
-
-    if (emailMatch) {
-      const targetEmail = emailMatch[1];
-      const subject = emailMatch[2];
-      const body = emailMatch[3];
-
-      const toolMessageId = (Date.now() + 1).toString();
-      const toolMsg: Message = {
-        id: toolMessageId,
-        role: "bot",
-        content: "",
-        type: "email-tool",
-        toolData: {
-          target: targetEmail,
-          status: "processing", // Start at processing
-        },
-      };
-
-      addMessageToConversation(conversationId, toolMsg);
-      // Fire and forget the async tool handler
-      sendEmailTool(toolMessageId, targetEmail, subject, body, conversationId);
-      return;
-    }
-
-    if (smsMatch) {
-      const targetNumber = smsMatch[1];
-      const toolMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "bot",
-        content: "",
-        type: "sms-tool",
-        toolData: { target: targetNumber, status: "processing" },
-      };
-      addMessageToConversation(conversationId, toolMsg);
-      return;
-    }
-    */
-
     setBotTyping(true);
-
-    // if (
-    //   userMessage.includes("employee details") ||
-    //   userMessage.includes("employee details form")
-    // ) {
-    //   setShowEmployeeLoader(true);
-    //   setTimeout(() => {
-    //     setShowEmployeeLoader(false);
-    //     setEmployeeDetailsOpen(true);
-    //   }, 2000);
-    //   setBotTyping(false);
-    //   return;
-    // }
 
     if (
       userMessage.includes("generate website") ||
@@ -441,10 +382,10 @@ export function useChatMessages() {
             type: "tool-loader",
             toolData: {
               status: "processing",
-              to: response.text?.to,
+              recipient: response.text?.recipient,
               subject: response.text?.subject,
               body: response.text?.body,
-              target: response.text?.to, // for compatibility with old target prop
+              target: response.text?.recipient, // for compatibility with old target prop
             },
           };
           addMessageToConversation(conversationId, toolMsg);
@@ -606,15 +547,71 @@ export function useChatMessages() {
           },
         });
 
-        // 2. API Call
-        const result = await apiClient("/auth/tools-send-email", {
-          method: "POST",
-          body: JSON.stringify({
-            recipient_email: editedData.to,
-            subject: editedData.subject,
-            body: editedData.body,
-          }),
+        const wsUrl = `${MODEL_URL}/ws/chat`;
+
+        const result = await new Promise<{
+          success: boolean;
+          message?: string;
+        }>((resolve) => {
+          const socket = new WebSocket(wsUrl);
+
+          socket.onopen = () => {
+            socket.send(
+              JSON.stringify({
+                type: "execute_tool",
+                tool: "send_email",
+                data: {
+                  recipient: editedData.to,
+                  subject: editedData.subject,
+                  body: editedData.body,
+                },
+              }),
+            );
+          };
+
+          socket.onmessage = (event) => {
+            try {
+              const response = JSON.parse(event.data);
+
+              socket.close();
+
+              if (response.type === "message") {
+                resolve({
+                  success: true,
+                  message: response.text || "Email sent successfully",
+                });
+              } else {
+                resolve({
+                  success: false,
+                  message: "Unexpected response from server",
+                });
+              }
+            } catch (err) {
+              socket.close();
+              resolve({
+                success: false,
+                message: "Failed to parse server response",
+              });
+            }
+          };
+
+          socket.onerror = () => {
+            socket.close();
+            resolve({
+              success: false,
+              message: "WebSocket connection failed",
+            });
+          };
         });
+
+        //         type: "execute_tool",
+        //   tool: "send_email",
+        //   data: {
+        //     recipient: editedData.to,
+        //     subject: editedData.subject,
+        //     body: editedData.body
+        //   }
+        // }));
 
         // 3. Final State
         if (!result.success) {

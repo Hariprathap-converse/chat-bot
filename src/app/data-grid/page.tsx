@@ -3,7 +3,6 @@
 import { AppSidebar } from "@/client/app-sidebar";
 import Profile from "@/client/profile";
 import { DataGrid } from "@/components/data-grid";
-import { useSidebar } from "@/components/ui/sidebar";
 
 import { sampleTableData } from "@/components/data-grid/sample-data";
 import ModelSelection from "@/components/chat/model-selection";
@@ -12,19 +11,19 @@ import { useEffect, useState } from "react";
 export default function DataGridPage() {
   const [tableConfig, setTableConfig] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const API_URL = process.env.NEXT_PUBLIC__HRMS_API_URL;
   useEffect(() => {
     const cancelToken = new AbortController();
 
     // Fetch data from API
-    fetch(`${API_URL}/salary-data`, { signal: cancelToken.signal })
+    fetch(`${API_URL}/data-grid`, { signal: cancelToken.signal })
       .then((res) => res.json())
       .then((data) => {
         setTableConfig(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to fetch salary data:", err);
+        console.error("Failed to fetch data-grid:", err);
         // Fallback to sample data if API fails to avoid breaking UI completely during dev
         setTableConfig(sampleTableData);
         setLoading(false);
@@ -40,7 +39,7 @@ export default function DataGridPage() {
       <div className="flex h-screen w-full items-center justify-center bg-background text-foreground">
         <div className="flex flex-col items-center gap-2">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-          <p>Loading salary data...</p>
+          <p>Loading data-grid table data...</p>
         </div>
       </div>
     );

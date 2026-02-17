@@ -48,6 +48,8 @@ export interface ColumnConfig {
   filterable?: boolean;
   description?: string;
   pinnable?: boolean;
+  isSeparated?: boolean;
+  parentTable?: string;
 }
 
 export interface TableOptions {
