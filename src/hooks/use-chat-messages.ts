@@ -8,14 +8,14 @@ export interface Message {
   role: "user" | "bot";
   content: string;
   type?:
-    | "text"
-    | "website-loader"
-    | "email-tool"
-    | "sms-tool"
-    | "employee-loader"
-    | "table"
-    | "tool-loader"
-    | "json";
+  | "text"
+  | "website-loader"
+  | "email-tool"
+  | "sms-tool"
+  | "employee-loader"
+  | "table"
+  | "tool-loader"
+  | "json";
   file?: {
     name: string;
     size?: number;
@@ -24,12 +24,12 @@ export interface Message {
   toolData?: {
     target?: string;
     status?:
-      | "idle"
-      | "processing"
-      | "sending"
-      | "success"
-      | "error"
-      | "cancelled";
+    | "idle"
+    | "processing"
+    | "sending"
+    | "success"
+    | "error"
+    | "cancelled";
     title?: string;
     message?: string;
     to?: string;
@@ -56,6 +56,7 @@ export function useChatMessages() {
   const [employeeDetailsOpen, setEmployeeDetailsOpen] = useState(false);
   const [dynamicFormData, setDynamicFormData] = useState<any>(null);
   const [botTyping, setBotTyping] = useState(false);
+  const MODEL_URL = process.env.NEXT_PUBLIC_MODEL_URL;
 
   useEffect(() => {
     const checkPendingOperation = async () => {
@@ -94,16 +95,16 @@ export function useChatMessages() {
 
           switch (type) {
             case "summarize":
-              endpoint = "http://127.0.0.1:5000/ai/summarize";
+              endpoint = `${MODEL_URL}/ai/summarize`;
               break;
             case "extract":
-              endpoint = "http://127.0.0.1:5000/ai/extract-invoice";
+              endpoint = `${MODEL_URL}/ai/extract-invoice`;
               break;
             case "classify":
-              endpoint = "http://127.0.0.1:5000/ai/classify";
+              endpoint = `${MODEL_URL}/ai/classify`;
               break;
             case "sentiment":
-              endpoint = "http://127.0.0.1:5000/ai/sentiment";
+              endpoint = `${MODEL_URL}/ai/sentiment`;
               break;
           }
 
@@ -193,7 +194,7 @@ export function useChatMessages() {
 
         setBotTyping(true);
 
-        const wsUrl = "ws://127.0.0.1:5000/ws/chat";
+        const wsUrl = `${MODEL_URL}/ws/chat`;
         const socket = new WebSocket(wsUrl);
 
         socket.onopen = () => {
@@ -417,8 +418,8 @@ export function useChatMessages() {
       }, 500);
       return;
     }
-
-    const wsUrl = "ws://127.0.0.1:5000/ws/chat";
+    const MODEL_URL = process.env.NEXT_PUBLIC_MODEL_WEBSOCKET_URL;
+    const wsUrl = `${MODEL_URL}/ws/chat`;
     const socket = new WebSocket(wsUrl);
 
     socket.onopen = () => {
@@ -538,7 +539,7 @@ export function useChatMessages() {
         id: (Date.now() + 1).toString(),
         role: "bot",
         content:
-          "I couldn't connect to the AI server. Please make sure the backend is running at http://127.0.0.1:5000 and has WebSocket support.",
+          `I couldn't connect to the AI server. Please make sure the backend is running at ${MODEL_URL} and has WebSocket support.`,
         type: "text",
       };
       addMessageToConversation(conversationId, botMsg);

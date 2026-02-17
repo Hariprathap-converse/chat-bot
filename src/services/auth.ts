@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { setTokens } from "@/lib/api-client";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 interface ApiResponse<T> {
   success: boolean;

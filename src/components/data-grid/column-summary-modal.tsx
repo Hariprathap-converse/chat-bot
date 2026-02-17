@@ -75,7 +75,9 @@ export function ColumnSummaryModal({
       setIsLoading(false);
       setError(null);
     }
-  }, [isOpen, column]);
+  }, [isOpen, column]);  
+  const MODEL_URL = process.env.NEXT_PUBLIC_MODEL_URL;
+
 
   // Fetch analytics when modal opens and column is available
   useEffect(() => {
@@ -103,8 +105,7 @@ export function ColumnSummaryModal({
               description: c.description || "",
             })) || [],
         };
-        console.log("llmPayload", llmPayload);
-        const llmRes = await fetch("http://localhost:5001/chat-analytics", {
+        const llmRes = await fetch(`${MODEL_URL}/chat-analytics`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(llmPayload),
@@ -120,7 +121,7 @@ export function ColumnSummaryModal({
         };
 
         const analyticsRes = await fetch(
-          "http://localhost:8001/analytics/analytics",
+          `${MODEL_URL}/analytics/analytics`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

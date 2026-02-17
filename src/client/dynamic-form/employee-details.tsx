@@ -78,7 +78,7 @@ export default function EmployeeDetails({
 
     console.log("Formatted data for submission:", formattedData);
 
-    const baseUrl = "http://localhost:8001";
+    const baseUrl = process.env.NEXT_PUBLIC_MODEL_URL;
     const url = action ? `${baseUrl}${action.path}` : `${baseUrl}/api/v1/form/add`;
     const method = action ? action.method : "POST";
 
