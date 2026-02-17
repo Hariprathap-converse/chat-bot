@@ -107,7 +107,6 @@ const defaultData: OpsBotData = {
           icon: "CalendarClock",
           hoverIcon: "CalendarClock",
         },
-
       ],
     },
   ],
@@ -187,7 +186,7 @@ const defaultData: OpsBotData = {
 
 const OpsBotContext = createContext<OpsBotContextType>({
   data: defaultData,
-  setData: () => { },
+  setData: () => {},
 });
 
 export const OpsBotProvider = ({ children }: { children: ReactNode }) => {

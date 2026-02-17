@@ -66,7 +66,7 @@ export default function Signup() {
         <AuthCarousel />
       </div>
       <div className="w-full h-full flex items-center justify-center p-4">
-        <Card className="w-full max-w-[590px] h-auto py-10 backdrop-blur-[40px] bg-white dark:bg-card rounded-[55px] border-0 shadow-none ring-3 px-6 sm:px-10 ring-white dark:ring-card" >
+        <Card className="w-full max-w-[590px] h-auto py-10 backdrop-blur-[40px] bg-white dark:bg-card rounded-[55px] border-0 shadow-none ring-3 px-6 sm:px-10 ring-white dark:ring-card">
           <CardHeader>
             <div className="flex flex-col items-center justify-center gap-5">
               <span className="pl-1 flex gap-2 items-center justify-center transition-all duration-300">

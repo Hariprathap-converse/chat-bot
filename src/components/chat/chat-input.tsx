@@ -40,7 +40,7 @@ export function ChatInput({
             "focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus-visible:ring-0! focus-visible:ring-offset-0 focus-visible:ring-transparent focus:placeholder:text-sub-title",
             "w-full max-w-full min-w-0",
             "whitespace-pre-wrap break-all",
-            "overflow-y-auto overflow-x-hidden"
+            "overflow-y-auto overflow-x-hidden",
           )}
           placeholder={placeholder}
         />

@@ -63,9 +63,9 @@ export interface TableOptions {
 
 export interface TableConfig {
   title: string;
-  description?:string;
-  tableName?:string;
-  tableDescription?:string;
+  description?: string;
+  tableName?: string;
+  tableDescription?: string;
   columns?: ColumnConfig[];
   data: Record<string, any>[];
   options?: TableOptions;

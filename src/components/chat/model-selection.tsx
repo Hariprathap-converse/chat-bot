@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 const ModelSelection = () => {
   return (
-    <Select  defaultValue="gpt-4o">
+    <Select defaultValue="gpt-4o">
       <SelectTrigger className="bg-card cursor-pointer  focus:ring-0 focus-visible:ring-0 border-none shadow-none  p-2 px-3  transition-colors font-medium rounded-md">
         <SelectValue placeholder="Select model" />
       </SelectTrigger>

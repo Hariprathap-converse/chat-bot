@@ -79,7 +79,9 @@ export default function EmployeeDetails({
     console.log("Formatted data for submission:", formattedData);
 
     const baseUrl = process.env.NEXT_PUBLIC_MODEL_URL;
-    const url = action ? `${baseUrl}${action.path}` : `${baseUrl}/api/v1/form/add`;
+    const url = action
+      ? `${baseUrl}${action.path}`
+      : `${baseUrl}/api/v1/form/add`;
     const method = action ? action.method : "POST";
 
     fetch(url, {
@@ -104,13 +106,12 @@ export default function EmployeeDetails({
         setIsSubmitting(false);
         setIsSuccess(true);
 
-
         setTimeout(() => {
           onCancel?.();
           if (onSubmitSuccess) {
             onSubmitSuccess(
               formData.form.formHeader.header,
-              `${formData.form.formHeader.header} has been successfully recorded.`
+              `${formData.form.formHeader.header} has been successfully recorded.`,
             );
           }
         }, 1000);
@@ -118,7 +119,8 @@ export default function EmployeeDetails({
       .catch((error) => {
         console.error("Submission error:", error);
         toast.error("Submission failed", {
-          description: error.message || "An error occurred while saving details.",
+          description:
+            error.message || "An error occurred while saving details.",
         });
         setIsSubmitting(false);
       });
@@ -127,7 +129,10 @@ export default function EmployeeDetails({
   const handleCancel = () => {
     onCancel?.();
     if (onCancelSuccess) {
-      onCancelSuccess(formData.form.formHeader.header, `The request for ${formData.form.formHeader.header} has been cancelled.`);
+      onCancelSuccess(
+        formData.form.formHeader.header,
+        `The request for ${formData.form.formHeader.header} has been cancelled.`,
+      );
     }
   };
 

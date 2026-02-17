@@ -176,7 +176,6 @@ export function DataGrid({ config }: DataGridProps) {
                     align="end"
                     className="w-40  bg-card rounded-[6px] border-none"
                   >
-
                     <DropdownMenuItem
                       onClick={() => handleActionClick("Option A", "header")}
                       className="text-sm cursor-pointer"
@@ -195,9 +194,11 @@ export function DataGrid({ config }: DataGridProps) {
                     >
                       Option C
                     </DropdownMenuItem>
-                    {col.type === 'number' && (
+                    {col.type === "number" && (
                       <DropdownMenuItem
-                        onClick={() => setSummaryModal({ open: true, column: col })}
+                        onClick={() =>
+                          setSummaryModal({ open: true, column: col })
+                        }
                         className="text-sm cursor-pointer gap-2"
                       >
                         Summarize
@@ -270,7 +271,6 @@ export function DataGrid({ config }: DataGridProps) {
                       <FilterIcon className="h-4 w-4" />
                       <span>Filter</span>
                     </DropdownMenuItem>
-
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -543,12 +543,12 @@ export function DataGrid({ config }: DataGridProps) {
                             "h-10 px-4 font-medium relative text-xs text-muted-foreground ",
                             isPinned && "sticky z-20",
                             isLastLeftPinned &&
-                            "shadow-[2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none  bg-background/95 clip-right",
+                              "shadow-[2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none  bg-background/95 clip-right",
                             isFirstRightPinned &&
-                            "shadow-[-2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none clip-left",
+                              "shadow-[-2px_0_4px_-1px_rgba(0,0,0,0.1)] border-none clip-left",
                             !isLastLeftPinned &&
-                            !isFirstRightPinned &&
-                            "after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:h-1/2 after:w-[2px] after:bg-gray-200/40 after:content-['']",
+                              !isFirstRightPinned &&
+                              "after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:h-1/2 after:w-[2px] after:bg-gray-200/40 after:content-['']",
                           )}
                           style={{
                             width: header.getSize(),
@@ -565,9 +565,9 @@ export function DataGrid({ config }: DataGridProps) {
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
                         </TableHead>
                       );
                     })}

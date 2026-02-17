@@ -5,65 +5,76 @@
  */
 
 export class MockWebSocket {
-    private listeners: Record<string, Function[]> = {};
-    public readyState: number = 0; // 0: CONNECTING, 1: OPEN, 2: CLOSING, 3: CLOSED
+  private listeners: Record<string, Function[]> = {};
+  public readyState: number = 0; // 0: CONNECTING, 1: OPEN, 2: CLOSING, 3: CLOSED
 
-    constructor(url: string) {
-        // Simulate connection delay
-        setTimeout(() => {
-            this.readyState = 1;
-            this.dispatchEvent("open", {});
-        }, 1000);
-    }
+  constructor(url: string) {
+    // Simulate connection delay
+    setTimeout(() => {
+      this.readyState = 1;
+      this.dispatchEvent("open", {});
+    }, 1000);
+  }
 
-    public addEventListener(type: string, callback: Function) {
-        if (!this.listeners[type]) this.listeners[type] = [];
-        this.listeners[type].push(callback);
-    }
+  public addEventListener(type: string, callback: Function) {
+    if (!this.listeners[type]) this.listeners[type] = [];
+    this.listeners[type].push(callback);
+  }
 
-    public removeEventListener(type: string, callback: Function) {
-        if (!this.listeners[type]) return;
-        this.listeners[type] = this.listeners[type].filter((cb) => cb !== callback);
-    }
+  public removeEventListener(type: string, callback: Function) {
+    if (!this.listeners[type]) return;
+    this.listeners[type] = this.listeners[type].filter((cb) => cb !== callback);
+  }
 
-    private dispatchEvent(type: string, data: any) {
-        if (!this.listeners[type]) return;
-        this.listeners[type].forEach((callback) => callback(data));
-    }
+  private dispatchEvent(type: string, data: any) {
+    if (!this.listeners[type]) return;
+    this.listeners[type].forEach((callback) => callback(data));
+  }
 
-    public send(message: string) {
-        // Auto-respond for demonstration
-        setTimeout(() => {
-            const response = {
-                id: Date.now(),
-                content: `Ack: ${message}`,
-                timestamp: new Date().toISOString()
-            };
-            this.dispatchEvent("message", { data: JSON.stringify(response) });
-        }, 500);
-    }
+  public send(message: string) {
+    // Auto-respond for demonstration
+    setTimeout(() => {
+      const response = {
+        id: Date.now(),
+        content: `Ack: ${message}`,
+        timestamp: new Date().toISOString(),
+      };
+      this.dispatchEvent("message", { data: JSON.stringify(response) });
+    }, 500);
+  }
 
-    public close() {
-        this.readyState = 2;
-        setTimeout(() => {
-            this.readyState = 3;
-            this.dispatchEvent("close", {});
-        }, 100);
-    }
+  public close() {
+    this.readyState = 2;
+    setTimeout(() => {
+      this.readyState = 3;
+      this.dispatchEvent("close", {});
+    }, 100);
+  }
 
-    // Simplified event property support (onopen, onmessage, etc.)
-    set onopen(callback: Function) { this.addEventListener("open", callback); }
-    set onmessage(callback: Function) { this.addEventListener("message", callback); }
-    set onerror(callback: Function) { this.addEventListener("error", callback); }
-    set onclose(callback: Function) { this.addEventListener("close", callback); }
+  // Simplified event property support (onopen, onmessage, etc.)
+  set onopen(callback: Function) {
+    this.addEventListener("open", callback);
+  }
+  set onmessage(callback: Function) {
+    this.addEventListener("message", callback);
+  }
+  set onerror(callback: Function) {
+    this.addEventListener("error", callback);
+  }
+  set onclose(callback: Function) {
+    this.addEventListener("close", callback);
+  }
 }
 
 /**
  * Factory to get either a real WebSocket or the Mock one
  */
-export function createChatConnection(url: string, useMock: boolean = true): WebSocket | MockWebSocket {
-    if (useMock) {
-        return new MockWebSocket(url) as any;
-    }
-    return new WebSocket(url);
+export function createChatConnection(
+  url: string,
+  useMock: boolean = true,
+): WebSocket | MockWebSocket {
+  if (useMock) {
+    return new MockWebSocket(url) as any;
+  }
+  return new WebSocket(url);
 }

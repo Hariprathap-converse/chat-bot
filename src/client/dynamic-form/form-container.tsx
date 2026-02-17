@@ -235,10 +235,10 @@ const FormContainerProps = ({
                 </div>
                 {(formData.form.formType == "basic" ||
                   formData.form.formType == "wizard") && (
-                    <div className="text-[0.9375rem] text-foreground font-medium">
-                      {/* {formData.form.formHeader.title} */}
-                    </div>
-                  )}
+                  <div className="text-[0.9375rem] text-foreground font-medium">
+                    {/* {formData.form.formHeader.title} */}
+                  </div>
+                )}
                 {formData.form.formType == "stepper" && (
                   <Stepper
                     currentStep={currentStepIndex}
@@ -265,7 +265,12 @@ const FormContainerProps = ({
                 }))
               }
             />
-            <FormFooter progress={progress} onCancel={onCancel} isLoading={isLoading} isSuccess={isSuccess} />
+            <FormFooter
+              progress={progress}
+              onCancel={onCancel}
+              isLoading={isLoading}
+              isSuccess={isSuccess}
+            />
           </div>
         </div>
       </form>

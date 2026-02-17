@@ -37,17 +37,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { FileText } from "lucide-react";
-import remarkBreaks from "remark-breaks"
+import remarkBreaks from "remark-breaks";
 
 interface ChatMessageProps {
   message: Message;
   index: number;
   isUser: boolean;
   scrollToBottom?: () => void;
-  onToolAction?: (messageId: string, data: { to: string; subject: string; body: string }) => void;
+  onToolAction?: (
+    messageId: string,
+    data: { to: string; subject: string; body: string },
+  ) => void;
   onToolCancel?: (messageId: string) => void;
 }
-
 
 export function ChatMessage({
   message,
@@ -156,7 +158,9 @@ export function ChatMessage({
                           <div className="flex items-center gap-2 p-2 bg-muted/50 hover:bg-muted rounded-lg border border-border cursor-default transition-colors">
                             <FileText className="w-4 h-4 text-accent" />
                             <span className="text-xs font-normal text-muted-foreground truncate max-w-[150px]">
-                              {message.file.name.length > 20 ? message.file.name.substring(0, 20) + '...' : message.file.name}
+                              {message.file.name.length > 20
+                                ? message.file.name.substring(0, 20) + "..."
+                                : message.file.name}
                             </span>
                           </div>
                         </TooltipTrigger>
@@ -219,7 +223,11 @@ export function ChatMessage({
           <div className="w-full max-w-full lg:max-w-4xl">
             <TableMessage
               data={message.tableData}
-              title={message.content !== "Generated structured data:" ? message.content : undefined}
+              title={
+                message.content !== "Generated structured data:"
+                  ? message.content
+                  : undefined
+              }
             />
           </div>
         </div>
@@ -237,7 +245,11 @@ export function ChatMessage({
           <div className="w-full max-w-full lg:max-w-4xl">
             <JsonMessage
               data={message.jsonData}
-              title={message.content !== "Structured data response:" ? message.content : undefined}
+              title={
+                message.content !== "Structured data response:"
+                  ? message.content
+                  : undefined
+              }
             />
           </div>
         </div>
@@ -263,7 +275,11 @@ export function ChatMessage({
     );
   }
 
-  if (message.type === "email-tool" || message.type === "sms-tool" || message.type === "tool-loader") {
+  if (
+    message.type === "email-tool" ||
+    message.type === "sms-tool" ||
+    message.type === "tool-loader"
+  ) {
     return (
       <>
         <div className="flex w-full h-full justify-start mt-2 mb-2">
@@ -278,7 +294,9 @@ export function ChatMessage({
                 status={message.toolData?.status ?? "processing"}
                 onPopupClose={scrollToBottom}
                 toolData={message.toolData}
-                onSend={(data: { to: string; subject: string; body: string }) => onToolAction?.(message.id, data)}
+                onSend={(data: { to: string; subject: string; body: string }) =>
+                  onToolAction?.(message.id, data)
+                }
                 onCancel={() => onToolCancel?.(message.id)}
               />
             </div>
@@ -327,15 +345,24 @@ export function ChatMessage({
 
                     // Bold text
                     strong: ({ node, ...props }) => (
-                      <span className="font-semibold text-foreground" {...props} />
+                      <span
+                        className="font-semibold text-foreground"
+                        {...props}
+                      />
                     ),
 
                     // Headings
                     h2: ({ node, ...props }) => (
-                      <h2 className="mt-4 mb-2 text-base font-bold" {...props} />
+                      <h2
+                        className="mt-4 mb-2 text-base font-bold"
+                        {...props}
+                      />
                     ),
                     h3: ({ node, ...props }) => (
-                      <h3 className="mt-3 mb-1 text-sm font-semibold" {...props} />
+                      <h3
+                        className="mt-3 mb-1 text-sm font-semibold"
+                        {...props}
+                      />
                     ),
 
                     // Lists
@@ -348,7 +375,10 @@ export function ChatMessage({
                     // Code blocks
                     code: ({ inline, ...props }: any) =>
                       inline ? (
-                        <code className="px-1 py-0.5 rounded bg-muted text-sm" {...props} />
+                        <code
+                          className="px-1 py-0.5 rounded bg-muted text-sm"
+                          {...props}
+                        />
                       ) : (
                         <pre className="my-2 p-3 rounded bg-white overflow-x-auto">
                           <code {...props} />
@@ -364,7 +394,9 @@ export function ChatMessage({
 
                 {message.sentimentStars !== undefined && (
                   <div className="flex items-center gap-1  pb-1 border-t border-accent/20 pt-3">
-                    <span className="text-xs font-semibold text-muted-foreground mr-1">Sentiment:</span>
+                    <span className="text-xs font-semibold text-muted-foreground mr-1">
+                      Sentiment:
+                    </span>
                     <div className="flex items-center">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <span key={star}>

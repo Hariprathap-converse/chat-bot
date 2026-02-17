@@ -13,7 +13,7 @@ import {
   EmployeeDetailsModal,
   SkeletonLoaderModal,
 } from "@/components/chat/chat-modals";
-import {  useSidebar } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
 import { BotTypingLoader } from "@/components/chat/dot-loader";
 import ModelSelection from "@/components/chat/model-selection";
 

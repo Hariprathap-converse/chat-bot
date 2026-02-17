@@ -66,14 +66,14 @@ export function normalizeOptions(options: OptionOrGroup[]): OptionOrGroup[] {
           group: toCapitalCase(option.group ?? ""),
           items: Array.isArray(option.items)
             ? option.items
-              .filter(
-                (item): item is Option =>
-                  !!item && typeof item === "object" && "value" in item,
-              )
-              .map((item) => ({
-                ...item,
-                label: toCapitalCase((item.label || item.value) ?? ""),
-              }))
+                .filter(
+                  (item): item is Option =>
+                    !!item && typeof item === "object" && "value" in item,
+                )
+                .map((item) => ({
+                  ...item,
+                  label: toCapitalCase((item.label || item.value) ?? ""),
+                }))
             : [],
         };
       }

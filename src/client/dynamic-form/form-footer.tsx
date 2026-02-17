@@ -15,7 +15,12 @@ interface FormFooterProps {
   isSuccess?: boolean;
 }
 
-const FormFooter = ({ progress, onCancel, isLoading = false, isSuccess = false }: FormFooterProps) => {
+const FormFooter = ({
+  progress,
+  onCancel,
+  isLoading = false,
+  isSuccess = false,
+}: FormFooterProps) => {
   const { formData } = useLayout();
 
   return (
@@ -75,7 +80,11 @@ const FormFooter = ({ progress, onCancel, isLoading = false, isSuccess = false }
                       : "opacity-100 translate-y-0 transform transition-all duration-700 ",
                 )}
               >
-                {isSuccess ? `${formData.form.formHeader.buttonText || 'Created'}!` : isLoading ? "" : (formData.form.formHeader.buttonText || "Create")}
+                {isSuccess
+                  ? `${formData.form.formHeader.buttonText || "Created"}!`
+                  : isLoading
+                    ? ""
+                    : formData.form.formHeader.buttonText || "Create"}
               </span>
             </div>
           </Button>

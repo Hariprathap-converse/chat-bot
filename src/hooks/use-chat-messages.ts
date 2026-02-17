@@ -8,14 +8,14 @@ export interface Message {
   role: "user" | "bot";
   content: string;
   type?:
-  | "text"
-  | "website-loader"
-  | "email-tool"
-  | "sms-tool"
-  | "employee-loader"
-  | "table"
-  | "tool-loader"
-  | "json";
+    | "text"
+    | "website-loader"
+    | "email-tool"
+    | "sms-tool"
+    | "employee-loader"
+    | "table"
+    | "tool-loader"
+    | "json";
   file?: {
     name: string;
     size?: number;
@@ -24,12 +24,12 @@ export interface Message {
   toolData?: {
     target?: string;
     status?:
-    | "idle"
-    | "processing"
-    | "sending"
-    | "success"
-    | "error"
-    | "cancelled";
+      | "idle"
+      | "processing"
+      | "sending"
+      | "success"
+      | "error"
+      | "cancelled";
     title?: string;
     message?: string;
     to?: string;
@@ -538,8 +538,7 @@ export function useChatMessages() {
       const botMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "bot",
-        content:
-          `I couldn't connect to the AI server. Please make sure the backend is running at ${MODEL_URL} and has WebSocket support.`,
+        content: `I couldn't connect to the AI server. Please make sure the backend is running at ${MODEL_URL} and has WebSocket support.`,
         type: "text",
       };
       addMessageToConversation(conversationId, botMsg);

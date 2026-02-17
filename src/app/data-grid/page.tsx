@@ -32,7 +32,7 @@ export default function DataGridPage() {
 
     return () => {
       cancelToken.abort();
-    }
+    };
   }, []);
 
   if (loading) {
@@ -43,7 +43,7 @@ export default function DataGridPage() {
           <p>Loading salary data...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (

@@ -75,9 +75,8 @@ export function ColumnSummaryModal({
       setIsLoading(false);
       setError(null);
     }
-  }, [isOpen, column]);  
+  }, [isOpen, column]);
   const MODEL_URL = process.env.NEXT_PUBLIC_MODEL_URL;
-
 
   // Fetch analytics when modal opens and column is available
   useEffect(() => {
@@ -120,14 +119,11 @@ export function ColumnSummaryModal({
           chart: llmData.chart,
         };
 
-        const analyticsRes = await fetch(
-          `${MODEL_URL}/analytics/analytics`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(analyticsPayload),
-          },
-        );
+        const analyticsRes = await fetch(`${MODEL_URL}/analytics/analytics`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(analyticsPayload),
+        });
 
         if (!analyticsRes.ok) throw new Error("Failed to get analytics data");
         const analyticsData = await analyticsRes.json();
@@ -344,7 +340,9 @@ export function ColumnSummaryModal({
                               boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
                             }}
                             formatter={(value: any) => [
-                              (typeof value === 'number' ? value.toLocaleString() : value),
+                              typeof value === "number"
+                                ? value.toLocaleString()
+                                : value,
                               column.header,
                             ]}
                           />
@@ -410,7 +408,9 @@ export function ColumnSummaryModal({
                               boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
                             }}
                             formatter={(value: any) => [
-                              (typeof value === 'number' ? value.toLocaleString() : value),
+                              typeof value === "number"
+                                ? value.toLocaleString()
+                                : value,
                               column.header,
                             ]}
                           />

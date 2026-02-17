@@ -1,11 +1,25 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Check, Mail, MessageSquare, Smartphone, Zap, X, Send } from "lucide-react";
+import {
+  Check,
+  Mail,
+  MessageSquare,
+  Smartphone,
+  Zap,
+  X,
+  Send,
+} from "lucide-react";
 
 interface ToolsLoaderProps {
   type: "email" | "sms" | "calendar" | null;
   target?: string;
-  status?: "idle" | "processing" | "sending" | "success" | "error" | "cancelled";
+  status?:
+    | "idle"
+    | "processing"
+    | "sending"
+    | "success"
+    | "error"
+    | "cancelled";
   onPopupClose?: () => void;
   toolData?: any;
   onSend?: (data: { to: string; subject: string; body: string }) => void;
@@ -40,7 +54,11 @@ export function ToolsLoader({
   const [elapsed, setElapsed] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(() => {
     // If loading from history as done/error/cancelled, start closed
-    return !(status === "success" || status === "error" || status === "cancelled");
+    return !(
+      status === "success" ||
+      status === "error" ||
+      status === "cancelled"
+    );
   });
 
   useEffect(() => {
@@ -66,7 +84,11 @@ export function ToolsLoader({
   useEffect(() => {
     if (status === "success" || status === "error" || status === "cancelled") {
       setInternalStage(
-        status === "success" ? "done" : status === "cancelled" ? "cancelled" : "error",
+        status === "success"
+          ? "done"
+          : status === "cancelled"
+            ? "cancelled"
+            : "error",
       );
 
       if (isPopupOpen) {
@@ -210,33 +232,45 @@ export function ToolsLoader({
             <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
               <div className="space-y-3">
                 <div className="space-y-1 flex  gap-1 flex-col">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">Recipient</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">
+                    Recipient
+                  </label>
                   <input
                     type="text"
                     value={formData.to}
-                    onChange={(e) => setFormData({ ...formData, to: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, to: e.target.value })
+                    }
                     className="w-full px-3 py-2 bg-white dark:bg-input border border-slate-200 dark:border-border rounded-lg text-sm text-slate-700 dark:text-foreground focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all font-semibold"
                     placeholder="Recipient email or number"
                   />
                 </div>
                 {type === "email" && (
                   <div className="space-y-1 flex  gap-1 flex-col">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">Subject</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">
+                      Subject
+                    </label>
                     <input
                       type="text"
                       value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, subject: e.target.value })
+                      }
                       className="w-full px-3 py-2 bg-white dark:bg-input border border-slate-200 dark:border-border rounded-lg text-sm text-slate-700 dark:text-foreground focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all font-semibold"
                       placeholder="Email subject"
                     />
                   </div>
                 )}
                 <div className="space-y-1 flex  gap-1 flex-col">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">Message</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1 ">
+                    Message
+                  </label>
                   <textarea
                     rows={4}
                     value={formData.body}
-                    onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, body: e.target.value })
+                    }
                     className="w-full px-3 py-2 bg-white dark:bg-input border  border-slate-200 dark:border-border rounded-lg text-sm text-slate-700 dark:text-foreground focus:outline-hidden focus:ring-1 focus:ring-indigo-500 transition-all resize-none min-h-[140px]"
                     placeholder="Type your message here..."
                   />
@@ -385,7 +419,11 @@ export function ToolsLoader({
                       : "bg-indigo-500 animate-pulse",
               )}
             />
-            {status === "error" ? "System Error" : status === "cancelled" ? "Cancelled" : "System Active"}
+            {status === "error"
+              ? "System Error"
+              : status === "cancelled"
+                ? "Cancelled"
+                : "System Active"}
           </span>
           <span className="font-mono">
             {status === "processing" || status === "sending"
@@ -401,4 +439,3 @@ export function ToolsLoader({
     </div>
   );
 }
-
