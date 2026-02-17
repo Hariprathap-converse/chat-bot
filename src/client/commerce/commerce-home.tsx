@@ -14,6 +14,7 @@ import { CartSheet } from "./cart-sheet";
 import { useCommerceStore } from "@/lib/commerce-store";
 import { ProductCarousel } from "./product-carousel";
 import { Heart, ShoppingCart } from "lucide-react";
+import { EmptyChatState } from "@/components/chat";
 
 export default function CommerceHome() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -92,8 +93,10 @@ export default function CommerceHome() {
             {/* Welcome Message */}
             {messages.length === 0 && (
               <div className="text-center text-muted-foreground">
-                <h2 className="text-2xl font-bold mb-2">Agentic Commerce</h2>
-                <p>Ask me to find products for you!</p>
+                <EmptyChatState
+                  title={"Agentic Commerce"}
+                  subtitle={"Ask me to find products for you!"}
+                />
               </div>
             )}
 
