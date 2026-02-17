@@ -151,7 +151,7 @@ export function DataGrid({ config }: DataGridProps) {
         enableHiding: false,
         size: 40,
       },
-      ...config.columns.map((col) => ({
+      ...(config.columns ?? []).map((col) => ({
         id: col.accessorKey,
         accessorKey: col.accessorKey,
         header: ({ column }: any) => {

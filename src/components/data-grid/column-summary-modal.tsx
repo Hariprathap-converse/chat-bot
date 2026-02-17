@@ -342,8 +342,8 @@ export function ColumnSummaryModal({
                               color: isDark ? "#e2e8f0" : "#0f172a",
                               boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
                             }}
-                            formatter={(value: number) => [
-                              value.toLocaleString(),
+                            formatter={(value: any) => [
+                              (typeof value === 'number' ? value.toLocaleString() : value),
                               column.header,
                             ]}
                           />
@@ -408,8 +408,8 @@ export function ColumnSummaryModal({
                               color: isDark ? "#e2e8f0" : "#0f172a",
                               boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.25)",
                             }}
-                            formatter={(value: number) => [
-                              value.toLocaleString(),
+                            formatter={(value: any) => [
+                              (typeof value === 'number' ? value.toLocaleString() : value),
                               column.header,
                             ]}
                           />

@@ -14,13 +14,15 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
+import { Suspense } from "react";
+
 const forgotPasswordSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
 });
 
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
-export default function ForgotPassword() {
+function ForgotPasswordContent() {
   const params = useSearchParams();
   const email: string | null | undefined = params.get("email");
   const { setOpen } = useSidebar();
@@ -156,3 +158,12 @@ export default function ForgotPassword() {
     </div>
   );
 }
+
+export default function ForgotPassword() {
+  return (
+    <Suspense fallback={null}>
+      <ForgotPasswordContent />
+    </Suspense>
+  );
+}
+
